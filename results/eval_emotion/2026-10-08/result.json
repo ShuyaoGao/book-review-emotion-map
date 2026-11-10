@@ -1,0 +1,464 @@
+{
+  "annotator": "agent:claude-opus-5.5（代理标注）",
+  "n": 90,
+  "per_label": {
+    "moved": {
+      "gold_positive": 3,
+      "lex": {
+        "tp": 1,
+        "fp": 1,
+        "fn": 2,
+        "precision": {
+          "k": 1,
+          "n": 2,
+          "value": 0.5,
+          "ci95_low": 0.0945,
+          "ci95_high": 0.9055
+        },
+        "recall": {
+          "k": 1,
+          "n": 3,
+          "value": 0.3333,
+          "ci95_low": 0.0615,
+          "ci95_high": 0.7923
+        }
+      },
+      "goemo": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": null,
+        "recall": {
+          "k": 0,
+          "n": 3,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.5615
+        }
+      }
+    },
+    "heartbreak": {
+      "gold_positive": 1,
+      "lex": {
+        "tp": 1,
+        "fp": 5,
+        "fn": 0,
+        "precision": {
+          "k": 1,
+          "n": 6,
+          "value": 0.1667,
+          "ci95_low": 0.0301,
+          "ci95_high": 0.5635
+        },
+        "recall": {
+          "k": 1,
+          "n": 1,
+          "value": 1.0,
+          "ci95_low": 0.2065,
+          "ci95_high": 1.0
+        }
+      },
+      "goemo": {
+        "tp": 0,
+        "fp": 2,
+        "fn": 1,
+        "precision": {
+          "k": 0,
+          "n": 2,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.6576
+        },
+        "recall": {
+          "k": 0,
+          "n": 1,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.7935
+        }
+      }
+    },
+    "anger": {
+      "gold_positive": 3,
+      "lex": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": {
+          "k": 1,
+          "n": 1,
+          "value": 1.0,
+          "ci95_low": 0.2065,
+          "ci95_high": 1.0
+        },
+        "recall": {
+          "k": 1,
+          "n": 3,
+          "value": 0.3333,
+          "ci95_low": 0.0615,
+          "ci95_high": 0.7923
+        }
+      },
+      "goemo": {
+        "tp": 0,
+        "fp": 2,
+        "fn": 3,
+        "precision": {
+          "k": 0,
+          "n": 2,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.6576
+        },
+        "recall": {
+          "k": 0,
+          "n": 3,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.5615
+        }
+      }
+    },
+    "amusement": {
+      "gold_positive": 3,
+      "lex": {
+        "tp": 3,
+        "fp": 2,
+        "fn": 0,
+        "precision": {
+          "k": 3,
+          "n": 5,
+          "value": 0.6,
+          "ci95_low": 0.2307,
+          "ci95_high": 0.8824
+        },
+        "recall": {
+          "k": 3,
+          "n": 3,
+          "value": 1.0,
+          "ci95_low": 0.4385,
+          "ci95_high": 1.0
+        }
+      },
+      "goemo": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": {
+          "k": 1,
+          "n": 1,
+          "value": 1.0,
+          "ci95_low": 0.2065,
+          "ci95_high": 1.0
+        },
+        "recall": {
+          "k": 1,
+          "n": 3,
+          "value": 0.3333,
+          "ci95_low": 0.0615,
+          "ci95_high": 0.7923
+        }
+      }
+    },
+    "shock": {
+      "gold_positive": 2,
+      "lex": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 2,
+        "precision": {
+          "k": 0,
+          "n": 1,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.7935
+        },
+        "recall": {
+          "k": 0,
+          "n": 2,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.6576
+        }
+      },
+      "goemo": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": {
+          "k": 2,
+          "n": 2,
+          "value": 1.0,
+          "ci95_low": 0.3424,
+          "ci95_high": 1.0
+        },
+        "recall": {
+          "k": 2,
+          "n": 2,
+          "value": 1.0,
+          "ci95_low": 0.3424,
+          "ci95_high": 1.0
+        }
+      }
+    },
+    "comfort": {
+      "gold_positive": 1,
+      "lex": {
+        "tp": 0,
+        "fp": 6,
+        "fn": 1,
+        "precision": {
+          "k": 0,
+          "n": 6,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.3903
+        },
+        "recall": {
+          "k": 0,
+          "n": 1,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.7935
+        }
+      },
+      "goemo": {
+        "tp": 0,
+        "fp": 4,
+        "fn": 1,
+        "precision": {
+          "k": 0,
+          "n": 4,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.4899
+        },
+        "recall": {
+          "k": 0,
+          "n": 1,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.7935
+        }
+      }
+    },
+    "swoon": {
+      "gold_positive": 1,
+      "lex": {
+        "tp": 1,
+        "fp": 7,
+        "fn": 0,
+        "precision": {
+          "k": 1,
+          "n": 8,
+          "value": 0.125,
+          "ci95_low": 0.0224,
+          "ci95_high": 0.4709
+        },
+        "recall": {
+          "k": 1,
+          "n": 1,
+          "value": 1.0,
+          "ci95_low": 0.2065,
+          "ci95_high": 1.0
+        }
+      },
+      "goemo": {
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "precision": {
+          "k": 0,
+          "n": 1,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.7935
+        },
+        "recall": {
+          "k": 0,
+          "n": 1,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.7935
+        }
+      }
+    },
+    "suspense": {
+      "gold_positive": 0,
+      "lex": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null
+      },
+      "goemo": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "precision": null,
+        "recall": null
+      }
+    },
+    "resonance": {
+      "gold_positive": 5,
+      "lex": {
+        "tp": 1,
+        "fp": 2,
+        "fn": 4,
+        "precision": {
+          "k": 1,
+          "n": 3,
+          "value": 0.3333,
+          "ci95_low": 0.0615,
+          "ci95_high": 0.7923
+        },
+        "recall": {
+          "k": 1,
+          "n": 5,
+          "value": 0.2,
+          "ci95_low": 0.0362,
+          "ci95_high": 0.6245
+        }
+      },
+      "goemo": {
+        "tp": 0,
+        "fp": 2,
+        "fn": 5,
+        "precision": {
+          "k": 0,
+          "n": 2,
+          "value": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.6576
+        },
+        "recall": {
+          "k": 0,
+          "n": 5,
+          "value": 0.0,
+          "ci95_low": -0.0,
+          "ci95_high": 0.4345
+        }
+      }
+    },
+    "aesthetic": {
+      "gold_positive": 17,
+      "lex": {
+        "tp": 4,
+        "fp": 1,
+        "fn": 13,
+        "precision": {
+          "k": 4,
+          "n": 5,
+          "value": 0.8,
+          "ci95_low": 0.3755,
+          "ci95_high": 0.9638
+        },
+        "recall": {
+          "k": 4,
+          "n": 17,
+          "value": 0.2353,
+          "ci95_low": 0.0955,
+          "ci95_high": 0.4726
+        }
+      },
+      "goemo": {
+        "tp": 9,
+        "fp": 7,
+        "fn": 8,
+        "precision": {
+          "k": 9,
+          "n": 16,
+          "value": 0.5625,
+          "ci95_low": 0.3318,
+          "ci95_high": 0.769
+        },
+        "recall": {
+          "k": 9,
+          "n": 17,
+          "value": 0.5294,
+          "ci95_low": 0.3096,
+          "ci95_high": 0.7384
+        }
+      }
+    }
+  },
+  "any_emotion": {
+    "lex": {
+      "precision": {
+        "k": 17,
+        "n": 27,
+        "value": 0.6296,
+        "ci95_low": 0.4423,
+        "ci95_high": 0.7847
+      },
+      "recall": {
+        "k": 17,
+        "n": 34,
+        "value": 0.5,
+        "ci95_low": 0.3407,
+        "ci95_high": 0.6593
+      },
+      "micro_precision": {
+        "k": 12,
+        "n": 37,
+        "value": 0.3243,
+        "ci95_low": 0.1963,
+        "ci95_high": 0.4854
+      },
+      "micro_recall": {
+        "k": 12,
+        "n": 36,
+        "value": 0.3333,
+        "ci95_low": 0.2021,
+        "ci95_high": 0.4967
+      }
+    },
+    "goemo": {
+      "precision": {
+        "k": 18,
+        "n": 29,
+        "value": 0.6207,
+        "ci95_low": 0.44,
+        "ci95_high": 0.7731
+      },
+      "recall": {
+        "k": 18,
+        "n": 34,
+        "value": 0.5294,
+        "ci95_low": 0.3674,
+        "ci95_high": 0.6855
+      },
+      "micro_precision": {
+        "k": 12,
+        "n": 30,
+        "value": 0.4,
+        "ci95_low": 0.2459,
+        "ci95_high": 0.5768
+      },
+      "micro_recall": {
+        "k": 12,
+        "n": 36,
+        "value": 0.3333,
+        "ci95_low": 0.2021,
+        "ci95_high": 0.4967
+      }
+    }
+  },
+  "gold_any_emotion_rate": {
+    "fired_stratum": {
+      "k": 26,
+      "n": 45,
+      "value": 0.5778,
+      "ci95_low": 0.433,
+      "ci95_high": 0.7103
+    },
+    "random_stratum": {
+      "k": 8,
+      "n": 45,
+      "value": 0.1778,
+      "ci95_low": 0.0929,
+      "ci95_high": 0.3133
+    }
+  }
+}

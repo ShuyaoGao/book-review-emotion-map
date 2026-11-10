@@ -1,0 +1,32 @@
+# 环境
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 原始数据与大文件（只在本机，不进 git）
+# Goodreads（UCSD Book Graph）仅限学术用途、不得再分发：原始数据、抽取结果、含书评文本或逐条书评记录的文件都不进仓库
+data/raw/
+data/books/*.txt
+data/cache/
+data/interim/
+data/llm_items/
+data/gold/sheets/
+data/gold/*_items.jsonl
+results/align/*/raw/
+results/emotion/*/raw/
+results/local_llm/*/raw/
+results/**/raw/*.text.jsonl
+results/**/raw/*.big.jsonl
+*.npy
+*.npz
+*.parquet
+*.gz
+*.part*
+models/
+showcase/assets/*.mp4
+showcase/deck_src/
+
+# 杂项
+*.log
+.DS_Store

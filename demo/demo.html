@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>桥段热度演示</title>
+<style>
+/* 离线单文件：不加载任何外部字体或脚本。主题沿用 showcase：纸白 + 荧光笔划线 */
+:root {
+  --paper: #f5f6f3; --sheet: #ffffff; --ink: #15191d; --ink-2: #4a5158; --muted: #737a80;
+  --rule: #dfe2e0; --base: #c3c6c2; --marker: #ffe36b; --accent: #1d4f8c;
+  --g0: #2a78d6; --g1: #eb6834; --g2: #eda100; --g3: #1baf7a; --g4: #aeb3af; --g5: #e3e5e2;
+  --skel: #e8eae7; --ghost-bg: #fff6c2;
+  --f-body: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  --f-serif: Georgia, "Times New Roman", "SimSun", serif;
+  --f-mono: "Cascadia Mono", Consolas, ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #111416; --sheet: #191c1f; --ink: #eef0ee; --ink-2: #b9bfc3; --muted: #8b9297; --rule: #2a2f33;
+    --base: #3a4045; --marker: #8a7414; --accent: #8fb8ee; --g4: #5a6166; --g5: #262b2e; --skel: #2a2f33; --ghost-bg: #4a3f0c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #111416; --sheet: #191c1f; --ink: #eef0ee; --ink-2: #b9bfc3; --muted: #8b9297; --rule: #2a2f33;
+  --base: #3a4045; --marker: #8a7414; --accent: #8fb8ee; --g4: #5a6166; --g5: #262b2e; --skel: #2a2f33; --ghost-bg: #4a3f0c;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.6; }
+.app { max-width: 1680px; margin: 0 auto; padding: 14px 20px 10px; display: grid; gap: 12px; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; justify-content: space-between; }
+h1 { font-size: clamp(20px, 2.2vw, 28px); margin: 0; font-weight: 800; letter-spacing: .02em; }
+h1 small { font-size: 14px; font-weight: 400; color: var(--muted); margin-left: 10px; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+button { font: inherit; font-size: 14px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink);
+  padding: 5px 12px; border-radius: 4px; cursor: pointer; }
+button[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 -3px 0 var(--marker); font-weight: 700; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#play[aria-pressed="true"] { background: var(--ink); color: var(--paper); box-shadow: none; }
+.panel { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 16px; min-width: 0; }
+.eyebrow { font-size: 12px; color: var(--muted); letter-spacing: .06em; }
+.tlhead { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline; }
+.tlhead h2 { margin: 0; font-size: 18px; }
+.tlhead h2 span { font-weight: 400; color: var(--muted); font-size: 14px; margin-left: 8px; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12.5px; color: var(--ink-2); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+#tl { width: 100%; height: clamp(190px, 31vh, 330px); display: block; margin-top: 4px; }
+#tl .bar-r { transition: y .9s ease, height .9s ease, opacity .4s; cursor: pointer; }
+#tl.dim .bar-r { opacity: .28; }
+#tl .bar-r.focus { opacity: 1; stroke: var(--ink); stroke-width: 1.2; }
+#tl .bar-r.pulse { animation: pulse 0.9s ease 2; }
+@keyframes pulse { 50% { opacity: .2; } }
+#tl text { font-family: var(--f-body); fill: var(--muted); font-size: 12px; }
+#tl .axis { stroke: var(--base); }
+#tl .exp { fill: none; stroke: var(--ink-2); stroke-width: 1.6; stroke-dasharray: 5 4; opacity: 0; transition: opacity .6s; }
+#tl .exp.on { opacity: .85; }
+#tl .cursor { stroke: var(--accent); stroke-width: 2; }
+#tl .pk circle { fill: var(--ink); }
+#tl .pk text { fill: var(--paper); font-size: 12px; font-weight: 700; text-anchor: middle; }
+#tl .call { fill: var(--ink); font-size: 13px; font-weight: 700; }
+.row { display: grid; grid-template-columns: 1fr 1.35fr 1fr; gap: 12px; }
+.row .panel { display: grid; align-content: start; gap: 8px; min-height: clamp(220px, 30vh, 330px); }
+.skel { display: grid; gap: 7px; }
+.skel i { display: block; height: 9px; border-radius: 5px; background: var(--skel); }
+.qbox { font-family: var(--f-serif); font-size: 16px; line-height: 1.55; }
+.qsrc { background: var(--marker); padding: 1px 3px; }
+.note { font-size: 12px; color: var(--muted); }
+.page { font-family: var(--f-serif); font-size: 15px; line-height: 1.7; color: var(--ink-2); max-height: 13.6em; overflow: hidden; -webkit-mask-image: linear-gradient(#000 85%, transparent); mask-image: linear-gradient(#000 85%, transparent); }
+.qdst { color: var(--ink); transition: background-size 1s ease; background: linear-gradient(transparent 55%, var(--marker) 55%, var(--marker) 92%, transparent 92%) no-repeat 0 0 / 0% 100%; }
+.qdst.hit { background-size: 100% 100%; }
+.stats { display: flex; flex-wrap: wrap; gap: 18px; }
+.stat b { display: block; font-family: var(--f-mono); font-size: 22px; font-weight: 600; line-height: 1.2; }
+.stat span { font-size: 12px; color: var(--muted); }
+.emo { display: grid; gap: 4px; }
+.emo div { display: grid; grid-template-columns: 6.5em 1fr 2.5em; gap: 8px; align-items: center; font-size: 13px; }
+.emo s { display: block; height: 10px; background: var(--g0); border-radius: 2px; text-decoration: none; transition: width .8s; }
+.emo em { font-style: normal; font-family: var(--f-mono); color: var(--muted); text-align: right; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips span { font-size: 12.5px; border: 1px solid var(--rule); border-radius: 12px; padding: 1px 9px; }
+.sum { font-size: 14px; border-left: 0; background: var(--paper); padding: 8px 10px; border-radius: 4px; }
+.bottom { display: grid; grid-template-columns: 1fr 1.5fr; gap: 12px; }
+#cardwrap { position: relative; min-height: 132px; overflow: hidden; }
+#cardwrap.spot { box-shadow: 0 0 0 3px var(--marker); }
+.card { position: absolute; inset: 12px 16px; display: grid; align-content: center; gap: 6px; opacity: 0; transform: translateX(30px); transition: opacity .6s, transform .6s; }
+.card.on { opacity: 1; transform: none; }
+.card q { font-family: var(--f-serif); font-size: 17px; line-height: 1.45; quotes: "“" "”"; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.card div { font-size: 12.5px; color: var(--muted); }
+.dots { position: absolute; right: 14px; top: 10px; display: flex; gap: 4px; }
+.dots i { width: 6px; height: 6px; border-radius: 3px; background: var(--rule); }
+.dots i.on { background: var(--ink); }
+#capbox { display: grid; gap: 8px; align-content: space-between; }
+#cap { font-size: clamp(15px, 1.25vw, 18px); line-height: 1.6; min-height: 4.8em; }
+.prog { height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+.prog i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .4s; }
+.ctl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+footer { font-size: 12px; color: var(--muted); line-height: 1.6; }
+footer b { color: var(--ink-2); }
+.ghost { position: fixed; z-index: 50; pointer-events: none; font-family: var(--f-serif); font-size: 16px; line-height: 1.55;
+  background: var(--ghost-bg); color: var(--ink); padding: 4px 8px; border-radius: 4px; box-shadow: 0 6px 24px rgba(0,0,0,.25);
+  transition: transform 1.1s cubic-bezier(.5,0,.25,1), opacity 1.1s ease, width 1.1s ease; }
+.fade { animation: fade .5s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } }
+#errlog { display: none; }
+@media (max-width: 980px) {
+  .row, .bottom { grid-template-columns: 1fr; }
+  .row .panel { min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition-duration: .01s !important; animation-duration: .01s !important; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>读者评论 → 桥段热度与情绪地图<small>静态演示（可离线） · 只用已有结果</small></h1>
+    <div class="bar" id="books" role="group" aria-label="选择书"></div>
+    <div class="bar" role="group" aria-label="热度口径">
+      <button id="m-raw" aria-pressed="true">原始提及数</button>
+      <button id="m-heat" aria-pressed="false">位置校正热度</button>
+    </div>
+  </header>
+
+  <section class="panel" aria-label="热度-情绪时间线">
+    <div class="tlhead">
+      <h2 id="tltitle">热度-情绪时间线</h2>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="note" id="ylab"></div>
+    <svg id="tl" role="img" aria-label="按书中位置排列的场景热度柱状图"></svg>
+  </section>
+
+  <div class="row">
+    <section class="panel" aria-label="书评中的引文">
+      <div class="eyebrow">① 一条书评引用了原文</div>
+      <div class="skel" aria-hidden="true"><i style="width:92%"></i><i style="width:78%"></i></div>
+      <div class="qbox" id="review">点击时间线上的柱子，或等待自动讲解。</div>
+      <div class="skel" aria-hidden="true"><i style="width:85%"></i><i style="width:55%"></i></div>
+      <div class="note" id="revnote">灰条代表书评里的其他文字：按数据许可，书评正文和用户名一律不展示，只保留引号里的公版原文。</div>
+    </section>
+    <section class="panel" aria-label="原文位置">
+      <div class="eyebrow" id="pagehead">② 对齐到书中的位置（Project Gutenberg 公版原文）</div>
+      <div class="page" id="page"></div>
+      <div class="stats" id="pstats"></div>
+    </section>
+    <section class="panel" aria-label="读者反应">
+      <div class="eyebrow">③ 读者在引用旁写了什么（聚合）</div>
+      <div id="react"></div>
+    </section>
+  </div>
+
+  <div class="bottom">
+    <section class="panel" id="cardwrap" aria-label="金句卡片轮播">
+      <div class="eyebrow">金句卡 · 按引用它的书评数排序</div>
+      <div id="cards"></div><div class="dots" id="dots"></div>
+    </section>
+    <section class="panel" id="capbox" aria-label="自动讲解">
+      <div id="cap" aria-live="polite"></div>
+      <div class="prog"><i id="prog"></i></div>
+      <div class="ctl">
+        <div class="bar">
+          <button id="prev" title="上一步（←）">◀ 上一步</button>
+          <button id="play" aria-pressed="false" title="播放/暂停（空格）">自动讲解</button>
+          <button id="next" title="下一步（→）">下一步 ▶</button>
+          <span class="note" id="stepno"></span>
+        </div>
+        <div class="bar">
+          <button id="speed" title="讲解速度">速度 1×</button>
+          <button id="speak" aria-pressed="false" title="用系统中文语音朗读字幕">朗读</button>
+          <button id="fs" title="全屏（F）">全屏</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <b>数据许可：</b>Goodreads 书评来自 UCSD Book Graph，<b>仅限学术用途</b>，不得再分发、不得商用；本页只含聚合计数、Project Gutenberg 公版原文、跨 ≥2 条书评聚合的高频词和代理撰写的中文摘要，不含书评原文和用户名。
+    金标与摘要由代理（Claude）完成，未经人工复标。数字来源：<span id="srcs"></span>。
+    快捷键：空格 播放/暂停 · ←/→ 上一步/下一步 · 1/2/3 切换书 · R 切换口径 · F 全屏<br><b>作者：</b>Shuyao Gao（gaoshuyao.mk@gmail.com）· aSSIST University (Seoul School of Integrated Sciences and Technologies) · 서울과학종합대학원대학교 · AI 教学演示案例 / AI Teaching Demos 系列 · 代码 MIT，文档 CC BY 4.0
+  </footer>
+  <pre id="errlog"></pre>
+</div>
+
+<script id="data" type="application/json">{"books":{"gatsby":{"zh":"了不起的盖茨比","en":"The Great Gatsby","author":"F. Scott Fitzgerald","year":1925,"nReviews":6273,"nScenes":90,"nWords":48143,"nChapters":9,"nCtx":1574,"bare":0.3189,"top10":0.2679,"nQuoted":459,"scenes":[[0,1,0.0,0.01024,58.0,42.82,1.354,0],[1,1,0.01024,0.01257,13.0,39.36,0.332,1],[2,1,0.02281,0.00673,1.0,16.83,0.064,4],[3,1,0.02954,0.00785,8.0,16.76,0.48,3],[4,1,0.03739,0.01186,6.0,20.74,0.292,1],[5,1,0.04925,0.01005,9.0,14.37,0.628,0],[6,1,0.0593,0.01631,10.0,18.77,0.534,3],[7,1,0.07561,0.01778,5.0,16.12,0.313,1],[8,1,0.09339,0.01751,27.0,12.96,2.078,1],[9,1,0.1109,0.01147,15.0,7.41,2.013,0],[10,2,0.12236,0.01147,7.0,6.79,1.031,0],[11,2,0.13383,0.01319,5.0,7.23,0.695,4],[12,2,0.14702,0.00889,1.0,4.61,0.229,0],[13,2,0.15591,0.00673,4.0,3.38,1.178,4],[14,2,0.16264,0.00688,3.0,3.38,0.89,4],[15,2,0.16952,0.01327,1.0,6.36,0.167,2],[16,2,0.18279,0.01169,0.0,5.5,0.013,5],[17,2,0.19448,0.00638,20.0,2.98,6.572,0],[18,2,0.20086,0.01039,6.0,4.85,1.233,1],[19,3,0.21125,0.00623,8.0,2.92,2.693,0],[20,3,0.21748,0.00644,0.0,3.04,0.024,5],[21,3,0.22392,0.0313,3.0,15.25,0.201,0],[22,3,0.25522,0.02536,43.0,13.34,3.211,0],[23,3,0.28058,0.00729,1.0,4.05,0.26,4],[24,3,0.28787,0.0081,1.5,4.63,0.335,1],[25,3,0.29597,0.01315,2.0,7.81,0.263,4],[26,3,0.30912,0.00964,6.0,5.97,1.005,1],[27,3,0.31876,0.01157,28.0,7.46,3.729,0],[28,4,0.33033,0.01581,3.0,10.7,0.285,4],[29,4,0.34614,0.01211,1.0,8.58,0.124,4],[30,4,0.35825,0.01253,6.0,9.23,0.653,4],[31,4,0.37077,0.01028,7.5,7.83,0.959,1],[32,4,0.38105,0.00928,0.0,7.26,0.01,5],[33,4,0.39034,0.01759,4.0,14.22,0.285,4],[34,4,0.40793,0.0076,4.0,6.32,0.638,4],[35,4,0.41553,0.01091,1.0,9.23,0.115,4],[36,4,0.42644,0.00636,3.0,5.46,0.555,4],[37,4,0.43279,0.01084,22.0,9.45,2.318,0],[38,5,0.44364,0.01211,0.0,10.72,0.007,5],[39,5,0.45575,0.0092,0.0,8.24,0.009,5],[40,5,0.46495,0.00837,4.0,7.56,0.534,0],[41,5,0.47332,0.00887,0.0,8.06,0.009,5],[42,5,0.48219,0.00631,2.0,5.76,0.356,4],[43,5,0.4885,0.0086,2.0,7.86,0.262,1],[44,5,0.4971,0.00638,0.0,5.83,0.013,5],[45,5,0.50348,0.02806,48.0,25.57,1.875,0],[46,6,0.53154,0.0125,11.0,11.23,0.98,4],[47,6,0.54405,0.01304,1.0,11.54,0.092,4],[48,6,0.55709,0.01205,0.0,10.46,0.007,5],[49,6,0.56914,0.01936,5.5,16.29,0.341,0],[50,6,0.5885,0.01032,2.0,8.38,0.245,4],[51,6,0.59882,0.00866,16.0,6.85,2.321,3],[52,6,0.60748,0.00787,33.0,6.07,5.381,0],[53,7,0.61535,0.00712,0.0,5.36,0.014,5],[54,7,0.62248,0.0114,3.0,8.3,0.367,2],[55,7,0.63388,0.0069,2.0,4.84,0.422,1],[56,7,0.64078,0.02075,27.0,13.74,1.96,0],[57,7,0.66153,0.01192,0.0,7.3,0.01,5],[58,7,0.67345,0.00623,6.0,3.64,1.636,0],[59,7,0.67968,0.00629,7.0,3.55,1.951,4],[60,7,0.68598,0.00804,4.0,4.36,0.919,0],[61,7,0.69402,0.02056,8.0,10.26,0.781,0],[62,7,0.71458,0.013,9.0,5.89,1.523,1],[63,7,0.72758,0.00663,2.0,2.84,0.712,4],[64,7,0.73421,0.00762,18.0,3.14,5.621,1],[65,7,0.74183,0.00623,1.0,2.48,0.421,4],[66,7,0.74806,0.01304,1.0,4.95,0.214,3],[67,7,0.76111,0.01375,0.0,4.93,0.015,5],[68,7,0.77486,0.00719,0.0,2.48,0.029,5],[69,7,0.78205,0.00627,1.0,2.13,0.488,4],[70,7,0.78832,0.0091,1.0,3.03,0.346,4],[71,8,0.79742,0.00723,4.0,2.38,1.66,4],[72,8,0.80464,0.0134,11.5,4.39,2.595,4],[73,8,0.81804,0.01093,10.0,3.61,2.737,0],[74,8,0.82897,0.00841,7.0,2.83,2.435,0],[75,8,0.83738,0.01803,21.0,6.36,3.275,0],[76,8,0.85541,0.00702,0.0,2.65,0.027,5],[77,8,0.86243,0.0065,0.0,2.57,0.028,5],[78,8,0.86893,0.0064,2.0,2.67,0.756,4],[79,8,0.87533,0.01616,20.0,7.52,2.644,1],[80,9,0.89149,0.01502,2.0,8.45,0.243,4],[81,9,0.90651,0.00646,0.0,4.26,0.017,5],[82,9,0.91297,0.00675,0.0,4.97,0.015,5],[83,9,0.91972,0.01529,4.0,13.83,0.293,4],[84,9,0.93501,0.00868,15.0,10.14,1.475,0],[85,9,0.94369,0.01007,3.0,14.73,0.208,4],[86,9,0.95376,0.00762,7.0,14.06,0.5,1],[87,9,0.96139,0.01126,7.0,27.23,0.259,0],[88,9,0.97264,0.01824,79.0,70.75,1.117,1],[89,9,0.99088,0.00912,159.0,58.0,2.739,0]],"detail":{"17":{"ch":2,"pos":0.1977,"m":20.0,"e":2.98,"h":6.57,"q":"I was within and without, simultaneously enchanted and repelled by the inexhaustible variety of life.","qn":19,"open":"The bottle of whisky—a second one—was now in constant demand by all present, excepting Catherine, who “felt just as good on nothing at all.” Tom rang for the janitor and sent him for some celebrated sandwiches, which were a complete…","feat":["揭示/反转"],"hooks":["反转悬念：用“你以为……其实……”句式，把揭示前后的两句话并排呈现。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"],"emo":{"文笔赞叹":1},"nctx":25,"bare":0.28,"kw":["new","york","party","sure","wasnt","review"],"sum":"读者把 Nick 这句“身在其中又置身其外”当作叙述者立场的自白来引用，多半直接贴原句，少数称赞文字。"},"64":{"ch":7,"pos":0.738,"m":18.0,"e":3.14,"h":5.62,"q":"Thirty—the promise of a decade of loneliness, a thinning list of single men to know, a thinning briefcase of enthusiasm, thinning hair.","qn":6,"open":"It passed, and he began to talk excitedly to Daisy, denying everything, defending his name against accusations that had not been made. But with every word she was drawing further and further into herself, so he gave that up, and…","feat":["死亡/离别","冲突","悬疑/不安","幽默"],"hooks":["悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。","冲突对峙：选一段针锋相对的对白做双人配音，适合短视频口播。","幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"],"emo":{"治愈/释然":1},"nctx":25,"bare":0.44,"kw":["enthusiasm","case","brief","hair","thinning","thats"],"sum":"第七章三十岁生日那段被当作全书的主题句之一；有读者说读到“驶向死亡”那句时彻底被文字折服。"},"52":{"ch":6,"pos":0.6114,"m":33.0,"e":6.07,"h":5.38,"q":"At his lips’ touch she blossomed for him like a flower and the incarnation was complete.","qn":14,"open":"“I’m going to fix everything just the way it was before,” he said, nodding determinedly. “She’ll see.” He talked a lot about the past, and I gathered that he wanted to recover something, some idea of himself perhaps, that had…","feat":["爱情/表白","冲突","悬疑/不安"],"hooks":["情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。","冲突对峙：选一段针锋相对的对白做双人配音，适合短视频口播。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"],"emo":{"文笔赞叹":8,"愤怒":2,"震撼/意外":1,"意难平/心碎":1},"nctx":82,"bare":0.49,"kw":["heart","beat","faster","gatsbys","great","love"],"sum":"盖茨比第一次吻黛西的段落，读者多赞叹意象之美，也有人嫌文字绕、读不懂。"},"27":{"ch":3,"pos":0.3245,"m":28.0,"e":7.46,"h":3.73,"q":"Everyone suspects himself of at least one of the cardinal virtues, and this is mine: I am one of the few honest people that I have ever known.","qn":17,"open":"For a while I lost sight of Jordan Baker, and then in midsummer I found her again. At first I was flattered to go places with her, because she was a golf champion, and everyone knew her name. Then it…","feat":["爱情/表白","揭示/反转"],"hooks":["情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。","悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。","反转悬念：用“你以为……其实……”句式，把揭示前后的两句话并排呈现。"],"emo":{"文笔赞叹":4,"意难平/心碎":1,"共鸣/认同":1,"震撼/意外":1},"nctx":40,"bare":0.28,"kw":["himself","reader","dont","lightly","nicks","honest"],"sum":null},"75":{"ch":8,"pos":0.8464,"m":21.0,"e":6.36,"h":3.27,"q":"You’re worth the whole damn bunch put together.","qn":18,"open":"It was nine o’clock when we finished breakfast and went out on the porch. The night had made a sharp difference in the weather and there was an autumn flavour in the air. The gardener, the last one of Gatsby’s…","feat":["死亡/离别","冲突"],"hooks":["悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"],"emo":{"文笔赞叹":4,"治愈/释然":1,"震撼/意外":1,"愤怒":1},"nctx":46,"bare":0.48,"kw":["crowd","rotten","theyre","money","first","best"],"sum":null},"22":{"ch":3,"pos":0.2679,"m":43.0,"e":13.34,"h":3.21,"q":"It was one of those rare smiles with a quality of eternal reassurance in it, that you may come across four or five times in life.","qn":20,"open":"There was dancing now on the canvas in the garden; old men pushing young girls backward in eternal graceless circles, superior couples holding each other tortuously, fashionably, and keeping in the corners—and a great number of single girls dancing individually…","feat":["悬疑/不安","幽默"],"hooks":["文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。","幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"],"emo":{"文笔赞叹":7,"共鸣/认同":2,"治愈/释然":2,"心动":1},"nctx":99,"bare":0.32,"kw":["favor","understood","external","smile","gatsbys","first"],"sum":null},"89":{"ch":9,"pos":0.9954,"m":159.0,"e":58.0,"h":2.74,"q":"So we beat on, boats against the current, borne back ceaselessly into the past.","qn":122,"open":"I spent my Saturday nights in New York because those gleaming, dazzling parties of his were with me so vividly that I could still hear the music and the laughter, faint and incessant, from his garden, and the cars going…","feat":["重逢","幽默","感官描写"],"hooks":["结尾余韵：用最后一句「So we beat on, boats against the current, borne back ceaselessly into the past.」做片尾字幕，引导评论区写“你读到这里时的感受”。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。","幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"],"emo":{"文笔赞叹":67,"共鸣/认同":11,"治愈/释然":5,"意难平/心碎":2},"nctx":284,"bare":0.2,"kw":["farther","fine","morning","orgastic","morrow","last"],"sum":null},"73":{"ch":8,"pos":0.8235,"m":10.0,"e":3.61,"h":2.74,"q":"At the grey tea hour there were always rooms that throbbed incessantly with this low, sweet fever, while fresh faces drifted here and there like rose petals blown by the sad horns around the floor.","qn":3,"open":"On the last afternoon before he went abroad, he sat with Daisy in his arms for a long, silent time. It was a cold fall day, with fire in the room and her cheeks flushed. Now and then she moved…","feat":["死亡/离别","悬疑/不安","感官描写"],"hooks":["悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。","幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"],"emo":{"好笑":1,"文笔赞叹":1},"nctx":12,"bare":0.08,"kw":["gray"],"sum":null},"19":{"ch":3,"pos":0.2144,"m":8.0,"e":2.92,"h":2.69,"q":"In his blue gardens men and girls came and went like moths among the whisperings and the champagne and the stars.","qn":5,"open":"There was music from my neighbour’s house through the summer nights. In his blue gardens men and girls came and went like moths among the whisperings and the champagne and the stars. At high tide in the afternoon I watched…","feat":["悬疑/不安","感官描写"],"hooks":["文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"],"emo":{"文笔赞叹":2,"心动":1},"nctx":9,"bare":0.22,"kw":["gatsbys","parties","across"],"sum":null},"79":{"ch":8,"pos":0.8834,"m":20.0,"e":7.52,"h":2.64,"q":"He must have looked up at an unfamiliar sky through frightening leaves and shivered as he found what a grotesque thing a rose is and how raw the sunlight was upon the scarcely created grass.","qn":14,"open":"Standing behind him, Michaelis saw with a shock that he was looking at the eyes of Doctor T. J. Eckleburg, which had just emerged, pale and enormous, from the dissolving night. “God sees everything,” repeated Wilson. “That’s an advertisement,” Michaelis…","feat":["悬疑/不安"],"hooks":["文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"],"emo":{"共鸣/认同":9,"文笔赞叹":2,"愤怒":1},"nctx":57,"bare":0.47,"kw":["love","next","realization","paragraph","man","didnt"],"sum":null}},"peaks":[17,64,52,27,75,22,89,73,19,79],"rawPeak":89,"cards":[{"s":"So we beat on, boats against the current, borne back ceaselessly into the past.","ch":9,"n":122,"sid":89},{"s":"They were careless people, Tom and Daisy—they smashed up things and creatures and then retreated back into their money or their vast carelessness, or whatever it was that kept them together, and let other people clean up the mess they had made …","ch":9,"n":66,"sid":88},{"s":"It eluded us then, but that’s no matter—tomorrow we will run faster, stretch out our arms further … And one fine morning—","ch":9,"n":52,"sid":89},{"s":"Gatsby believed in the green light, the orgiastic future that year by year recedes before us.","ch":9,"n":50,"sid":89},{"s":"And I hope she’ll be a fool—that’s the best thing a girl can be in this world, a beautiful little fool.’","ch":1,"n":25,"sid":8},{"s":"Whenever you feel like criticizing anyone,” he told me, “just remember that all the people in this world haven’t had the advantages that you’ve had.","ch":1,"n":22,"sid":0},{"s":"It was one of those rare smiles with a quality of eternal reassurance in it, that you may come across four or five times in life.","ch":3,"n":20,"sid":22},{"s":"It faced—or seemed to face—the whole eternal world for an instant, and then concentrated on you with an irresistible prejudice in your favour.","ch":3,"n":20,"sid":22},{"s":"I was within and without, simultaneously enchanted and repelled by the inexhaustible variety of life.","ch":2,"n":19,"sid":17},{"s":"And as I sat there brooding on the old, unknown world, I thought of Gatsby’s wonder when he first picked out the green light at the end of Daisy’s dock.","ch":9,"n":19,"sid":89},{"s":"No amount of fire or freshness can challenge what a man can store up in his ghostly heart.","ch":5,"n":19,"sid":45},{"s":"You’re worth the whole damn bunch put together.","ch":8,"n":18,"sid":75}]},"pride":{"zh":"傲慢与偏见","en":"Pride and Prejudice","author":"Jane Austen","year":1813,"nReviews":5858,"nScenes":200,"nWords":121571,"nChapters":61,"nCtx":851,"bare":0.3608,"top10":0.3177,"nQuoted":354,"scenes":[[0,1,0.0,0.00254,121.0,6.41,18.685,0],[1,1,0.00254,0.00443,4.0,10.16,0.398,2],[2,2,0.00697,0.00656,5.0,13.05,0.387,0],[3,3,0.01352,0.00377,0.0,6.59,0.011,5],[4,3,0.01729,0.00257,4.0,4.17,0.959,4],[5,3,0.01986,0.00294,7.0,4.46,1.56,0],[6,3,0.0228,0.00469,1.0,6.52,0.163,4],[7,4,0.02749,0.00274,0.0,3.51,0.021,5],[8,4,0.03023,0.00598,1.0,6.97,0.152,4],[9,5,0.03621,0.00308,0.0,3.27,0.022,5],[10,5,0.03929,0.00475,25.0,4.66,5.297,0],[11,6,0.04404,0.00429,4.0,3.86,1.034,4],[12,6,0.04833,0.00274,4.0,2.31,1.709,1],[13,6,0.05107,0.00572,3.0,4.47,0.677,4],[14,6,0.05679,0.0065,7.0,4.58,1.521,4],[15,7,0.06329,0.0035,0.0,2.28,0.032,5],[16,7,0.06679,0.00341,0.0,2.1,0.034,5],[17,7,0.07021,0.00583,2.0,3.35,0.605,4],[18,7,0.07604,0.00362,1.0,1.95,0.531,0],[19,8,0.07966,0.00254,2.0,1.31,1.496,2],[20,8,0.0822,0.00755,2.0,3.65,0.557,4],[21,8,0.08975,0.00327,3.0,1.48,1.98,4],[22,8,0.09302,0.00248,1.0,1.08,0.927,4],[23,9,0.09549,0.0073,2.0,3.03,0.668,4],[24,9,0.1028,0.00294,1.0,1.16,0.871,4],[25,9,0.10574,0.00396,1.0,1.51,0.68,4],[26,10,0.1097,0.00417,1.0,1.53,0.67,4],[27,10,0.11387,0.00272,3.0,0.97,2.949,1],[28,10,0.11659,0.00372,2.0,1.29,1.524,4],[29,10,0.12031,0.00753,1.0,2.5,0.418,4],[30,11,0.12784,0.00276,0.0,0.88,0.078,5],[31,11,0.1306,0.01036,16.0,3.17,4.951,1],[32,12,0.14096,0.00554,0.0,1.62,0.044,5],[33,13,0.1465,0.00416,0.0,1.19,0.059,5],[34,13,0.15066,0.00436,1.0,1.22,0.829,0],[35,13,0.15502,0.00538,1.0,1.48,0.692,1],[36,14,0.1604,0.00648,1.0,1.75,0.59,4],[37,14,0.16688,0.00269,0.5,0.71,0.728,4],[38,15,0.16957,0.00596,1.0,1.56,0.656,4],[39,15,0.17553,0.00793,0.0,2.05,0.035,5],[40,16,0.18346,0.00649,1.0,1.66,0.619,4],[41,16,0.18995,0.00309,0.0,0.79,0.086,5],[42,16,0.19304,0.00285,0.0,0.72,0.093,5],[43,16,0.19589,0.00454,0.0,1.15,0.06,5],[44,16,0.20043,0.00512,1.0,1.3,0.781,1],[45,16,0.20555,0.00247,0.0,0.63,0.106,5],[46,16,0.20802,0.00308,0.0,0.78,0.087,5],[47,17,0.21109,0.00324,1.0,0.83,1.194,0],[48,17,0.21434,0.00724,0.0,1.85,0.038,5],[49,18,0.22157,0.00253,0.0,0.65,0.102,5],[50,18,0.22411,0.00349,2.0,0.9,2.127,4],[51,18,0.2276,0.00256,1.0,0.66,1.455,4],[52,18,0.23015,0.00258,0.0,0.67,0.099,5],[53,18,0.23274,0.00346,3.0,0.91,3.13,1],[54,18,0.2362,0.01225,1.0,3.26,0.322,2],[55,18,0.24845,0.00703,0.0,1.92,0.037,5],[56,18,0.25548,0.00532,2.0,1.48,1.337,4],[57,18,0.2608,0.00327,0.0,0.92,0.075,5],[58,19,0.26408,0.00261,0.0,0.74,0.091,5],[59,19,0.26668,0.00554,0.0,1.59,0.044,5],[60,19,0.27223,0.00755,4.0,2.22,1.778,2],[61,20,0.27978,0.00734,11.0,2.21,4.848,3],[62,20,0.28712,0.00294,6.0,0.9,6.23,4],[63,20,0.29005,0.00324,0.0,1.01,0.069,5],[64,21,0.29329,0.00815,0.0,2.58,0.028,5],[65,21,0.30145,0.00828,0.0,2.7,0.027,5],[66,22,0.30973,0.00693,2.0,2.33,0.864,3],[67,22,0.31665,0.0073,0.0,2.52,0.029,5],[68,23,0.32396,0.00716,0.0,2.53,0.028,5],[69,23,0.33112,0.00347,0.0,1.25,0.056,5],[70,23,0.33459,0.00261,1.0,0.95,1.048,4],[71,24,0.33719,0.00532,1.0,1.97,0.526,0],[72,24,0.34252,0.01052,15.0,4.0,3.703,1],[73,25,0.35304,0.0042,0.0,1.63,0.043,5],[74,25,0.35723,0.00276,3.0,1.09,2.648,4],[75,25,0.36,0.00549,0.0,2.19,0.033,5],[76,26,0.36549,0.00452,0.0,1.83,0.039,5],[77,26,0.37001,0.00391,1.0,1.6,0.642,4],[78,26,0.37392,0.01072,2.0,4.48,0.456,1],[79,27,0.38464,0.00572,2.0,2.44,0.825,4],[80,27,0.39036,0.0046,9.0,1.99,4.399,0],[81,28,0.39495,0.01191,1.0,5.25,0.202,4],[82,29,0.40687,0.00397,0.0,1.78,0.04,5],[83,29,0.41084,0.00756,1.0,3.43,0.306,4],[84,29,0.4184,0.00503,2.0,2.32,0.868,4],[85,29,0.42343,0.00301,0.0,1.39,0.05,5],[86,30,0.42644,0.01011,0.0,4.74,0.015,5],[87,31,0.43655,0.00267,0.0,1.26,0.056,5],[88,31,0.43922,0.00248,0.0,1.18,0.059,5],[89,31,0.44169,0.00763,11.0,3.65,2.974,0],[90,32,0.44932,0.00357,0.0,1.72,0.041,5],[91,32,0.45289,0.00325,0.0,1.57,0.045,5],[92,32,0.45614,0.00545,0.0,2.65,0.027,5],[93,33,0.46159,0.00311,0.0,1.52,0.047,5],[94,33,0.4647,0.00324,0.0,1.59,0.045,5],[95,33,0.46794,0.00507,0.0,2.49,0.029,5],[96,33,0.47301,0.00383,0.0,1.89,0.038,5],[97,34,0.47684,0.00322,0.0,1.59,0.044,5],[98,34,0.48007,0.00403,29.0,1.99,14.055,1],[99,34,0.4841,0.00355,1.0,1.76,0.587,4],[100,34,0.48764,0.00645,11.0,3.2,3.381,0],[101,35,0.49409,0.00271,0.0,1.34,0.052,5],[102,35,0.4968,0.0015,0.0,0.74,0.091,5],[103,35,0.49829,0.02042,3.0,10.14,0.301,4],[104,36,0.51871,0.00957,2.0,4.72,0.432,4],[105,36,0.52828,0.00686,10.0,3.37,2.927,0],[106,37,0.53514,0.00622,0.0,3.03,0.024,5],[107,37,0.54135,0.00503,1.0,2.44,0.427,4],[108,38,0.54639,0.00853,1.0,4.1,0.257,4],[109,39,0.55492,0.00855,1.0,4.06,0.26,4],[110,39,0.56346,0.00484,0.0,2.27,0.032,5],[111,40,0.56831,0.00387,0.0,1.8,0.039,5],[112,40,0.57218,0.00278,3.0,1.29,2.26,2],[113,40,0.57496,0.00713,0.0,3.27,0.022,5],[114,41,0.5821,0.00494,0.0,2.23,0.032,5],[115,41,0.58704,0.00656,0.0,2.92,0.025,5],[116,41,0.5936,0.00256,1.0,1.13,0.895,1],[117,41,0.59615,0.00456,0.0,1.99,0.036,5],[118,42,0.60071,0.00275,2.0,1.19,1.647,1],[119,42,0.60346,0.00379,1.0,1.62,0.634,4],[120,42,0.60725,0.00846,1.0,3.54,0.297,4],[121,43,0.61571,0.00388,0.0,1.59,0.044,5],[122,43,0.61959,0.00409,0.0,1.66,0.043,5],[123,43,0.62368,0.00429,1.0,1.71,0.601,4],[124,43,0.62797,0.00387,0.0,1.52,0.046,5],[125,43,0.63184,0.00689,0.0,2.65,0.027,5],[126,43,0.63874,0.00401,0.0,1.51,0.047,5],[127,43,0.64274,0.0048,0.0,1.78,0.04,5],[128,43,0.64755,0.00318,0.0,1.15,0.06,5],[129,43,0.65072,0.00483,0.0,1.72,0.041,5],[130,44,0.65555,0.00557,0.0,1.94,0.037,5],[131,44,0.66112,0.00946,0.0,3.18,0.023,5],[132,44,0.67058,0.00415,1.0,1.35,0.756,4],[133,45,0.67473,0.01043,0.0,3.25,0.022,5],[134,45,0.68516,0.00378,2.0,1.13,1.717,4],[135,46,0.68895,0.00959,0.0,2.77,0.026,5],[136,46,0.69854,0.00872,0.0,2.38,0.03,5],[137,46,0.70726,0.0029,0.0,0.77,0.088,5],[138,46,0.71016,0.00354,0.0,0.92,0.075,5],[139,47,0.7137,0.00457,0.0,1.16,0.06,5],[140,47,0.71826,0.00337,0.0,0.84,0.082,5],[141,47,0.72164,0.00257,0.0,0.62,0.106,5],[142,47,0.7242,0.00359,0.0,0.86,0.08,5],[143,47,0.72779,0.00526,0.0,1.23,0.057,5],[144,47,0.73305,0.00414,2.0,0.94,2.042,4],[145,47,0.73719,0.00341,0.0,0.76,0.089,5],[146,47,0.7406,0.00256,0.0,0.56,0.117,5],[147,47,0.74315,0.00408,0.0,0.88,0.078,5],[148,48,0.74723,0.00729,0.0,1.53,0.046,5],[149,48,0.75452,0.00292,0.0,0.6,0.11,5],[150,48,0.75744,0.00832,0.0,1.66,0.043,5],[151,49,0.76576,0.00361,0.0,0.7,0.095,5],[152,49,0.76937,0.00379,0.0,0.73,0.092,5],[153,49,0.77316,0.00473,0.0,0.9,0.076,5],[154,49,0.77789,0.00629,0.0,1.17,0.059,5],[155,50,0.78418,0.00456,0.0,0.84,0.081,5],[156,50,0.78874,0.00395,0.0,0.72,0.094,5],[157,50,0.79269,0.0041,5.0,0.74,6.233,4],[158,50,0.79679,0.00548,0.0,0.98,0.07,5],[159,51,0.80226,0.00817,1.0,1.46,0.702,4],[160,51,0.81043,0.00262,0.0,0.47,0.137,5],[161,51,0.81306,0.00285,0.0,0.51,0.127,5],[162,51,0.81591,0.00336,0.0,0.6,0.11,5],[163,52,0.81927,0.01537,1.0,2.77,0.377,4],[164,52,0.83464,0.00408,5.0,0.75,6.127,1],[165,52,0.83872,0.0021,1.0,0.39,2.306,4],[166,52,0.84082,0.00336,0.0,0.63,0.105,5],[167,53,0.84417,0.00257,1.0,0.49,1.898,4],[168,53,0.84675,0.00736,0.0,1.44,0.049,5],[169,53,0.85411,0.00351,0.0,0.71,0.095,5],[170,53,0.85762,0.00384,0.0,0.79,0.086,5],[171,53,0.86146,0.00312,0.0,0.66,0.101,5],[172,53,0.86458,0.00372,0.0,0.81,0.084,5],[173,54,0.8683,0.0051,1.0,1.14,0.882,4],[174,54,0.8734,0.008,2.0,1.9,1.049,4],[175,55,0.88139,0.00406,1.0,1.03,0.975,4],[176,55,0.88546,0.0026,0.0,0.68,0.098,5],[177,55,0.88806,0.00517,0.0,1.42,0.05,5],[178,55,0.89323,0.00728,1.0,2.16,0.48,5],[179,56,0.90051,0.00555,0.0,1.8,0.039,5],[180,56,0.90606,0.00338,2.0,1.18,1.66,4],[181,56,0.90944,0.0033,0.0,1.21,0.058,5],[182,56,0.91274,0.00348,1.0,1.35,0.755,4],[183,56,0.91622,0.00258,4.0,1.06,3.606,1],[184,56,0.9188,0.0041,7.0,1.78,3.819,0],[185,57,0.9229,0.00639,0.0,3.07,0.024,5],[186,57,0.92929,0.00718,9.0,3.96,2.252,1],[187,58,0.93647,0.00427,8.0,2.67,2.947,3],[188,58,0.94074,0.00297,2.0,2.02,0.993,1],[189,58,0.94371,0.00366,0.0,2.69,0.027,5],[190,58,0.94737,0.00446,14.0,3.62,3.807,1],[191,58,0.95183,0.00464,0.0,4.24,0.017,5],[192,59,0.95647,0.00586,4.0,6.18,0.652,1],[193,59,0.96233,0.00878,1.0,11.44,0.093,1],[194,59,0.9711,0.00567,5.0,9.23,0.545,0],[195,60,0.97677,0.00633,24.0,12.56,1.906,0],[196,60,0.9831,0.00392,4.0,9.26,0.437,0],[197,60,0.98702,0.0028,0.0,7.45,0.01,5],[198,61,0.98982,0.00499,4.0,15.34,0.264,2],[199,61,0.99481,0.00519,2.0,19.36,0.107,1]],"detail":{"0":{"ch":1,"pos":0.0013,"m":121.0,"e":6.41,"h":18.68,"q":"It is a truth universally acknowledged, that a single man in possession of a good fortune must be in want of a wife.","qn":120,"open":"It is a truth universally acknowledged, that a single man in possession of a good fortune must be in want of a wife. However little known the feelings or views of such a man may be on his first entering…","feat":["金句","揭示/反转","重逢"],"hooks":["开篇钩子：把第一句「It is a truth universally acknowledged, that a single man in possession of a good fortun…」打在封面上，3 秒内提问“这句话其实是反讽，你看出来了吗”。","金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。","反转悬念：用“你以为……其实……”句式，把揭示前后的两句话并排呈现。"],"emo":{"文笔赞叹":23,"共鸣/认同":6,"好笑":5,"愤怒":4},"nctx":136,"bare":0.07,"kw":["prejudice","pride","austen","first","love","austens"],"sum":"开篇第一句被大量引用，还常被读者改写成“举世公认……”来给自己的书评开头。"},"98":{"ch":34,"pos":0.4821,"m":29.0,"e":1.99,"h":14.05,"q":"You must allow me to tell you how ardently I admire and love you.","qn":28,"open":"“In vain have I struggled. It will not do. My feelings will not be repressed. You must allow me to tell you how ardently I admire and love you.” Elizabeth’s astonishment was beyond expression. She stared, coloured, doubted, and was…","feat":["爱情/表白","揭示/反转","冲突","悬疑/不安"],"hooks":["情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。","反转悬念：用“你以为……其实……”句式，把揭示前后的两句话并排呈现。","冲突对峙：选一段针锋相对的对白做双人配音，适合短视频口播。"],"emo":{"共鸣/认同":3,"文笔赞叹":2,"好笑":1,"震撼/意外":1},"nctx":32,"bare":0.34,"kw":["love","enough","austen","good","some","pride"],"sum":"达西第一次求婚的台词常被原样引用，或改写成“我热烈地爱慕这本书”来表达喜爱。"},"157":{"ch":50,"pos":0.7947,"m":5.0,"e":0.74,"h":6.23,"q":"But how little of permanent happiness could belong to a couple who were only brought together because their passions were stronger than their virtue, she could easily conjecture.","qn":5,"open":"Elizabeth was now most heartily sorry that she had, from the distress of the moment, been led to make Mr. Darcy acquainted with their fears for her sister; for since her marriage would so shortly give the proper termination to…","feat":["爱情/表白","悬疑/不安"],"hooks":["情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。"],"emo":{},"nctx":9,"bare":0.33,"kw":["another","heedless","lives","sort","characters","essentially"],"sum":"叙述者评价 Lydia 与 Wickham 婚姻的一句被反复摘录，读者多只贴原文、不加评论。"},"62":{"ch":20,"pos":0.2886,"m":6.0,"e":0.9,"h":6.23,"q":"Those who do not complain are never pitied.","qn":5,"open":"While the family were in this confusion, Charlotte Lucas came to spend the day with them. She was met in the vestibule by Lydia, who, flying to her, cried in a half whisper, “I am glad you are come, for…","feat":["金句","死亡/离别"],"hooks":["金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。","悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。"],"emo":{},"nctx":9,"bare":0.44,"kw":[],"sum":null},"164":{"ch":52,"pos":0.8367,"m":5.0,"e":0.75,"h":6.13,"q":"Her heart did whisper that he had done it for her.","qn":5,"open":"The contents of this letter threw Elizabeth into a flutter of spirits, in which it was difficult to determine whether pleasure or pain bore the greatest share. The vague and unsettled suspicions which uncertainty had produced, of what Mr. Darcy…","feat":["金句","爱情/表白","冲突"],"hooks":["金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。","情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。","冲突对峙：选一段针锋相对的对白做双人配音，适合短视频口播。"],"emo":{"共鸣/认同":1},"nctx":6,"bare":0.17,"kw":["freaking"],"sum":null},"10":{"ch":5,"pos":0.0417,"m":25.0,"e":4.66,"h":5.3,"q":"Pride relates more to our opinion of ourselves; vanity to what we would have others think of us.","qn":20,"open":"“Upon my word! Well, that was very decided, indeed--that does seem as if--but, however, it may all come to nothing, you know.” “My overhearings were more to the purpose than yours, Eliza,” said Charlotte. “Mr. Darcy is not so well…","feat":["冲突"],"hooks":["悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。","幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"],"emo":{"文笔赞叹":4,"好笑":1,"意难平/心碎":1,"治愈/释然":1},"nctx":63,"bare":0.6,"kw":["pride","austen","good","love","mother","received"],"sum":null},"31":{"ch":11,"pos":0.1358,"m":16.0,"e":3.17,"h":4.95,"q":"I declare, after all, there is no enjoyment like reading!","qn":9,"open":"Miss Bingley’s attention was quite as much engaged in watching Mr. Darcy’s progress through his book, as in reading her own; and she was perpetually either making some inquiry, or looking at his page. She could not win him, however,…","feat":["金句","冲突","幽默"],"hooks":["金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。","幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"],"emo":{"共鸣/认同":3,"文笔赞叹":2},"nctx":33,"bare":0.33,"kw":["love","austen","characters","detest","certainly","invoked"],"sum":null},"61":{"ch":20,"pos":0.2834,"m":11.0,"e":2.21,"h":4.85,"q":"Collins, and I will never see you again if you do.","qn":10,"open":"Mr. Collins was not left long to the silent contemplation of his successful love; for Mrs. Bennet, having dawdled about in the vestibule to watch for the end of the conference, no sooner saw Elizabeth open the door and with…","feat":["爱情/表白","死亡/离别","冲突","重逢","悬疑/不安"],"hooks":["情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。","悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。","冲突对峙：选一段针锋相对的对白做双人配音，适合短视频口播。"],"emo":{"愤怒":1,"意难平/心碎":1},"nctx":48,"bare":0.62,"kw":["love","dont","marry","character","tongued","bennett"],"sum":null},"80":{"ch":27,"pos":0.3927,"m":9.0,"e":1.99,"h":4.4,"q":"Stupid men are the only ones worth knowing, after all.","qn":5,"open":"“But, my dear Elizabeth,” she added, “what sort of girl is Miss King? I should be sorry to think our friend mercenary.” “Pray, my dear aunt, what is the difference in matrimonial affairs, between the mercenary and the prudent motive?…","feat":["金句","死亡/离别","悬疑/不安"],"hooks":["金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。","悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"],"emo":{"文笔赞叹":1},"nctx":18,"bare":0.5,"kw":["manner","travelers","wit","first","attempt","less"],"sum":null},"184":{"ch":56,"pos":0.9209,"m":7.0,"e":1.78,"h":3.82,"q":"I am only resolved to act in that manner, which will, in my own opinion, constitute my happiness, without reference to you, or to any person so wholly unconnected with me.","qn":4,"open":"“You can now have nothing further to say,” she resentfully answered. “You have insulted me, in every possible method. I must beg to return to the house.” And she rose as she spoke. Lady Catherine rose also, and they turned…","feat":["冲突"],"hooks":["冲突对峙：选一段针锋相对的对白做双人配音，适合短视频口播。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"],"emo":{"文笔赞叹":2},"nctx":12,"bare":0.5,"kw":["utter","hurl","regular","insolence","put","wife"],"sum":null}},"peaks":[0,98,157,62,164,10,31,61,80,184],"rawPeak":0,"cards":[{"s":"It is a truth universally acknowledged, that a single man in possession of a good fortune must be in want of a wife.","ch":1,"n":120,"sid":0},{"s":"You must allow me to tell you how ardently I admire and love you.","ch":34,"n":28,"sid":98},{"s":"Pride relates more to our opinion of ourselves; vanity to what we would have others think of us.","ch":5,"n":20,"sid":10},{"s":"I cannot fix on the hour, or the spot, or the look, or the words, which laid the foundation.","ch":60,"n":18,"sid":195},{"s":"I was in the middle before I knew that I had begun.","ch":60,"n":18,"sid":195},{"s":"Vanity and pride are different things, though the words are often used synonymously.","ch":5,"n":15,"sid":10},{"s":"A person may be proud without being vain.","ch":5,"n":15,"sid":10},{"s":"The more I see of the world the more am I dissatisfied with it; and every day confirms my belief of the inconsistency of all human characters, and of the little dependence that can be placed on the appearance of either merit or sense.","ch":24,"n":11,"sid":72},{"s":"Collins, and I will never see you again if you do.","ch":20,"n":10,"sid":61},{"s":"Think only of the past as its remembrance gives you pleasure.","ch":58,"n":10,"sid":190},{"s":"Your mother will never see you again if you do not marry Mr.","ch":20,"n":10,"sid":61},{"s":"There are few people whom I really love, and still fewer of whom I think well.","ch":24,"n":9,"sid":72}]},"janeeyre":{"zh":"简·爱","en":"Jane Eyre","author":"Charlotte Brontë","year":1847,"nReviews":4111,"nScenes":334,"nWords":184376,"nChapters":38,"nCtx":1055,"bare":0.5033,"top10":0.1883,"nQuoted":565,"scenes":[[0,1,0.0,0.00183,4.0,4.48,0.894,0],[1,1,0.00183,0.00179,0.0,4.17,0.017,5],[2,1,0.00362,0.00191,0.0,4.24,0.017,5],[3,1,0.00554,0.0022,0.0,4.62,0.016,5],[4,1,0.00774,0.00271,0.0,5.34,0.014,5],[5,2,0.01045,0.00334,0.0,6.1,0.012,5],[6,2,0.01379,0.0033,0.0,5.55,0.013,5],[7,2,0.0171,0.00635,4.0,9.5,0.426,1],[8,2,0.02344,0.00184,0.0,2.5,0.029,5],[9,3,0.02528,0.00478,0.0,6.04,0.012,5],[10,3,0.03006,0.00223,1.0,2.62,0.399,4],[11,3,0.03229,0.00703,2.0,7.47,0.275,4],[12,3,0.03932,0.00325,1.0,3.12,0.337,4],[13,4,0.04258,0.00356,1.0,3.19,0.329,4],[14,4,0.04614,0.00562,1.0,4.62,0.229,4],[15,4,0.05176,0.00258,0.0,1.97,0.036,5],[16,4,0.05433,0.00201,0.0,1.48,0.048,5],[17,4,0.05635,0.00221,7.0,1.56,4.316,3],[18,4,0.05856,0.00175,0.0,1.2,0.058,5],[19,4,0.06031,0.00236,0.0,1.56,0.045,5],[20,4,0.06268,0.00211,0.0,1.35,0.052,5],[21,4,0.06479,0.00428,0.0,2.6,0.028,5],[22,4,0.06907,0.00236,0.0,1.36,0.052,5],[23,4,0.07143,0.00259,1.0,1.44,0.709,4],[24,5,0.07402,0.00408,0.0,2.16,0.033,5],[25,5,0.0781,0.00754,0.0,3.69,0.02,5],[26,5,0.08564,0.00187,0.0,0.86,0.079,5],[27,5,0.08751,0.00197,0.0,0.89,0.077,5],[28,5,0.08948,0.00227,0.0,1.0,0.069,5],[29,5,0.09175,0.00287,0.0,1.22,0.057,5],[30,5,0.09462,0.00166,0.0,0.69,0.097,5],[31,5,0.09628,0.00266,0.0,1.08,0.064,5],[32,5,0.09893,0.00213,0.0,0.84,0.081,5],[33,6,0.10107,0.00238,0.0,0.92,0.075,5],[34,6,0.10345,0.00182,0.0,0.69,0.097,5],[35,6,0.10527,0.00192,0.0,0.71,0.094,5],[36,6,0.10719,0.00219,5.0,0.8,5.834,4],[37,6,0.10937,0.00293,0.0,1.04,0.066,5],[38,6,0.11231,0.00221,4.5,0.77,5.428,0],[39,6,0.11452,0.00228,10.0,0.78,11.824,4],[40,7,0.1168,0.0021,0.0,0.7,0.096,5],[41,7,0.1189,0.00173,0.0,0.57,0.115,5],[42,7,0.12063,0.00202,0.0,0.66,0.101,5],[43,7,0.12266,0.00316,0.0,1.0,0.069,5],[44,7,0.12581,0.00396,1.0,1.23,0.824,0],[45,7,0.12978,0.00471,0.0,1.42,0.05,5],[46,7,0.13449,0.0017,1.0,0.5,1.868,1],[47,8,0.13619,0.00467,9.0,1.35,6.363,1],[48,8,0.14086,0.00405,1.0,1.14,0.881,4],[49,8,0.14491,0.00227,0.0,0.63,0.105,5],[50,8,0.14718,0.00521,3.5,1.42,2.387,4],[51,9,0.1524,0.00263,1.0,0.7,1.379,4],[52,9,0.15502,0.00274,0.0,0.73,0.092,5],[53,9,0.15776,0.00572,2.0,1.5,1.321,4],[54,9,0.16349,0.00225,0.0,0.58,0.113,5],[55,9,0.16574,0.00423,1.0,1.08,0.93,4],[56,10,0.16997,0.00241,0.0,0.61,0.108,5],[57,10,0.17238,0.00639,5.0,1.6,3.024,4],[58,10,0.17877,0.00404,0.0,1.0,0.069,5],[59,10,0.18281,0.00177,0.0,0.44,0.145,5],[60,10,0.18458,0.0031,0.0,0.76,0.088,5],[61,10,0.18768,0.00223,0.0,0.55,0.119,5],[62,10,0.18992,0.00366,2.0,0.9,2.138,4],[63,11,0.19357,0.00816,2.0,1.99,1.004,4],[64,11,0.20173,0.00163,0.0,0.4,0.157,5],[65,11,0.20336,0.00226,0.0,0.55,0.118,5],[66,11,0.20562,0.002,0.0,0.49,0.132,5],[67,11,0.20761,0.00406,0.0,0.99,0.07,5],[68,11,0.21167,0.00185,0.0,0.45,0.141,5],[69,11,0.21352,0.00174,0.0,0.43,0.148,5],[70,11,0.21526,0.00172,0.0,0.42,0.149,5],[71,11,0.21698,0.00172,0.0,0.42,0.149,5],[72,11,0.21871,0.00234,0.0,0.58,0.114,5],[73,11,0.22105,0.00179,1.0,0.44,2.08,4],[74,11,0.22284,0.00367,0.0,0.91,0.075,5],[75,11,0.2265,0.00207,0.0,0.52,0.126,5],[76,12,0.22858,0.00257,0.0,0.64,0.103,5],[77,12,0.23115,0.00167,33.0,0.42,67.24,0],[78,12,0.23281,0.00225,0.0,0.57,0.116,5],[79,12,0.23506,0.0027,0.0,0.68,0.098,5],[80,12,0.23776,0.00354,1.0,0.9,1.102,4],[81,12,0.2413,0.00444,5.0,1.14,4.175,4],[82,12,0.24574,0.00355,0.0,0.92,0.074,5],[83,12,0.24929,0.0019,0.0,0.5,0.13,5],[84,13,0.2512,0.00492,1.0,1.3,0.784,0],[85,13,0.25612,0.00169,1.0,0.45,2.055,4],[86,13,0.2578,0.00216,1.0,0.58,1.645,4],[87,13,0.25997,0.00625,4.0,1.69,2.307,4],[88,13,0.26622,0.00214,0.0,0.59,0.112,5],[89,13,0.26836,0.00254,1.0,0.7,1.385,4],[90,13,0.2709,0.00211,0.0,0.59,0.112,5],[91,14,0.27301,0.00249,2.0,0.7,2.679,4],[92,14,0.2755,0.00176,0.0,0.5,0.13,5],[93,14,0.27726,0.00178,3.0,0.51,5.301,4],[94,14,0.27904,0.0028,0.0,0.8,0.084,5],[95,14,0.28184,0.00617,11.0,1.8,5.92,0],[96,14,0.28801,0.0031,1.0,0.92,1.084,4],[97,14,0.29111,0.00242,2.0,0.72,2.597,4],[98,14,0.29354,0.00216,3.0,0.65,4.241,4],[99,14,0.29569,0.00384,3.0,1.17,2.47,4],[100,15,0.29953,0.00325,0.0,1.0,0.069,5],[101,15,0.30279,0.00272,0.0,0.85,0.08,5],[102,15,0.30551,0.00357,1.0,1.13,0.894,4],[103,15,0.30908,0.00302,0.0,0.97,0.071,5],[104,15,0.3121,0.00437,3.0,1.42,2.061,4],[105,15,0.31647,0.0029,0.0,0.95,0.072,5],[106,15,0.31937,0.00725,2.0,2.43,0.829,3],[107,16,0.32662,0.00284,0.0,0.97,0.071,5],[108,16,0.32946,0.00186,0.0,0.64,0.104,5],[109,16,0.33132,0.00202,0.0,0.7,0.096,5],[110,16,0.33334,0.00496,2.0,1.74,1.143,4],[111,16,0.3383,0.00337,0.0,1.2,0.058,5],[112,16,0.34168,0.00305,4.0,1.1,3.475,4],[113,16,0.34473,0.00213,1.0,0.77,1.268,4],[114,17,0.34686,0.00283,1.0,1.03,0.97,4],[115,17,0.34969,0.00174,0.0,0.64,0.104,5],[116,17,0.35143,0.00174,0.0,0.64,0.103,5],[117,17,0.35316,0.00256,0.0,0.96,0.072,5],[118,17,0.35572,0.00216,0.0,0.81,0.084,5],[119,17,0.35789,0.00208,0.0,0.79,0.086,5],[120,17,0.35997,0.00277,0.0,1.06,0.066,5],[121,17,0.36274,0.002,0.0,0.77,0.088,5],[122,17,0.36473,0.00351,0.0,1.36,0.052,5],[123,17,0.36824,0.00291,0.0,1.14,0.061,5],[124,17,0.37115,0.00312,0.0,1.23,0.057,5],[125,17,0.37428,0.00222,16.0,0.88,16.824,0],[126,17,0.3765,0.00203,4.0,0.81,4.593,1],[127,17,0.37853,0.00163,0.0,0.66,0.102,5],[128,17,0.38016,0.00171,0.0,0.69,0.097,5],[129,17,0.38187,0.00631,0.0,2.57,0.028,5],[130,17,0.38818,0.00233,4.0,0.96,3.942,4],[131,18,0.39051,0.00167,0.0,0.69,0.097,5],[132,18,0.39217,0.00195,0.0,0.81,0.084,5],[133,18,0.39412,0.00287,0.0,1.2,0.058,5],[134,18,0.39699,0.00182,0.0,0.77,0.088,5],[135,18,0.39881,0.00734,5.0,3.12,1.587,4],[136,18,0.40615,0.0036,0.0,1.55,0.046,5],[137,18,0.40975,0.00255,0.0,1.11,0.063,5],[138,18,0.4123,0.00166,0.0,0.72,0.093,5],[139,18,0.41396,0.0037,1.0,1.62,0.634,4],[140,18,0.41766,0.00183,0.0,0.8,0.084,5],[141,18,0.41949,0.00271,0.0,1.2,0.058,5],[142,19,0.4222,0.00225,1.0,1.0,1.003,4],[143,19,0.42444,0.00501,2.0,2.24,0.896,4],[144,19,0.42945,0.00312,0.0,1.41,0.05,5],[145,19,0.43258,0.0029,7.0,1.31,5.101,0],[146,19,0.43548,0.00433,0.0,1.97,0.036,5],[147,19,0.43981,0.00279,0.0,1.28,0.055,5],[148,20,0.44261,0.00219,0.0,1.01,0.069,5],[149,20,0.4448,0.00236,0.0,1.09,0.064,5],[150,20,0.44716,0.0018,0.0,0.83,0.082,5],[151,20,0.44896,0.00279,0.0,1.29,0.054,5],[152,20,0.45175,0.00177,0.0,0.82,0.083,5],[153,20,0.45352,0.00248,2.0,1.15,1.69,4],[154,20,0.456,0.00313,1.0,1.46,0.7,4],[155,20,0.45913,0.00289,0.0,1.35,0.052,5],[156,20,0.46201,0.00203,0.0,0.95,0.072,5],[157,20,0.46404,0.00245,1.0,1.15,0.877,4],[158,20,0.46649,0.00191,0.0,0.9,0.076,5],[159,20,0.4684,0.0026,1.0,1.23,0.826,4],[160,20,0.47099,0.00284,0.0,1.34,0.052,5],[161,21,0.47383,0.00315,0.0,1.49,0.047,5],[162,21,0.47698,0.00201,0.0,0.95,0.072,5],[163,21,0.47899,0.00171,0.0,0.81,0.083,5],[164,21,0.4807,0.00218,0.0,1.04,0.067,5],[165,21,0.48288,0.00422,2.0,2.01,0.995,3],[166,21,0.4871,0.00377,0.0,1.8,0.04,5],[167,21,0.49087,0.00324,0.0,1.55,0.046,5],[168,21,0.49412,0.00238,0.0,1.14,0.061,5],[169,21,0.4965,0.0034,3.0,1.62,1.809,1],[170,21,0.4999,0.00322,0.0,1.54,0.046,5],[171,21,0.50312,0.00183,0.0,0.87,0.078,5],[172,21,0.50495,0.0044,0.0,2.1,0.034,5],[173,21,0.50935,0.00316,2.0,1.51,1.31,4],[174,21,0.51251,0.00439,0.0,2.09,0.034,5],[175,21,0.51689,0.00231,1.0,1.1,0.917,4],[176,21,0.5192,0.00201,0.0,0.95,0.072,5],[177,22,0.52121,0.00172,0.0,0.82,0.083,5],[178,22,0.52293,0.00174,0.0,0.82,0.083,5],[179,22,0.52466,0.00389,0.0,1.84,0.039,5],[180,22,0.52856,0.00296,1.0,1.4,0.729,4],[181,22,0.53152,0.0025,2.0,1.18,1.655,4],[182,22,0.53402,0.00285,1.0,1.34,0.759,4],[183,23,0.53687,0.00298,2.0,1.4,1.41,0],[184,23,0.53985,0.00236,0.0,1.11,0.063,5],[185,23,0.54221,0.00298,1.0,1.39,0.733,4],[186,23,0.5452,0.00294,9.0,1.37,6.301,4],[187,23,0.54814,0.00773,64.0,3.57,17.601,0],[188,23,0.55586,0.00211,0.0,0.97,0.071,5],[189,24,0.55797,0.00239,1.0,1.09,0.921,4],[190,24,0.56037,0.00404,1.0,1.83,0.563,4],[191,24,0.5644,0.00239,5.0,1.08,4.396,2],[192,24,0.56679,0.00232,0.0,1.04,0.066,5],[193,24,0.56911,0.00367,0.0,1.64,0.043,5],[194,24,0.57278,0.00402,0.0,1.79,0.04,5],[195,24,0.57681,0.00334,0.0,1.47,0.048,5],[196,24,0.58015,0.0017,0.0,0.75,0.09,5],[197,24,0.58185,0.00345,0.0,1.5,0.047,5],[198,24,0.5853,0.00392,1.0,1.69,0.609,4],[199,24,0.58921,0.00166,0.0,0.71,0.094,5],[200,24,0.59087,0.00349,0.0,1.48,0.048,5],[201,24,0.59436,0.00218,1.0,0.92,1.079,4],[202,25,0.59654,0.00252,0.0,1.06,0.066,5],[203,25,0.59906,0.00382,0.0,1.59,0.045,5],[204,25,0.60288,0.00455,2.0,1.87,1.067,1],[205,25,0.60743,0.00374,0.0,1.52,0.047,5],[206,25,0.61116,0.00283,0.0,1.14,0.061,5],[207,25,0.614,0.0017,0.0,0.68,0.098,5],[208,25,0.6157,0.00562,1.0,2.21,0.47,4],[209,25,0.62132,0.0023,0.0,0.89,0.077,5],[210,26,0.62362,0.00452,0.0,1.73,0.041,5],[211,26,0.62813,0.00594,1.0,2.24,0.465,4],[212,26,0.63408,0.00217,0.0,0.81,0.084,5],[213,26,0.63625,0.00392,1.0,1.43,0.712,1],[214,26,0.64018,0.00167,0.0,0.6,0.11,5],[215,26,0.64184,0.00169,0.0,0.61,0.109,5],[216,26,0.64353,0.00301,2.0,1.07,1.813,4],[217,27,0.64654,0.00562,5.0,1.96,2.492,4],[218,27,0.65217,0.00196,1.0,0.67,1.441,4],[219,27,0.65413,0.0019,0.0,0.65,0.103,5],[220,27,0.65603,0.00213,3.0,0.72,3.891,1],[221,27,0.65816,0.00378,1.0,1.26,0.808,4],[222,27,0.66194,0.00321,1.0,1.05,0.959,2],[223,27,0.66514,0.00217,1.0,0.7,1.39,4],[224,27,0.66731,0.00463,1.0,1.46,0.698,4],[225,27,0.67194,0.00176,1.0,0.55,1.729,4],[226,27,0.67369,0.0023,1.0,0.71,1.373,4],[227,27,0.67599,0.00185,0.0,0.57,0.116,5],[228,27,0.67785,0.00548,2.0,1.64,1.212,4],[229,27,0.68333,0.00308,1.0,0.9,1.106,4],[230,27,0.68641,0.00332,0.0,0.95,0.072,5],[231,27,0.68973,0.0058,30.5,1.62,18.054,0],[232,27,0.69554,0.00346,9.0,0.94,8.947,4],[233,27,0.699,0.00756,6.0,1.99,2.944,1],[234,28,0.70656,0.00222,0.0,0.57,0.116,5],[235,28,0.70877,0.00226,0.0,0.57,0.115,5],[236,28,0.71104,0.00383,3.0,0.95,3.003,1],[237,28,0.71487,0.00416,0.0,1.01,0.069,5],[238,28,0.71903,0.0017,0.0,0.41,0.155,5],[239,28,0.72073,0.00244,1.0,0.57,1.656,4],[240,28,0.72317,0.0026,0.0,0.6,0.109,5],[241,28,0.72577,0.0021,0.0,0.48,0.133,5],[242,28,0.72788,0.0019,0.0,0.43,0.147,5],[243,28,0.72978,0.00302,0.0,0.67,0.099,5],[244,28,0.7328,0.00409,0.0,0.9,0.076,5],[245,28,0.73689,0.00226,0.0,0.49,0.132,5],[246,28,0.73914,0.00457,0.0,0.97,0.071,5],[247,29,0.74371,0.00303,0.0,0.63,0.105,5],[248,29,0.74675,0.00245,5.0,0.5,8.812,1],[249,29,0.7492,0.00417,0.0,0.84,0.081,5],[250,29,0.75337,0.00204,0.0,0.4,0.155,5],[251,29,0.75541,0.00324,0.0,0.63,0.105,5],[252,29,0.75865,0.00494,0.0,0.95,0.072,5],[253,29,0.76359,0.00469,0.0,0.89,0.077,5],[254,30,0.76828,0.00237,0.0,0.44,0.144,5],[255,30,0.77065,0.00481,0.0,0.88,0.077,5],[256,30,0.77546,0.00247,0.0,0.45,0.142,5],[257,30,0.77793,0.00186,0.0,0.34,0.181,5],[258,30,0.77979,0.00232,0.0,0.42,0.151,5],[259,30,0.78211,0.0021,1.0,0.38,2.392,4],[260,30,0.78422,0.00409,0.0,0.72,0.093,5],[261,31,0.78831,0.00355,2.0,0.62,2.977,4],[262,31,0.79186,0.00559,2.0,0.97,1.986,1],[263,31,0.79745,0.00251,0.0,0.43,0.146,5],[264,31,0.79996,0.00511,0.0,0.88,0.078,5],[265,32,0.80507,0.00326,0.0,0.56,0.117,5],[266,32,0.80833,0.00384,0.0,0.66,0.101,5],[267,32,0.81217,0.0017,0.0,0.29,0.203,5],[268,32,0.81386,0.00226,0.0,0.39,0.161,5],[269,32,0.81612,0.00181,1.0,0.31,2.8,4],[270,32,0.81793,0.00215,0.0,0.37,0.167,5],[271,32,0.82008,0.00167,0.0,0.29,0.205,5],[272,32,0.82175,0.00486,3.0,0.84,3.366,0],[273,32,0.82661,0.00315,0.0,0.55,0.119,5],[274,33,0.82976,0.00165,0.0,0.29,0.205,5],[275,33,0.83141,0.00236,0.5,0.41,1.175,1],[276,33,0.83377,0.00452,0.0,0.8,0.085,5],[277,33,0.83829,0.00205,0.0,0.37,0.168,5],[278,33,0.84034,0.00257,0.0,0.46,0.138,5],[279,33,0.8429,0.00196,0.5,0.36,1.331,4],[280,33,0.84486,0.00189,0.0,0.35,0.176,5],[281,33,0.84675,0.00247,0.0,0.46,0.139,5],[282,33,0.84923,0.00314,1.0,0.59,1.614,4],[283,33,0.85237,0.00323,0.0,0.62,0.107,5],[284,34,0.85559,0.00197,1.5,0.38,3.443,3],[285,34,0.85756,0.00189,0.0,0.37,0.166,5],[286,34,0.85945,0.00165,0.0,0.33,0.184,5],[287,34,0.8611,0.00479,1.0,0.98,1.022,4],[288,34,0.8659,0.00233,1.0,0.49,1.915,4],[289,34,0.86823,0.00176,0.0,0.37,0.165,5],[290,34,0.86999,0.00233,0.0,0.5,0.128,5],[291,34,0.87232,0.00261,0.0,0.58,0.114,5],[292,34,0.87492,0.00389,1.0,0.89,1.12,4],[293,34,0.87881,0.00168,1.0,0.39,2.298,4],[294,34,0.88049,0.002,2.0,0.48,3.764,4],[295,34,0.8825,0.00241,2.0,0.59,3.135,0],[296,34,0.8849,0.00396,1.0,1.0,1.0,0],[297,34,0.88886,0.00217,1.0,0.57,1.673,4],[298,34,0.89103,0.00214,1.0,0.57,1.657,4],[299,34,0.89317,0.00286,0.0,0.79,0.085,5],[300,34,0.89603,0.00294,1.0,0.85,1.166,0],[301,34,0.89897,0.00205,0.0,0.61,0.108,5],[302,34,0.90102,0.00456,15.0,1.43,10.052,0],[303,35,0.90558,0.00612,1.0,2.07,0.5,4],[304,35,0.9117,0.00276,0.0,1.0,0.069,5],[305,35,0.91446,0.00503,4.0,1.96,2.004,4],[306,35,0.91949,0.0034,1.0,1.43,0.716,4],[307,35,0.92289,0.00359,5.0,1.61,3.012,1],[308,35,0.92648,0.00247,3.0,1.17,2.461,4],[309,36,0.92894,0.00382,0.0,1.94,0.037,5],[310,36,0.93276,0.00572,1.0,3.21,0.327,4],[311,36,0.93848,0.00374,1.0,2.34,0.445,0],[312,36,0.94222,0.00381,1.0,2.6,0.402,4],[313,36,0.94603,0.00399,1.0,3.0,0.35,4],[314,37,0.95002,0.00259,0.0,2.12,0.034,5],[315,37,0.95261,0.00227,0.0,1.97,0.036,5],[316,37,0.95488,0.00195,0.0,1.79,0.04,5],[317,37,0.95683,0.0017,0.0,1.64,0.043,5],[318,37,0.95852,0.0034,3.0,3.52,0.855,4],[319,37,0.96192,0.00179,2.0,2.0,1.0,4],[320,37,0.96371,0.00187,0.0,2.2,0.033,5],[321,37,0.96558,0.00168,1.5,2.09,0.728,4],[322,37,0.96726,0.00284,2.0,3.77,0.539,0],[323,37,0.9701,0.00273,0.0,3.95,0.018,5],[324,37,0.97283,0.00176,0.0,2.73,0.026,5],[325,37,0.97458,0.00209,0.0,3.45,0.021,5],[326,37,0.97667,0.00193,0.0,3.41,0.021,5],[327,37,0.9786,0.0028,2.5,5.35,0.475,4],[328,37,0.9814,0.00358,4.0,7.62,0.529,0],[329,37,0.98498,0.0052,0.0,12.91,0.006,5],[330,38,0.99018,0.00253,11.0,7.23,1.516,1],[331,38,0.99271,0.00171,2.5,5.29,0.48,4],[332,38,0.99441,0.00372,11.0,12.77,0.862,1],[333,38,0.99813,0.00187,1.0,7.14,0.149,4]],"detail":{"77":{"ch":12,"pos":0.232,"m":33.0,"e":0.42,"h":67.24,"q":"Women are supposed to be very calm generally: but women feel just as men feel; they need exercise for their faculties, and a field for their efforts, as much as their brothers do; they suffer from too rigid a restraint, too absolute a stagnation, precisely as men would suffer; and it is narrow-minded in their more privileged fellow-creatures to say that they ought to confine themselves to making puddings and knitting stockings, to playing on the piano and embroidering bags.","qn":25,"open":"Who blames me? Many, no doubt; and I shall be called discontented. I could not help it: the restlessness was in my nature; it agitated me to pain sometimes. Then my sole relief was to walk along the corridor of…","feat":["金句","悬疑/不安","幽默"],"hooks":["金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。","幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"],"emo":{"文笔赞叹":7,"共鸣/认同":1},"nctx":68,"bare":0.41,"kw":["tranquility","some","part","written","bronte","women"],"sum":"“女人和男人一样有感受”这一段被读者视为早期女性主义宣言，有人说读到这里忍不住欢呼。"},"231":{"ch":27,"pos":0.6926,"m":30.5,"e":1.62,"h":18.05,"q":"The more solitary, the more friendless, the more unsustained I am, the more I will respect myself.","qn":14,"open":"“Don’t talk any more of those days, sir,” I interrupted, furtively dashing away some tears from my eyes; his language was torture to me; for I knew what I must do—and do soon—and all these reminiscences, and these revelations of…","feat":["爱情/表白","死亡/离别","悬疑/不安"],"hooks":["情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。","悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"],"emo":{"文笔赞叹":5,"治愈/释然":2,"意难平/心碎":2},"nctx":71,"bare":0.58,"kw":["love","character","care","myself","woman","loves"],"sum":"简出走前“越孤独越要自重”一段，读者常与“法律与原则”连着引用，称赞其意志与语言。"},"187":{"ch":23,"pos":0.552,"m":64.0,"e":3.57,"h":17.6,"q":"I am no bird; and no net ensnares me; I am a free human being with an independent will, which I now exert to leave you.","qn":40,"open":"In listening, I sobbed convulsively; for I could repress what I endured no longer; I was obliged to yield, and I was shaken from head to foot with acute distress. When I did speak, it was only to express an…","feat":["爱情/表白","死亡/离别","悬疑/不安"],"hooks":["情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。","悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"],"emo":{"文笔赞叹":16,"治愈/释然":4,"意难平/心碎":1,"震撼/意外":1},"nctx":145,"bare":0.53,"kw":["eyre","charlotte","bronte","life","character","love"],"sum":"“我不是鸟”被视为全书最响亮的独立宣言，读者认为这句话值得大声说出来。"},"125":{"ch":17,"pos":0.3754,"m":16.0,"e":0.88,"h":16.82,"q":"He made me love him without looking at me.","qn":7,"open":"He comes in last: I am not looking at the arch, yet I see him enter. I try to concentrate my attention on those netting-needles, on the meshes of the purse I am forming—I wish to think only of the…","feat":["爱情/表白","揭示/反转"],"hooks":["情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。","反转悬念：用“你以为……其实……”句式，把揭示前后的两句话并排呈现。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"],"emo":{"文笔赞叹":5,"治愈/释然":1},"nctx":27,"bare":0.44,"kw":["beholder","character","ann","love","eyre","romance"],"sum":null},"39":{"ch":6,"pos":0.1157,"m":10.0,"e":0.78,"h":11.82,"q":"Life appears to me too short to be spent in nursing animosity or registering wrongs.","qn":10,"open":"“She has been unkind to you, no doubt; because you see, she dislikes your cast of character, as Miss Scatcherd does mine; but how minutely you remember all she has done and said to you! What a singularly deep impression…","feat":["悬疑/不安"],"hooks":["通用：原文朗读 + 一句话点评，突出这一段被读者反复引用的理由。"],"emo":{},"nctx":14,"bare":0.5,"kw":["young"],"sum":null},"302":{"ch":34,"pos":0.9033,"m":15.0,"e":1.43,"h":10.05,"q":"I have not much pride under such circumstances: I would always rather be happy than dignified; and I ran after him—he stood at the foot of the stairs.","qn":11,"open":"“It is known that you are not my sister; I cannot introduce you as such: to attempt it would be to fasten injurious suspicions on us both. And for the rest, though you have a man’s vigorous brain, you have…","feat":["爱情/表白","冲突","悬疑/不安"],"hooks":["情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"],"emo":{"文笔赞叹":2,"愤怒":1,"治愈/释然":1},"nctx":25,"bare":0.24,"kw":["eyre","some","charlotte","point","bronte","first"],"sum":null},"232":{"ch":27,"pos":0.6973,"m":9.0,"e":0.94,"h":8.95,"q":"And it is you, spirit—with will and energy, and virtue and purity—that I want: not alone your brittle frame.","qn":3,"open":"I did. Mr. Rochester, reading my countenance, saw I had done so. His fury was wrought to the highest: he must yield to it for a moment, whatever followed; he crossed the floor and seized my arm and grasped my…","feat":["爱情/表白","死亡/离别","悬疑/不安"],"hooks":["情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。","悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。"],"emo":{},"nctx":26,"bare":0.65,"kw":["think","suffering","married","reader"],"sum":null},"248":{"ch":29,"pos":0.748,"m":5.0,"e":0.5,"h":8.81,"q":"Prejudices, it is well known, are most difficult to eradicate from the heart whose soil has never been loosened or fertilised by education: they grow there, firm as weeds among stones.","qn":5,"open":"“She is so ill, St. John.” “Ill or well, she would always be plain. The grace and harmony of beauty are quite wanting in those features.” On the third day I was better; on the fourth, I could speak, move,…","feat":["金句","重逢","幽默"],"hooks":["金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。","幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"],"emo":{"治愈/释然":1,"文笔赞叹":1},"nctx":5,"bare":0.2,"kw":["writing","eyre"],"sum":null},"47":{"ch":8,"pos":0.1385,"m":9.0,"e":1.35,"h":6.36,"q":"If all the world hated you, and believed you wicked, while your own conscience approved you, and absolved you from guilt, you would not be without friends.","qn":5,"open":"Ere the half-hour ended, five o’clock struck; school was dismissed, and all were gone into the refectory to tea. I now ventured to descend: it was deep dusk; I retired into a corner and sat down on the floor. The…","feat":["爱情/表白","死亡/离别","冲突"],"hooks":["情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。","悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。","文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"],"emo":{"文笔赞叹":2,"共鸣/认同":1,"治愈/释然":1},"nctx":16,"bare":0.31,"kw":["good","friend","life","love","tells","first"],"sum":null},"186":{"ch":23,"pos":0.5467,"m":9.0,"e":1.37,"h":6.3,"q":"Because,” he said, “I sometimes have a queer feeling with regard to you—especially when you are near me, as now: it is as if I had a string somewhere under my left ribs, tightly and inextricably knotted to a similar string situated in the corresponding quarter of your little frame.","qn":9,"open":"“Oh, no need to apologise! I consider that when a dependent does her duty as well as you have done yours, she has a sort of claim upon her employer for any little assistance he can conveniently render her; indeed…","feat":["金句","死亡/离别","冲突","悬疑/不安"],"hooks":["金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。","悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。"],"emo":{},"nctx":15,"bare":0.6,"kw":["some"],"sum":null}},"peaks":[77,231,187,125,39,302,232,248,47,186],"rawPeak":187,"cards":[{"s":"I am no bird; and no net ensnares me; I am a free human being with an independent will, which I now exert to leave you.","ch":23,"n":40,"sid":187},{"s":"Women are supposed to be very calm generally: but women feel just as men feel; they need exercise for their faculties, and a field for their efforts, as much as their brothers do; they suffer from too rigid a restraint, too absolute a stagnation, precisely as men would suffer; and it is narrow-minded in their more privileged fellow-creatures to say that they ought to confine themselves to making puddings and knitting stockings, to playing on the piano and embroidering bags.","ch":12,"n":25,"sid":77},{"s":"It is thoughtless to condemn them, or laugh at them, if they seek to do more or learn more than custom has pronounced necessary for their sex.","ch":12,"n":23,"sid":77},{"s":"Do you think, because I am poor, obscure, plain, and little, I am soulless and heartless?","ch":23,"n":23,"sid":187},{"s":"You think wrong!—I have as much soul as you,—and full as much heart!","ch":23,"n":19,"sid":187},{"s":"I am not talking to you now through the medium of custom, conventionalities, nor even of mortal flesh;—it is my spirit that addresses your spirit; just as if both had passed through the grave, and we stood at God’s feet, equal,—as we are!","ch":23,"n":15,"sid":187},{"s":"And if God had gifted me with some beauty and much wealth, I should have made it as hard for you to leave me, as it is now for me to leave you.","ch":23,"n":14,"sid":187},{"s":"The more solitary, the more friendless, the more unsustained I am, the more I will respect myself.","ch":27,"n":14,"sid":231},{"s":"Laws and principles are not for the times when there is no temptation: they are for such moments as this, when body and soul rise in mutiny against their rigour; stringent are they; inviolate they shall be.","ch":27,"n":13,"sid":231},{"s":"and can bear to have my morsel of bread snatched from my lips, and my drop of living water dashed from my cup?","ch":23,"n":11,"sid":187},{"s":"I have not much pride under such circumstances: I would always rather be happy than dignified; and I ran after him—he stood at the foot of the stairs.","ch":34,"n":11,"sid":302},{"s":"Life appears to me too short to be spent in nursing animosity or registering wrongs.","ch":6,"n":10,"sid":39}]}},"order":["gatsby","pride","janeeyre"],"g":{"nReviews":16242,"nScenes":624,"quoteA":[60,60],"quoteRecall":[26,28],"plotF1":0.11,"aph":[1.186,1.054,1.334,0.052],"groups":["文笔赞叹","感动与共鸣","好笑","冲击与愤怒","未表态","无提及"],"source":{"analysis":"results/analysis/2026-10-08_quoteonly_goemo/result.json","highlights":"results/highlights/2026-10-08_quoteonly_goemo/result.json","eval_align":"results/eval_align/2026-10-08_with_llm/result.json","eval_emotion":"results/eval_emotion/2026-10-08/result.json"}}}</script>
+<script>
+"use strict";
+const errs = [];
+function logErr(m) { errs.push(String(m)); const el = document.getElementById("errlog"); el.textContent = errs.join("\n"); document.body.dataset.errors = errs.length; }
+window.addEventListener("error", e => logErr(e.message));
+window.addEventListener("unhandledrejection", e => logErr(e.reason));
+
+const D = JSON.parse(document.getElementById("data").textContent);
+const $ = s => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+const GCOL = ["var(--g0)", "var(--g1)", "var(--g2)", "var(--g3)", "var(--g4)", "var(--g5)"];
+const params = new URLSearchParams(location.search);
+if (["light", "dark"].includes(params.get("theme"))) document.documentElement.dataset.theme = params.get("theme");
+const S = { book: D.order[0], mode: "raw", focus: null, step: -1, playing: false, speed: +(params.get("speed") || 1), speak: false, showExp: false };
+let W = 1000, H = 300, TOP = 26, BASE = 262;
+let token = 0, cardIdx = 0, cardTimer = null, growing = null;
+
+const sleep = ms => new Promise(r => setTimeout(r, ms / S.speed));
+const fmt = n => Number(n).toLocaleString("en-US");
+const pct = x => Math.round(x * 100);
+const where = x => x < 0.01 ? "全书开篇处" : x > 0.99 ? "全书结尾处" : `全书 ${pct(x)}% 处`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const short = (s, n = 60) => s.length > n ? s.slice(0, n).replace(/\s+\S*$/, "") + " …" : s;
+const B = () => D.books[S.book];
+
+/* ---------- 顶部控件 ---------- */
+D.order.forEach((slug, i) => {
+  const b = D.books[slug], btn = document.createElement("button");
+  btn.textContent = "《" + b.zh + "》"; btn.dataset.slug = slug;
+  btn.onclick = () => { stopAuto(); setBook(slug, true); };
+  $("#books").append(btn);
+});
+$("#legend").innerHTML = D.g.groups.map((g, i) => `<span><i style="background:${GCOL[i]}"></i>${g === "未表态" ? "被引用但未表态" : g === "无提及" ? "无人引用" : g}</span>`).join("");
+$("#srcs").textContent = Object.values(D.g.source).join("；");
+$("#m-raw").onclick = () => { stopAuto(); setMode("raw"); };
+$("#m-heat").onclick = () => { stopAuto(); setMode("heat"); };
+
+/* ---------- 时间线 ---------- */
+function val(row) { return S.mode === "raw" ? row[4] : row[6]; }
+function maxVal() { return Math.max(...B().scenes.map(val)); }
+function yOf(v, mx) { return (BASE - TOP) * Math.min(1, v / mx); }
+
+function drawTimeline() {
+  const svg = $("#tl"); svg.innerHTML = "";
+  W = Math.max(320, Math.round(svg.clientWidth || 1000)); H = Math.max(160, Math.round(svg.clientHeight || 300)); BASE = H - 36;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.classList.remove("dim");
+  const b = B();
+  const defs = document.createElementNS(NS, "defs");
+  defs.innerHTML = '<clipPath id="grow"><rect id="growr" x="0" y="0" width="0" height="2000"/></clipPath>';
+  svg.append(defs);
+  const g = document.createElementNS(NS, "g"); g.setAttribute("clip-path", "url(#grow)"); g.id = "bars";
+  svg.append(g);
+  const mx = maxVal();
+  b.scenes.forEach(row => {
+    const [sid, ch, x0, wf, m, e, h, gi] = row;
+    const r = document.createElementNS(NS, "rect");
+    const hh = Math.max(yOf(val(row), mx), m > 0 ? 1.5 : 0.8);
+    r.setAttribute("x", (x0 * W).toFixed(2)); r.setAttribute("width", Math.max(wf * W - 0.5, 0.9).toFixed(2));
+    r.style.y = (BASE - hh) + "px"; r.style.height = hh + "px";
+    r.setAttribute("fill", GCOL[gi]); r.classList.add("bar-r"); r.dataset.sid = sid;
+    const t = document.createElementNS(NS, "title");
+    t.textContent = `第 ${ch} 章 · 提及 ${m} · 期望 ${e} · 热度 ×${h}`;
+    r.append(t);
+    r.onclick = () => { if (b.detail[sid]) { stopAuto(); focusScene(sid, true); } };
+    g.append(r);
+  });
+  // 期望曲线
+  const pl = document.createElementNS(NS, "polyline"); pl.classList.add("exp"); pl.id = "exp";
+  g.append(pl);
+  // 坐标轴与刻度
+  const ax = document.createElementNS(NS, "line");
+  Object.entries({ x1: 0, x2: W, y1: BASE + .5, y2: BASE + .5 }).forEach(([k, v]) => ax.setAttribute(k, v)); ax.classList.add("axis");
+  svg.append(ax);
+  [0, .25, .5, .75, 1].forEach(p => {
+    const t = document.createElementNS(NS, "text");
+    t.setAttribute("x", p * W + (p === 0 ? 2 : p === 1 ? -2 : 0)); t.setAttribute("y", BASE + 18);
+    t.setAttribute("text-anchor", p === 0 ? "start" : p === 1 ? "end" : "middle");
+    t.textContent = p === 0 ? "开头" : p === 1 ? "结尾" : `全书 ${p * 100}%`;
+    svg.append(t);
+  });
+  const cur = document.createElementNS(NS, "line"); cur.classList.add("cursor"); cur.id = "cursor";
+  cur.setAttribute("y1", TOP - 6); cur.setAttribute("y2", BASE); cur.setAttribute("x1", 0); cur.setAttribute("x2", 0); cur.style.opacity = 0;
+  svg.append(cur);
+  const marks = document.createElementNS(NS, "g"); marks.id = "marks"; svg.append(marks);
+  updateBars(true);
+}
+
+function updateBars(instant) {
+  const b = B(), mx = maxVal();
+  document.querySelectorAll("#bars .bar-r").forEach((r, i) => {
+    const row = b.scenes[i], hh = Math.max(yOf(val(row), mx), row[4] > 0 ? 1.5 : 0.8);
+    if (instant) r.style.transition = "none";
+    r.style.y = (BASE - hh) + "px"; r.style.height = hh + "px";
+    if (instant) { r.getBoundingClientRect(); r.style.transition = ""; }
+  });
+  const emx = Math.max(...b.scenes.map(r => r[4]));
+  $("#exp").setAttribute("points", b.scenes.map(r => `${((r[2] + r[3] / 2) * W).toFixed(1)},${(BASE - yOf(r[5], emx)).toFixed(1)}`).join(" "));
+  $("#exp").classList.toggle("on", S.showExp && S.mode === "raw");
+  $("#ylab").textContent = S.mode === "raw"
+    ? `纵轴：引用该场景的书评数（最高 ${fmt(emx)}）${S.showExp ? " · 虚线 = 按位置与篇幅估计的期望次数" : ""}`
+    : `纵轴：位置校正热度 = 实际 ÷ 期望，经验贝叶斯收缩（最高 ×${Math.max(...b.scenes.map(r => r[6])).toFixed(1)}）`;
+  drawMarks();
+}
+
+function drawMarks() {
+  const g = $("#marks"); if (!g) return; g.innerHTML = "";
+  const b = B(), mx = maxVal();
+  const list = S.mode === "raw" ? [b.rawPeak] : b.peaks.slice(0, 3);
+  list.forEach((sid, k) => {
+    const row = b.scenes.find(r => r[0] === sid);
+    const cx = Math.min(W - 11, Math.max(11, (row[2] + row[3] / 2) * W)), cy = BASE - yOf(val(row), mx) - 13;
+    const pk = document.createElementNS(NS, "g"); pk.classList.add("pk");
+    pk.innerHTML = `<circle cx="${cx}" cy="${Math.max(cy, 12)}" r="9"/><text x="${cx}" y="${Math.max(cy, 12) + 4}">${S.mode === "raw" ? "★" : k + 1}</text>`;
+    g.append(pk);
+  });
+  if (S.focus != null) {
+    const row = b.scenes.find(r => r[0] === S.focus); if (!row) return;
+    const cx = Math.min(W - 11, Math.max(11, (row[2] + row[3] / 2) * W)), cy = Math.max(BASE - yOf(val(row), mx) - 13, 12) + 5;
+    const t = document.createElementNS(NS, "text"); t.classList.add("call");
+    const anchor = cx > W * .7 ? "end" : "start";
+    t.setAttribute("x", cx + (anchor === "end" ? -16 : 16)); t.setAttribute("y", cy); t.setAttribute("text-anchor", anchor);
+    t.textContent = `第 ${row[1]} 章 · ` + (S.mode === "raw" ? `${row[4]} 篇书评` : `热度 ×${row[6].toFixed(1)}`);
+    g.append(t);
+  }
+}
+
+function grow(ms) {
+  return new Promise(res => {
+    const r = $("#growr"), cur = $("#cursor"); const t0 = performance.now(), dur = ms / S.speed;
+    cur.style.opacity = 1;
+    if (growing) cancelAnimationFrame(growing);
+    const tick = now => {
+      const p = Math.min(1, Math.max(0, (now - t0) / dur)), x = W * (1 - Math.pow(1 - p, 2));
+      r.setAttribute("width", x); cur.setAttribute("x1", x); cur.setAttribute("x2", x);
+      if (p < 1) growing = requestAnimationFrame(tick); else { growing = null; cur.style.opacity = 0; res(); }
+    };
+    growing = requestAnimationFrame(tick);
+    // 无头/后台标签页里 rAF 可能不跑：兜底直接长满
+    setTimeout(() => { if (growing) { cancelAnimationFrame(growing); growing = null; r.setAttribute("width", W); cur.style.opacity = 0; res(); } }, dur + 400);
+  });
+}
+function showAll() { const r = $("#growr"); if (r) r.setAttribute("width", W); }
+
+/* ---------- 状态切换 ---------- */
+function setBook(slug, full) {
+  S.book = slug; S.focus = null;
+  document.querySelectorAll("#books button").forEach(b => b.setAttribute("aria-pressed", b.dataset.slug === slug));
+  const b = B();
+  $("#tltitle").innerHTML = `《${esc(b.zh)}》<span>${esc(b.en)} · ${esc(b.author)}，${b.year} · ${fmt(b.nReviews)} 条书评 · ${b.nScenes} 个场景</span>`;
+  drawTimeline(); if (full) showAll();
+  clearPanels(); startCards();
+}
+function setMode(m) {
+  S.mode = m;
+  $("#m-raw").setAttribute("aria-pressed", m === "raw"); $("#m-heat").setAttribute("aria-pressed", m === "heat");
+  updateBars(false); if (S.focus != null) highlightBar(S.focus);
+}
+function clearPanels() {
+  $("#review").innerHTML = "点击时间线上带编号的柱子，或等待自动讲解。"; $("#review").style.fontSize = "";
+  $("#revnote").textContent = "灰条代表书评里的其他文字：按数据许可，书评正文和用户名一律不展示，只保留引号里的公版原文。"; $("#page").innerHTML = ""; $("#pstats").innerHTML = ""; $("#react").innerHTML = "";
+  $("#pagehead").textContent = "② 对齐到书中的位置（Project Gutenberg 公版原文）";
+}
+function highlightBar(sid) {
+  const svg = $("#tl"); svg.classList.add("dim");
+  document.querySelectorAll("#bars .bar-r").forEach(r => r.classList.toggle("focus", +r.dataset.sid === sid));
+  drawMarks();
+}
+
+function focusScene(sid, withFly) {
+  const b = B(), d = b.detail[sid]; if (!d) return Promise.resolve();
+  S.focus = sid; highlightBar(sid);
+  $("#review").innerHTML = `<span class="qsrc" id="qsrc">“${esc(d.q)}”</span>`;
+  $("#review").style.fontSize = d.q.length > 200 ? "14px" : d.q.length > 120 ? "15px" : "";
+  $("#revnote").textContent = (d.qn ? `共 ${d.qn} 篇书评引用了这一句。` : "") + "灰条代表书评里的其他文字：按数据许可不展示正文和用户名。";
+  $("#pagehead").textContent = `② 对齐到原文：第 ${d.ch} 章 · ${where(d.pos)}（Project Gutenberg 公版原文）`;
+  const open = d.open.replace(/…$/, "");
+  const key = d.q.slice(0, 40), at = open.indexOf(key);
+  let html;
+  if (at >= 0) {
+    const end = Math.min(open.length, at + d.q.length);
+    html = esc(open.slice(0, at)) + `<span class="qdst" id="qdst">${esc(open.slice(at, end))}</span>` + esc(open.slice(end)) + " …";
+  } else {
+    html = esc(short(open, Math.max(70, 260 - d.q.length))) + `<br>…… <span class="qdst" id="qdst">${esc(d.q)}</span> ……`;
+  }
+  $("#page").innerHTML = html; $("#page").classList.remove("fade"); void $("#page").offsetWidth; $("#page").classList.add("fade");
+  $("#pstats").innerHTML = [["实际提及", d.m], ["期望", d.e], ["位置校正热度", "×" + d.h.toFixed(1)]]
+    .map(([k, v]) => `<div class="stat"><b>${v}</b><span>${k}</span></div>`).join("");
+  // 读者反应
+  const emo = Object.entries(d.emo || {}).sort((a, c) => c[1] - a[1]).slice(0, 4);
+  const emax = Math.max(1, ...emo.map(e => e[1]));
+  let r = `<div class="stats"><div class="stat"><b>${d.nctx}</b><span>条对齐的书评语境</span></div><div class="stat"><b>${pct(d.bare)}%</b><span>只贴原句、不加评论</span></div></div>`;
+  r += emo.length ? `<div class="emo">${emo.map(([k, v]) => `<div><span>${esc(k)}</span><s style="width:${(v / emax * 100).toFixed(0)}%"></s><em>${v}</em></div>`).join("")}</div>`
+    : `<div class="note">引用旁几乎没有可识别的情绪词（GoEmotions 模型）。</div>`;
+  if (d.kw && d.kw.length) r += `<div><div class="note">读者高频用词（跨 ≥2 条书评聚合）</div><div class="chips">${d.kw.map(k => `<span>${esc(k)}</span>`).join("")}</div></div>`;
+  if (d.sum) r += `<div class="sum">${esc(d.sum)}<div class="note">代理读过代表性书评后撰写的中文摘要，不是书评原文。</div></div>`;
+  else if (d.feat && d.feat.length) r += `<div><div class="note">桥段特征（规则标注）</div><div class="chips">${d.feat.map(k => `<span>${esc(k)}</span>`).join("")}</div></div>`;
+  $("#react").innerHTML = r;
+  return withFly ? fly() : Promise.resolve();
+}
+
+function fly() {
+  const src = $("#qsrc"), dst = $("#qdst"); if (!src || !dst) return Promise.resolve();
+  const a = src.getBoundingClientRect(), c = dst.getBoundingClientRect();
+  const gh = document.createElement("div"); gh.className = "ghost"; gh.textContent = src.textContent;
+  Object.assign(gh.style, { left: a.left + "px", top: a.top + "px", width: Math.max(a.width, 160) + "px" });
+  document.body.append(gh); gh.getBoundingClientRect();
+  gh.style.transform = `translate(${c.left - a.left}px, ${c.top - a.top}px)`;
+  gh.style.width = Math.max(c.width, 160) + "px";
+  return new Promise(res => setTimeout(() => {
+    gh.style.opacity = 0;
+    dst.classList.add("hit");
+    const bar = document.querySelector(`#bars .bar-r[data-sid="${S.focus}"]`);
+    if (bar) { bar.classList.remove("pulse"); void bar.getBoundingClientRect(); bar.classList.add("pulse"); }
+    setTimeout(() => { gh.remove(); res(); }, 500);
+  }, 1150 / Math.min(S.speed, 2)));
+}
+
+/* ---------- 金句卡轮播 ---------- */
+function startCards() {
+  const cards = B().cards.slice(0, 8);
+  $("#cards").innerHTML = cards.map(c => `<div class="card"><q>${esc(c.s)}</q><div>第 ${c.ch} 章 · ${c.n} 篇书评引用 · 《${esc(B().zh)}》</div></div>`).join("");
+  $("#dots").innerHTML = cards.map(() => "<i></i>").join("");
+  cardIdx = -1; nextCard();
+  clearInterval(cardTimer); cardTimer = setInterval(nextCard, 5200);
+}
+function nextCard() {
+  const els = document.querySelectorAll("#cards .card"), dots = document.querySelectorAll("#dots i"); if (!els.length) return;
+  cardIdx = (cardIdx + 1) % els.length;
+  els.forEach((e, i) => e.classList.toggle("on", i === cardIdx)); dots.forEach((e, i) => e.classList.toggle("on", i === cardIdx));
+}
+
+/* ---------- 自动讲解脚本 ---------- */
+function peakStep(slug, k) {
+  const b = D.books[slug], sid = b.peaks[k], d = b.detail[sid];
+  return {
+    t: `峰值 ${k + 1}：第 ${d.ch} 章（${where(d.pos)}），实际被 ${d.m} 篇书评提到，按位置只该有 ${d.e} 篇，热度 ×${d.h.toFixed(1)}。` +
+      (d.sum ? `读者的反应：${d.sum}` : `读者最常引用：“${short(d.q, 70)}”`),
+    run: async () => { if (S.book !== slug) { setBook(slug, true); } if (S.mode !== "heat") setMode("heat"); await sleep(300); await focusScene(sid, true); },
+    dur: 9500,
+  };
+}
+function buildSteps() {
+  const G = D.g, gb = D.books.gatsby, pb = D.books.pride, jb = D.books.janeeyre;
+  const rp = gb.detail[gb.rawPeak], p0 = gb.detail[gb.peaks[0]], p1 = gb.detail[gb.peaks[1]];
+  const pp = pb.detail[pb.peaks[0]];
+  return [
+    { t: `读者在书评里引用的句子，就是一份现成的“标注”。这里把 ${fmt(G.nReviews)} 条 Goodreads 英文书评，对齐到三本公版小说的 ${G.nScenes} 个场景，看哪些桥段最打动人、引起什么反应。`,
+      run: async () => { setBook("gatsby"); setMode("raw"); S.showExp = false; updateBars(true); }, dur: 7500 },
+    { t: `《了不起的盖茨比》：横轴是书中位置，从第一页到最后一页；每根柱子是一个场景，高度是引用了这个场景的书评数；颜色是读者在引用旁写下的主要情绪。`,
+      run: async () => { await grow(3600); }, dur: 5000 },
+    { t: `原始计数最高的是结尾：${rp.m} 篇书评提到这个场景，其中“${short(rp.q, 48)}”一句就被 ${rp.qn} 篇书评引用。看，书评里引号中的句子飞回了它在原文中的位置。`,
+      run: async () => { showAll(); await focusScene(gb.rawPeak, true); }, dur: 8500 },
+    { t: `但开头和结尾本来就会被多引用。虚线是按位置和篇幅估计的“期望次数”：书评偏爱首尾，中间段落天然吃亏。读者越往后越少，也是同一类幸存者偏差。`,
+      run: async () => { S.showExp = true; updateBars(false); }, dur: 8500 },
+    { t: `把“实际 ÷ 期望”再做经验贝叶斯收缩，得到位置校正热度。结尾不再最高，第 ${p0.ch} 章和第 ${p1.ch} 章冒了出来：这些是超出预期的段落，适合做差异化选题。`,
+      run: async () => { S.showExp = false; S.focus = null; $("#tl").classList.remove("dim"); document.querySelectorAll(".bar-r.focus").forEach(r => r.classList.remove("focus")); setMode("heat"); clearPanels(); }, dur: 8000 },
+    peakStep("gatsby", 0), peakStep("gatsby", 1), peakStep("gatsby", 2),
+    { t: `金句卡：按引用它的书评数排序，名句做流量入口；校正后的高光桥段做差异化内容。卡片只用公版原文。`,
+      run: async () => { $("#cardwrap").classList.add("spot"); nextCard(); await sleep(2600); nextCard(); await sleep(2600); nextCard(); }, dur: 3000 },
+    { t: `换一本：《傲慢与偏见》。位置校正后最热的仍是开篇第一句所在的场景（热度 ×${pp.h.toFixed(1)}），名句的号召力强到连位置偏差都盖不住。`,
+      run: async () => { setBook("pride"); setMode("heat"); await grow(3200); }, dur: 4500 },
+    peakStep("pride", 0), peakStep("pride", 1),
+    { t: `《简·爱》：热度分布更分散，被引用最多的 10 个句子只占全部引用的 ${pct(jb.top10)}%（盖茨比 ${pct(gb.top10)}%，傲慢与偏见 ${pct(pb.top10)}%）。`,
+      run: async () => { setBook("janeeyre"); setMode("heat"); await grow(3200); }, dur: 5000 },
+    peakStep("janeeyre", 0), peakStep("janeeyre", 2),
+    { t: `方法靠不靠得住：引文对齐精确率 ${G.quoteA[0]}/${G.quoteA[1]}、召回 ${G.quoteRecall[0]}/${G.quoteRecall[1]}，可以直接用；情节对齐 F1 约 ${G.plotF1}，还不能用。建模发现格言式句子每多 1 个标准差，被引用次数 ×${G.aph[0]}（95% 区间 ${G.aph[1]}–${G.aph[2]}）。金标是代理标注，待人工复标。`,
+      run: async () => { S.focus = null; setBook("gatsby", true); setMode("heat"); }, dur: 12000 },
+  ];
+}
+const STEPS = buildSteps();
+let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { const f = S.focus; drawTimeline(); showAll(); if (f != null) { S.focus = f; highlightBar(f); } }, 200); });
+
+function say(text) {
+  if (!S.speak || !("speechSynthesis" in window)) return;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = "zh-CN"; u.rate = Math.min(1.6, 1.05 * S.speed); speechSynthesis.speak(u); } catch (e) { /* 没有中文语音时静默 */ }
+}
+async function go(i) {
+  const my = ++token;
+  $("#cardwrap").classList.remove("spot");
+  S.step = (i + STEPS.length) % STEPS.length;
+  const s = STEPS[S.step];
+  document.body.dataset.step = S.step;
+  $("#cap").textContent = s.t; $("#cap").classList.remove("fade"); void $("#cap").offsetWidth; $("#cap").classList.add("fade");
+  $("#stepno").textContent = `${S.step + 1} / ${STEPS.length}`;
+  $("#prog").style.width = ((S.step + 1) / STEPS.length * 100) + "%";
+  say(s.t);
+  await s.run();
+  if (my !== token) return;
+  document.body.dataset.done = S.step;
+  // 朗读开启时按字数估计时长，至少等到读完
+  const need = S.speak ? s.t.length * 230 : 0;
+  await sleep(Math.max(s.dur, need));
+  if (my !== token || !S.playing) return;
+  go(S.step + 1);
+}
+function setPlaying(p) { S.playing = p; $("#play").setAttribute("aria-pressed", p); $("#play").textContent = p ? "暂停讲解" : "自动讲解"; }
+function stopAuto() { if (S.playing) { setPlaying(false); token++; } }
+$("#play").onclick = () => { if (S.playing) { stopAuto(); } else { setPlaying(true); go(S.step + 1); } };
+$("#next").onclick = () => go(S.step + 1);
+$("#prev").onclick = () => go(S.step - 1);
+$("#speed").onclick = () => { S.speed = S.speed >= 2 ? 0.75 : S.speed === 0.75 ? 1 : S.speed === 1 ? 1.5 : 2; $("#speed").textContent = `速度 ${S.speed}×`; };
+$("#speed").textContent = `速度 ${S.speed}×`;
+$("#speak").onclick = () => { S.speak = !S.speak; $("#speak").setAttribute("aria-pressed", S.speak); if (!S.speak && "speechSynthesis" in window) speechSynthesis.cancel(); };
+$("#fs").onclick = () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {}); else document.exitFullscreen(); };
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "BUTTON" && (e.key === " " || e.key === "Enter")) { if (e.key === " ") e.preventDefault(); else return; }
+  if (e.key === " ") { e.preventDefault(); $("#play").click(); }
+  else if (e.key === "ArrowRight") go(S.step + 1);
+  else if (e.key === "ArrowLeft") go(S.step - 1);
+  else if (["1", "2", "3"].includes(e.key)) { stopAuto(); setBook(D.order[+e.key - 1], true); }
+  else if (e.key === "r" || e.key === "R") { stopAuto(); setMode(S.mode === "raw" ? "heat" : "raw"); }
+  else if (e.key === "f" || e.key === "F") $("#fs").click();
+});
+
+/* ---------- 启动：默认自动讲解；?auto=0 不自动；?step=N 直接跳到第 N 步（从 1 数）并停住，便于截图 ---------- */
+setBook(D.order[0]);
+const jump = parseInt(params.get("step") || "0", 10);
+if (jump > 0) { (async () => { for (let i = 0; i < jump - 1; i++) { S.step = i; await STEPS[i].run(); } showAll(); go(jump - 1); })(); }
+else if (params.get("auto") !== "0") { setPlaying(true); go(0); }
+else { showAll(); }
+</script>
+</body>
+</html>

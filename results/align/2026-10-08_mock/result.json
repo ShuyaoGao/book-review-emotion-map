@@ -1,0 +1,33 @@
+{
+  "confirm": "mock",
+  "corpus": "reviews_full",
+  "books": {
+    "gatsby": {
+      "n_reviews": 6273,
+      "n_sentences": 42395,
+      "quote_sentences": 1587,
+      "plot_sentences": 1041,
+      "plot_candidates": 6964,
+      "unique_review_scene_pairs": 1826,
+      "reviews_with_any_mention": 980
+    },
+    "pride": {
+      "n_reviews": 5858,
+      "n_sentences": 42163,
+      "quote_sentences": 856,
+      "plot_sentences": 543,
+      "plot_candidates": 6809,
+      "unique_review_scene_pairs": 1017,
+      "reviews_with_any_mention": 601
+    },
+    "janeeyre": {
+      "n_reviews": 4111,
+      "n_sentences": 34247,
+      "quote_sentences": 1062,
+      "plot_sentences": 721,
+      "plot_candidates": 7207,
+      "unique_review_scene_pairs": 1181,
+      "reviews_with_any_mention": 630
+    }
+  }
+}

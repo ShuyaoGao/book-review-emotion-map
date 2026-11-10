@@ -1,0 +1,163 @@
+{
+  "books": {
+    "gatsby": {
+      "n_scenes": 90,
+      "means": {
+        "sid": 44.5,
+        "chapter": 5.167,
+        "pos": 0.513,
+        "n_words": 534.922,
+        "chapter_open": 0.1,
+        "chapter_close": 0.1,
+        "book_first": 0.011,
+        "book_last": 0.011,
+        "death_parting_per1k": 1.671,
+        "reunion_per1k": 0.811,
+        "reversal_per1k": 1.247,
+        "conflict_per1k": 0.739,
+        "romance_per1k": 2.328,
+        "sensory_per1k": 11.416,
+        "suspense_per1k": 1.504,
+        "humor_per1k": 1.286,
+        "aphorism_n": 0.133,
+        "aphorism_any": 0.122,
+        "dialogue_ratio": 0.249,
+        "exclaim_per1k": 2.363,
+        "question_per1k": 6.6,
+        "n_names": 3.678
+      },
+      "code_prevalence": {
+        "conflict": 0.422,
+        "reversal": 0.167,
+        "death_parting": 0.2,
+        "reunion": 0.156,
+        "romance": 0.122,
+        "sensory": 1.122,
+        "humor": 0.244,
+        "suspense": 0.556,
+        "aphorism": 0.122
+      },
+      "scene_type_counts": {
+        "summary": 37,
+        "description": 39,
+        "dialogue": 14
+      }
+    },
+    "pride": {
+      "n_scenes": 200,
+      "means": {
+        "sid": 99.5,
+        "chapter": 32.96,
+        "pos": 0.496,
+        "n_words": 607.855,
+        "chapter_open": 0.305,
+        "chapter_close": 0.305,
+        "book_first": 0.005,
+        "book_last": 0.005,
+        "death_parting_per1k": 0.707,
+        "reunion_per1k": 0.885,
+        "reversal_per1k": 2.542,
+        "conflict_per1k": 1.184,
+        "romance_per1k": 3.908,
+        "sensory_per1k": 1.724,
+        "suspense_per1k": 1.238,
+        "humor_per1k": 0.929,
+        "aphorism_n": 0.315,
+        "aphorism_any": 0.255,
+        "dialogue_ratio": 0.463,
+        "exclaim_per1k": 3.485,
+        "question_per1k": 4.272,
+        "n_names": 6.91
+      },
+      "code_prevalence": {
+        "conflict": 0.61,
+        "reversal": 0.335,
+        "death_parting": 0.085,
+        "reunion": 0.195,
+        "romance": 0.25,
+        "sensory": 0.1,
+        "humor": 0.195,
+        "suspense": 0.485,
+        "aphorism": 0.255
+      },
+      "scene_type_counts": {
+        "dialogue": 97,
+        "summary": 101,
+        "description": 2
+      }
+    },
+    "janeeyre": {
+      "n_scenes": 334,
+      "means": {
+        "sid": 166.5,
+        "chapter": 20.79,
+        "pos": 0.5,
+        "n_words": 552.024,
+        "chapter_open": 0.114,
+        "chapter_close": 0.114,
+        "book_first": 0.003,
+        "book_last": 0.003,
+        "death_parting_per1k": 1.834,
+        "reunion_per1k": 1.023,
+        "reversal_per1k": 1.291,
+        "conflict_per1k": 0.932,
+        "romance_per1k": 3.463,
+        "sensory_per1k": 8.581,
+        "suspense_per1k": 2.182,
+        "humor_per1k": 0.933,
+        "aphorism_n": 0.132,
+        "aphorism_any": 0.111,
+        "dialogue_ratio": 0.427,
+        "exclaim_per1k": 4.916,
+        "question_per1k": 7.815,
+        "n_names": 3.03
+      },
+      "code_prevalence": {
+        "conflict": 0.485,
+        "reversal": 0.135,
+        "death_parting": 0.269,
+        "reunion": 0.216,
+        "romance": 0.192,
+        "sensory": 0.853,
+        "humor": 0.192,
+        "suspense": 0.775,
+        "aphorism": 0.111
+      },
+      "scene_type_counts": {
+        "description": 85,
+        "summary": 116,
+        "dialogue": 133
+      }
+    }
+  },
+  "code_thresholds": {
+    "conflict": [
+      0.0,
+      2.4482999999999997
+    ],
+    "reversal": [
+      3.003
+    ],
+    "death_parting": [
+      2.7824000000000013
+    ],
+    "reunion": [
+      2.0766000000000004
+    ],
+    "romance": [
+      5.9952000000000005
+    ],
+    "sensory": [
+      4.7225,
+      13.101099999999999
+    ],
+    "humor": [
+      2.087800000000001
+    ],
+    "suspense": [
+      1.1644999999999999,
+      3.817949999999999
+    ],
+    "description_sensory": 9.82475
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "params": {
+    "min_scene_words": 300,
+    "max_scene_words": 1600,
+    "window_words": 300
+  },
+  "books": {
+    "gatsby": {
+      "n_chapters": 9,
+      "n_paragraphs": 1635,
+      "n_words": 48143,
+      "n_scenes": 90,
+      "scene_words_median": 489,
+      "scene_words_p10_p90": [
+        307,
+        847
+      ]
+    },
+    "pride": {
+      "n_chapters": 61,
+      "n_paragraphs": 2060,
+      "n_words": 121571,
+      "n_scenes": 200,
+      "scene_words_median": 506,
+      "scene_words_p10_p90": [
+        323,
+        991
+      ]
+    },
+    "janeeyre": {
+      "n_chapters": 38,
+      "n_paragraphs": 4048,
+      "n_words": 184376,
+      "n_scenes": 334,
+      "scene_words_median": 473,
+      "scene_words_p10_p90": [
+        324,
+        877
+      ]
+    }
+  },
+  "validation": {
+    "gatsby": {
+      "pk": 0.3206,
+      "windowdiff": 0.3711,
+      "k": 91,
+      "boundary_recall_tol2": 0.125,
+      "boundary_precision_tol2": 0.125,
+      "n_true": 8,
+      "n_pred": 8,
+      "random_baseline": {
+        "pk": 0.4881,
+        "windowdiff": 0.5197,
+        "boundary_recall_tol2": 0.0187,
+        "boundary_precision_tol2": 0.0187
+      }
+    },
+    "pride": {
+      "pk": 0.3686,
+      "windowdiff": 0.4151,
+      "k": 17,
+      "boundary_recall_tol2": 0.3,
+      "boundary_precision_tol2": 0.3167,
+      "n_true": 60,
+      "n_pred": 60,
+      "random_baseline": {
+        "pk": 0.4942,
+        "windowdiff": 0.5393,
+        "boundary_recall_tol2": 0.1452,
+        "boundary_precision_tol2": 0.1523
+      }
+    },
+    "janeeyre": {
+      "pk": 0.413,
+      "windowdiff": 0.4758,
+      "k": 53,
+      "boundary_recall_tol2": 0.1351,
+      "boundary_precision_tol2": 0.1351,
+      "n_true": 37,
+      "n_pred": 37,
+      "random_baseline": {
+        "pk": 0.4949,
+        "windowdiff": 0.5363,
+        "boundary_recall_tol2": 0.0426,
+        "boundary_precision_tol2": 0.0432
+      }
+    }
+  },
+  "embed_backend": "BAAI/bge-m3@cache"
+}

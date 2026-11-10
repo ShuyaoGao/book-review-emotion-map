@@ -1,0 +1,60 @@
+{"item": "gatsby-B00", "gold": {"quote": [16]}, "pred": [16]}
+{"item": "gatsby-B01", "gold": "none", "pred": null}
+{"item": "gatsby-B02", "gold": {"quote": [1614]}, "pred": [1614]}
+{"item": "gatsby-B03", "gold": {"quote": [1040]}, "pred": [1040]}
+{"item": "gatsby-B04", "gold": {"quote": [600]}, "pred": [600]}
+{"item": "gatsby-B05", "gold": "none", "pred": null}
+{"item": "gatsby-B06", "gold": "none", "pred": null}
+{"item": "gatsby-B07", "gold": "none", "pred": null}
+{"item": "gatsby-B08", "gold": "none", "pred": null}
+{"item": "gatsby-B09", "gold": "none", "pred": null}
+{"item": "gatsby-B10", "gold": {"quote": [1376]}, "pred": [1376]}
+{"item": "gatsby-B11", "gold": {"quote": [291]}, "pred": [291]}
+{"item": "gatsby-B12", "gold": {"quote": [3]}, "pred": [3]}
+{"item": "gatsby-B13", "gold": "none", "pred": null}
+{"item": "gatsby-B14", "gold": "none", "pred": null}
+{"item": "gatsby-B15", "gold": "none", "pred": null}
+{"item": "gatsby-B16", "gold": {"quote": [291]}, "pred": [291]}
+{"item": "gatsby-B17", "gold": {"quote": [19]}, "pred": [19]}
+{"item": "gatsby-B18", "gold": "none", "pred": null}
+{"item": "gatsby-B19", "gold": {"quote": [1630]}, "pred": null}
+{"item": "pride-B00", "gold": {"quote": [172]}, "pred": [172]}
+{"item": "pride-B01", "gold": {"quote": [172]}, "pred": [172]}
+{"item": "pride-B02", "gold": {"quote": [1919]}, "pred": [1919]}
+{"item": "pride-B03", "gold": "none", "pred": null}
+{"item": "pride-B04", "gold": {"quote": [417]}, "pred": [417]}
+{"item": "pride-B05", "gold": "none", "pred": null}
+{"item": "pride-B06", "gold": {"quote": [247]}, "pred": [247]}
+{"item": "pride-B07", "gold": {"quote": [172]}, "pred": [172]}
+{"item": "pride-B08", "gold": "none", "pred": null}
+{"item": "pride-B09", "gold": {"quote": [0]}, "pred": [0]}
+{"item": "pride-B10", "gold": {"quote": [0]}, "pred": null}
+{"item": "pride-B11", "gold": "none", "pred": null}
+{"item": "pride-B12", "gold": {"quote": [1098]}, "pred": [1098]}
+{"item": "pride-B13", "gold": "none", "pred": null}
+{"item": "pride-B14", "gold": {"quote": [637]}, "pred": [637]}
+{"item": "pride-B15", "gold": "none", "pred": null}
+{"item": "pride-B16", "gold": {"quote": [784]}, "pred": [784]}
+{"item": "pride-B17", "gold": {"quote": [1080]}, "pred": [1080]}
+{"item": "pride-B18", "gold": "none", "pred": null}
+{"item": "pride-B19", "gold": "none", "pred": null}
+{"item": "janeeyre-B00", "gold": "none", "pred": null}
+{"item": "janeeyre-B01", "gold": "none", "pred": null}
+{"item": "janeeyre-B02", "gold": "none", "pred": null}
+{"item": "janeeyre-B03", "gold": "none", "pred": null}
+{"item": "janeeyre-B04", "gold": "none", "pred": null}
+{"item": "janeeyre-B05", "gold": "none", "pred": null}
+{"item": "janeeyre-B06", "gold": "none", "pred": null}
+{"item": "janeeyre-B07", "gold": "none", "pred": null}
+{"item": "janeeyre-B08", "gold": "none", "pred": null}
+{"item": "janeeyre-B09", "gold": {"quote": [4047]}, "pred": [4047]}
+{"item": "janeeyre-B10", "gold": {"quote": [1122]}, "pred": [1122]}
+{"item": "janeeyre-B11", "gold": {"quote": [214]}, "pred": [214]}
+{"item": "janeeyre-B12", "gold": "none", "pred": null}
+{"item": "janeeyre-B13", "gold": "none", "pred": null}
+{"item": "janeeyre-B14", "gold": {"quote": [298]}, "pred": [298]}
+{"item": "janeeyre-B15", "gold": "none", "pred": null}
+{"item": "janeeyre-B16", "gold": "none", "pred": null}
+{"item": "janeeyre-B17", "gold": {"quote": [0]}, "pred": [0]}
+{"item": "janeeyre-B18", "gold": {"quote": [3860]}, "pred": [3860]}
+{"item": "janeeyre-B19", "gold": "none", "pred": null}

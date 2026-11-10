@@ -1,0 +1,130 @@
+{
+  "books": {
+    "gatsby": {
+      "n_contexts": 2615,
+      "bare_quote_share": 0.192,
+      "prevalence_lexicon": {
+        "moved": 0.0161,
+        "heartbreak": 0.0688,
+        "anger": 0.0398,
+        "amusement": 0.0061,
+        "shock": 0.0287,
+        "comfort": 0.0367,
+        "swoon": 0.0558,
+        "suspense": 0.0057,
+        "resonance": 0.0207,
+        "aesthetic": 0.0658
+      },
+      "prevalence_goemo": {
+        "moved": 0.0,
+        "heartbreak": 0.0356,
+        "anger": 0.0138,
+        "amusement": 0.0038,
+        "shock": 0.0088,
+        "comfort": 0.0226,
+        "swoon": 0.008,
+        "suspense": 0.0011,
+        "resonance": 0.0283,
+        "aesthetic": 0.1327
+      }
+    },
+    "pride": {
+      "n_contexts": 1394,
+      "bare_quote_share": 0.2202,
+      "prevalence_lexicon": {
+        "moved": 0.0036,
+        "heartbreak": 0.0108,
+        "anger": 0.0402,
+        "amusement": 0.0832,
+        "shock": 0.0201,
+        "comfort": 0.0352,
+        "swoon": 0.0832,
+        "suspense": 0.0057,
+        "resonance": 0.023,
+        "aesthetic": 0.0237
+      },
+      "prevalence_goemo": {
+        "moved": 0.0,
+        "heartbreak": 0.0129,
+        "anger": 0.0158,
+        "amusement": 0.0308,
+        "shock": 0.0057,
+        "comfort": 0.0387,
+        "swoon": 0.0093,
+        "suspense": 0.0,
+        "resonance": 0.023,
+        "aesthetic": 0.1011
+      }
+    },
+    "janeeyre": {
+      "n_contexts": 1776,
+      "bare_quote_share": 0.3001,
+      "prevalence_lexicon": {
+        "moved": 0.0124,
+        "heartbreak": 0.0321,
+        "anger": 0.0259,
+        "amusement": 0.0169,
+        "shock": 0.0191,
+        "comfort": 0.0372,
+        "swoon": 0.103,
+        "suspense": 0.0242,
+        "resonance": 0.0175,
+        "aesthetic": 0.0304
+      },
+      "prevalence_goemo": {
+        "moved": 0.0,
+        "heartbreak": 0.0293,
+        "anger": 0.013,
+        "amusement": 0.0062,
+        "shock": 0.0079,
+        "comfort": 0.0332,
+        "swoon": 0.0028,
+        "suspense": 0.0017,
+        "resonance": 0.0107,
+        "aesthetic": 0.0963
+      }
+    }
+  },
+  "agreement_lexicon_vs_goemo": {
+    "moved": {
+      "kappa": null,
+      "blocked_reason": "某一方方差为 0"
+    },
+    "heartbreak": {
+      "kappa": 0.249,
+      "pct_agree": 0.948
+    },
+    "anger": {
+      "kappa": 0.1786,
+      "pct_agree": 0.9601
+    },
+    "amusement": {
+      "kappa": 0.4425,
+      "pct_agree": 0.9786
+    },
+    "shock": {
+      "kappa": 0.2217,
+      "pct_agree": 0.9758
+    },
+    "comfort": {
+      "kappa": 0.1929,
+      "pct_agree": 0.9483
+    },
+    "swoon": {
+      "kappa": 0.0042,
+      "pct_agree": 0.9177
+    },
+    "suspense": {
+      "kappa": 0.0816,
+      "pct_agree": 0.9886
+    },
+    "resonance": {
+      "kappa": 0.0631,
+      "pct_agree": 0.9616
+    },
+    "aesthetic": {
+      "kappa": 0.2619,
+      "pct_agree": 0.8904
+    }
+  }
+}

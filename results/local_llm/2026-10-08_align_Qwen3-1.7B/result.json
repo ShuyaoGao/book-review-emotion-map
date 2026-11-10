@@ -1,0 +1,7 @@
+{
+  "model": "Qwen/Qwen3-1.7B",
+  "task": "align",
+  "n": 120,
+  "parse_ok": 120,
+  "peak_vram_gb": 3.758
+}

@@ -1,0 +1,182 @@
+[
+  {
+    "slug": "pg1342",
+    "gutenberg_id": 1342,
+    "url": "https://www.gutenberg.org/cache/epub/1342/pg1342.txt",
+    "path": "data/books/pg1342.txt",
+    "chars": 728714,
+    "sha256": "48bba16ccc3accb733998bb2041499d5096240d624f270942b5c5e97a091f12c",
+    "cached": false
+  },
+  {
+    "slug": "pg1260",
+    "gutenberg_id": 1260,
+    "url": "https://www.gutenberg.org/cache/epub/1260/pg1260.txt",
+    "path": "data/books/pg1260.txt",
+    "chars": 1022380,
+    "sha256": "88d4efc5d1613f2a237343beea921c1d620296914371828936e0fa75e7d497e1",
+    "cached": false
+  },
+  {
+    "slug": "pg84",
+    "gutenberg_id": 84,
+    "url": "https://www.gutenberg.org/cache/epub/84/pg84.txt",
+    "path": "data/books/pg84.txt",
+    "chars": 419337,
+    "sha256": "9cd3976a922451dd34daa4b4886c6f853fc59ab6d916e4345ec74bcaf2762347",
+    "cached": false
+  },
+  {
+    "slug": "pg64317",
+    "gutenberg_id": 64317,
+    "url": "https://www.gutenberg.org/cache/epub/64317/pg64317.txt",
+    "path": "data/books/pg64317.txt",
+    "chars": 270691,
+    "sha256": "32a3f1839d5a72afd773888d524ce36e58476a207f7d5c4b53f9464c07e1b5ba",
+    "cached": false
+  },
+  {
+    "slug": "pg345",
+    "gutenberg_id": 345,
+    "url": "https://www.gutenberg.org/cache/epub/345/pg345.txt",
+    "path": "data/books/pg345.txt",
+    "chars": 845890,
+    "sha256": "a28592cef10b05e35557eeece717d2238a84fd01dab46e875f4da534549b47fa",
+    "cached": false
+  },
+  {
+    "slug": "pg768",
+    "gutenberg_id": 768,
+    "url": "https://www.gutenberg.org/cache/epub/768/pg768.txt",
+    "path": "data/books/pg768.txt",
+    "chars": 645606,
+    "sha256": "44ca6b3f143b24c2692ca1f5ad2e6ecc9e3bb4d339dc64305c743834eef80026",
+    "cached": false
+  },
+  {
+    "slug": "pg514",
+    "gutenberg_id": 514,
+    "url": "https://www.gutenberg.org/cache/epub/514/pg514.txt",
+    "path": "data/books/pg514.txt",
+    "chars": 1007152,
+    "sha256": "77e4e1abb8663f76e8ce96403c7a2960deac0b28e9cf55d0fa94e78b96c5b742",
+    "cached": false
+  },
+  {
+    "slug": "pg174",
+    "gutenberg_id": 174,
+    "url": "https://www.gutenberg.org/cache/epub/174/pg174.txt",
+    "path": "data/books/pg174.txt",
+    "chars": 429313,
+    "sha256": "b8524cf8521c5c8fbed45dd49fe029b9f44578a10a5acf8fae616a5d19303cc8",
+    "cached": false
+  },
+  {
+    "slug": "pg11",
+    "gutenberg_id": 11,
+    "url": "https://www.gutenberg.org/cache/epub/11/pg11.txt",
+    "path": "data/books/pg11.txt",
+    "chars": 144600,
+    "sha256": "c6a28d03da69beab217ab68fe31d42402035d70c2458d3fbf0bac08393aebc89",
+    "cached": false
+  },
+  {
+    "slug": "pg1400",
+    "gutenberg_id": 1400,
+    "url": "https://www.gutenberg.org/cache/epub/1400/pg1400.txt",
+    "path": "data/books/pg1400.txt",
+    "chars": 994617,
+    "sha256": "85ade233e98e7d56ffa3a63fb812fa15a9ff45e407281f6c53536bd85653234b",
+    "cached": false
+  },
+  {
+    "slug": "pg98",
+    "gutenberg_id": 98,
+    "url": "https://www.gutenberg.org/cache/epub/98/pg98.txt",
+    "path": "data/books/pg98.txt",
+    "chars": 757605,
+    "sha256": "f931148891306741bb06e93765017ecef4d27f96c050c2ab87d49c8cf75ed54c",
+    "cached": false
+  },
+  {
+    "slug": "pg2701",
+    "gutenberg_id": 2701,
+    "url": "https://www.gutenberg.org/cache/epub/2701/pg2701.txt",
+    "path": "data/books/pg2701.txt",
+    "chars": 1218941,
+    "sha256": "5f0dc5610f5d123d167035e71e09d42d724d6ff1180581f29555425aaa0f098e",
+    "cached": false
+  },
+  {
+    "slug": "pg158",
+    "gutenberg_id": 158,
+    "url": "https://www.gutenberg.org/cache/epub/158/pg158.txt",
+    "path": "data/books/pg158.txt",
+    "chars": 880425,
+    "sha256": "6c6feec474a0ddcb7e5b9e385472ffe35a9cead9fb1ea5ab9654d75318a4be67",
+    "cached": false
+  },
+  {
+    "slug": "pg161",
+    "gutenberg_id": 161,
+    "url": "https://www.gutenberg.org/cache/epub/161/pg161.txt",
+    "path": "data/books/pg161.txt",
+    "chars": 670675,
+    "sha256": "47debc4706e4bad8085f2e11b4f6dc9ec631fb084e25f2569e94f7197d4855e6",
+    "cached": false
+  },
+  {
+    "slug": "pg105",
+    "gutenberg_id": 105,
+    "url": "https://www.gutenberg.org/cache/epub/105/pg105.txt",
+    "path": "data/books/pg105.txt",
+    "chars": 464828,
+    "sha256": "8b9699e307ebee1fe5f9aa7853d2084cabe14087abd623dde324a0e0c542963a",
+    "cached": false
+  },
+  {
+    "slug": "pg43",
+    "gutenberg_id": 43,
+    "url": "https://www.gutenberg.org/cache/epub/43/pg43.txt",
+    "path": "data/books/pg43.txt",
+    "chars": 138815,
+    "sha256": "bdf80e8d9a2c3d97adab29587804f6384962be095269329508727c7668b515ce",
+    "cached": false
+  },
+  {
+    "slug": "pg25344",
+    "gutenberg_id": 25344,
+    "url": "https://www.gutenberg.org/cache/epub/25344/pg25344.txt",
+    "path": "data/books/pg25344.txt",
+    "chars": 492030,
+    "sha256": "d23707a0f9141bc92f93411f504101d6770761c4ddb6be93fc006126b638b357",
+    "cached": false
+  },
+  {
+    "slug": "pg1661",
+    "gutenberg_id": 1661,
+    "url": "https://www.gutenberg.org/cache/epub/1661/pg1661.txt",
+    "path": "data/books/pg1661.txt",
+    "chars": 562203,
+    "sha256": "28ebc9fb97c5934c448428565f5032376ba570c594723d3e14e1581c06a14dc6",
+    "cached": false
+  },
+  {
+    "slug": "pg2554",
+    "gutenberg_id": 2554,
+    "url": "https://www.gutenberg.org/cache/epub/2554/pg2554.txt",
+    "path": "data/books/pg2554.txt",
+    "chars": 1135109,
+    "sha256": "8a4c532cd09950661bfb4cf43aa1c6d303577835c011706863df11685e47d112",
+    "cached": false
+  },
+  {
+    "slug": "pg120",
+    "gutenberg_id": 120,
+    "url": "https://www.gutenberg.org/cache/epub/120/pg120.txt",
+    "path": "data/books/pg120.txt",
+    "chars": 364520,
+    "sha256": "07e2738f2e0b335097fa41789d419dfc94db01cb319bfa3a063644cc85788fa4",
+    "cached": false
+  }
+]

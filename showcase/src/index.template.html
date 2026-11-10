@@ -1,0 +1,490 @@
+<title>桥段热度地图</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* 版式概念：一页“批注过的书页”——正文窄栏居中，数据图横跨全宽；荧光笔划线是唯一的强调手段 */
+:root {
+  --paper: #f7f8f6;        /* 页面底色：偏冷的纸白 */
+  --sheet: #fdfdfc;        /* 图表/卡片面 */
+  --ink: #15191d;          /* 正文墨色 */
+  --ink-2: #4a5158;        /* 次要文字 */
+  --muted: #7d848a;        /* 轴、注释 */
+  --rule: #dfe2e0;         /* 发丝线 */
+  --base: #c3c6c2;         /* 基线 */
+  --marker: #ffe36b;       /* 荧光笔：划线 */
+  --marker-ink: #15191d;
+  --accent: #1d4f8c;       /* 墨蓝：链接与选中 */
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s0: #c3c6c2; --snone: #e7e9e6;
+  --good: #0ca30c; --crit: #d03b3b;
+  --f-display: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  --f-body: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #111416; --sheet: #191c1f; --ink: #eef0ee; --ink-2: #b9bfc3; --muted: #8b9297; --rule: #2a2f33; --base: #3a4045;
+    --marker: #8a7414; --marker-ink: #fff7cf; --accent: #8fb8ee;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s0: #4b5257; --snone: #23282b; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #111416; --sheet: #191c1f; --ink: #eef0ee; --ink-2: #b9bfc3; --muted: #8b9297; --rule: #2a2f33; --base: #3a4045;
+  --marker: #8a7414; --marker-ink: #fff7cf; --accent: #8fb8ee;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s0: #4b5257; --snone: #23282b; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.7; margin: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 64px; }
+.col { max-width: 720px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; line-height: 1.25; margin: 0; }
+h1 { font-size: clamp(30px, 5vw, 48px); font-weight: 900; letter-spacing: 0.01em; }
+h2 { font-size: clamp(22px, 3vw, 28px); font-weight: 900; }
+h3 { font-size: 17px; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--accent); }
+.mark { background: linear-gradient(transparent 52%, var(--marker) 52%, var(--marker) 90%, transparent 90%); color: inherit; padding: 0 2px; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { font-size: 17px; color: var(--ink-2); max-width: 680px; }
+section { padding-block: 44px 8px; border-top: 1px solid var(--rule); margin-top: 36px; display: grid; gap: 18px; }
+header { display: grid; gap: 16px; padding-block: 8px 12px; }
+.facts { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 8px; }
+.fact { display: grid; gap: 2px; min-width: 0; }
+.fact b { font-family: var(--f-mono); font-size: 26px; font-weight: 500; }
+.fact span { font-size: 13px; color: var(--muted); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.panel { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 16px 18px; min-width: 0; }
+.route { display: grid; gap: 6px; }
+.route .tag { font-family: var(--f-mono); font-size: 12px; }
+.ok { color: var(--good); } .no { color: var(--crit); } .mid { color: var(--s4); }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tabs button, .seg button { font: inherit; font-size: 14px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink); padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+.tabs button[aria-pressed="true"], .seg button[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 -3px 0 var(--marker); font-weight: 700; }
+button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.controls { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; }
+.seg { display: flex; gap: 0; }
+.seg button { border-radius: 0; }
+.seg button:first-child { border-radius: 4px 0 0 4px; } .seg button:last-child { border-radius: 0 4px 4px 0; border-left: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--ink-2); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.chart { width: 100%; overflow-x: auto; }
+.chart svg { display: block; width: 100%; height: auto; }
+#tl svg { min-width: 640px; }
+.heat td:first-child, .heat th:first-child { white-space: nowrap; }
+.heat th { white-space: nowrap; }
+.axis text, .lbl { fill: var(--muted); font-family: var(--f-mono); font-size: 11px; }
+.tip { position: fixed; pointer-events: none; background: var(--sheet); color: var(--ink); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 10px; font-size: 13px; line-height: 1.5; box-shadow: 0 4px 16px rgba(0,0,0,.12); max-width: 300px; z-index: 5; }
+.tip b { font-family: var(--f-mono); font-weight: 500; font-size: 15px; }
+.detail { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; }
+@media (max-width: 760px) { .detail { grid-template-columns: 1fr; } }
+blockquote { margin: 0; font-family: var(--f-display); font-size: 19px; line-height: 1.6; font-weight: 600; }
+.small { font-size: 13px; color: var(--ink-2); }
+.muted { color: var(--muted); }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 12px; border: 1px solid var(--rule); border-radius: 999px; padding: 1px 9px; color: var(--ink-2); background: var(--paper); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 500; color: var(--muted); font-size: 12px; }
+td.num, th.num { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.tablewrap { overflow-x: auto; }
+details summary { cursor: pointer; color: var(--accent); font-size: 14px; }
+.hl { display: grid; gap: 10px; }
+.hl-item { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding-block: 12px; border-bottom: 1px solid var(--rule); }
+.hl-rank { font-family: var(--f-mono); font-size: 22px; color: var(--muted); }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.card { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 18px; display: grid; gap: 12px; align-content: space-between; min-height: 180px; }
+.card q { font-family: var(--f-display); font-size: 17px; line-height: 1.55; quotes: "“" "”"; }
+.card .meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-family: var(--f-mono); }
+.flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0; counter-reset: step; }
+.flow div { padding: 14px 16px; border-left: 2px solid var(--rule); counter-increment: step; display: grid; gap: 4px; }
+.flow div::before { content: counter(step); font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.script { font-size: 14px; display: grid; gap: 8px; }
+.script .t { font-family: var(--f-mono); color: var(--muted); font-size: 12px; }
+ul.lim { margin: 0; padding-left: 20px; display: grid; gap: 8px; }
+.heat td.cell { text-align: center; font-family: var(--f-mono); font-size: 12px; min-width: 52px; }
+footer { margin-top: 48px; font-size: 12px; color: var(--muted); display: grid; gap: 6px; }
+@media (prefers-reduced-motion: no-preference) { .bar { transition: y .35s ease, height .35s ease; } }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">p8-book-emotion · 实验报告 · 2026-10</div>
+  <h1>读者<span class="mark">引用过的句子</span>，<br>就是一份现成的桥段标注</h1>
+  <p class="lede">用户想用微信读书的划线和书评找出“最打动人的桥段”。私有接口不能爬，我们换了一条能复现的路：Goodreads 公开研究数据里的英文书评，对齐到三本公版小说的原文，算出每个场景被引用的热度，再看读者表达了什么情绪、哪些桥段特征更容易被引用。</p>
+  <div class="facts" id="facts"></div>
+</header>
+
+<section id="feasibility">
+  <div class="eyebrow">01 · 数据能不能拿到</div>
+  <h2>微信读书走不通批量爬取；研究先用公开数据，商用要换数据源</h2>
+  <div class="grid3">
+    <div class="panel route"><span class="tag no">✕ 不采用</span><h3>爬微信读书私有接口</h3><p class="small">《微信读书软件许可及服务协议》6.1.2.4 / 6.1.2.6 条禁止非授权第三方工具获取交互数据；2025 年修订的《反不正当竞争法》第十三条第三款明确禁止避开技术措施获取他人数据。微博诉脉脉、淘宝诉美景等判例认定平台对聚合数据有竞争性权益。</p></div>
+    <div class="panel route"><span class="tag mid">△ 可行但要授权</span><h3>官方 Skill / 用户本人导出</h3><p class="small">2026 年 5 月腾讯开源了微信读书 Skill（github.com/tencent/wechatreading），用户凭本人 API Key 可读自己的划线、想法和书的“热门划线”。Key 与个人身份绑定，未见允许批量采集或商用的条款。适合“用户自愿捐赠”与小规模研究，规模化需腾讯书面许可。</p></div>
+    <div class="panel route"><span class="tag ok">✓ 本次使用</span><h3>Goodreads 公开研究数据</h3><p class="small">UCSD Book Graph（Wan &amp; McAuley 2018；Wan et al. ACL 2019）。原文条款：仅限学术使用、不得再分发、不得商用。所以本页的方法可以迁移到商用，数据不行：商用要换成公版文本 + 自有/捐赠/授权的读者数据。</p></div>
+  </div>
+  <p class="small muted">完整调研（含核实状态表、来源 49 条、19 条标 [未核实]）见仓库 docs/DATA_FEASIBILITY.md。</p>
+</section>
+
+<section id="timeline">
+  <div class="eyebrow">02 · 热度—情绪时间线</div>
+  <h2>一本书从头到尾，哪里被引用得最多</h2>
+  <p class="col small">每根柱子是一个场景（切分算法见 docs），宽度与篇幅成正比。高度可在“原始提及数”和“位置校正热度”之间切换：后者 = 观测提及 ÷ 按位置与篇幅预期的提及，并做经验贝叶斯收缩，用来扣掉“开头和结尾总是被引用最多”的位置效应。颜色是读者在引用旁边自己写下的反应（只看读者的话，不看被引的原文）。点任一柱子看详情。</p>
+  <div class="controls">
+    <div class="tabs" id="bookTabs" role="group" aria-label="选择书目"></div>
+    <div class="seg" role="group" aria-label="热度口径">
+      <button id="mRaw" aria-pressed="true">原始提及数</button><button id="mAdj" aria-pressed="false">位置校正热度</button>
+    </div>
+  </div>
+  <div class="legend" id="legend"></div>
+  <div class="panel" style="padding:10px 8px 4px"><div class="chart" id="tl"></div></div>
+  <div class="panel detail" id="detail" aria-live="polite"></div>
+  <details><summary>以表格查看本书提及最多的 20 个场景</summary><div class="tablewrap"><table id="tlTable"></table></div></details>
+</section>
+
+<section id="position">
+  <div class="eyebrow">03 · 位置偏差</div>
+  <h2>书评偏爱开头和结尾，划线则是越往后越少</h2>
+  <div class="grid2">
+    <div class="panel"><h3>书评引用的位置分布（三本书合计）</h3><p class="small muted">每万词被引用次数，按全书十分位</p><div class="chart" id="pp"></div></div>
+    <div class="panel"><h3>合成数据检验：归一化能不能找回真实高光</h3><p class="small muted">模拟“越往后读的人越少”的划线数据（读完率 35%），50 次重复。纵轴 = Top20 高光里后 1/3 场景的占比，橙线为真实值</p><div class="chart" id="sim"></div></div>
+  </div>
+  <p class="col small" id="simText"></p>
+</section>
+
+<section id="features">
+  <div class="eyebrow">04 · 什么样的桥段被引用、引出什么情绪</div>
+  <h2>格言式句子最能带来引用；情绪信号稀疏，只能做探索</h2>
+  <div class="grid2">
+    <div class="panel"><h3>特征 → 被引用次数</h3><p class="small muted">Poisson 准似然，书固定效应，控制篇幅、位置样条、章首/章末、首尾场景；按“书×章”聚类稳健标准误。每 +1 SD 的发生率比与 95% CI，蓝色 = BH q &lt; 0.1</p><div class="chart" id="forest"></div><p class="small" id="forestNote"></p></div>
+    <div class="panel"><h3>特征 × 读者情绪（描述性）</h3><p class="small muted">有该特征的场景 vs 没有的场景，评论语境表达该情绪的比例之比（+0.5 平滑）。灰色格 = 阳性不足 5 条，不解读。打标器：GoEmotions（阈值 0.5）</p><div class="tablewrap"><table class="heat" id="fe"></table></div></div>
+  </div>
+</section>
+
+<section id="highlights">
+  <div class="eyebrow">05 · 获客产出</div>
+  <h2>高光桥段清单与金句卡片</h2>
+  <p class="col small">清单按位置校正热度排序，挑的是“被低估的高光”；金句卡按引用该句的书评数排序，挑的是“人尽皆知的名句”。两者互补。原文均为公版（Project Gutenberg）。</p>
+  <div class="tabs" id="bookTabs2" role="group" aria-label="选择书目"></div>
+  <div class="grid2">
+    <div class="panel"><h3>高光桥段 Top 8</h3><div class="hl" id="hlList"></div></div>
+    <div><h3 style="margin-bottom:12px">金句卡片</h3><div class="cards" id="cards"></div></div>
+  </div>
+</section>
+
+<section id="growth">
+  <div class="eyebrow">06 · 怎么用在获客上</div>
+  <h2>从热度地图到一条拆书短视频</h2>
+  <div class="flow">
+    <div><b>选书</b><span class="small">公版或已获授权的书</span></div>
+    <div><b>找高光</b><span class="small">引用/划线热度 + 位置校正</span></div>
+    <div><b>定情绪</b><span class="small">读者在这里是赞叹、共鸣还是心碎</span></div>
+    <div><b>出素材</b><span class="small">金句卡、名场面对白、倒叙结构</span></div>
+    <div><b>回收数据</b><span class="small">评论区反应再进模型</span></div>
+  </div>
+  <div class="grid2">
+    <div class="panel script" id="script"></div>
+    <div class="panel"><h3>读到的信号对选题的含义</h3><ul class="lim small" id="implications"></ul></div>
+  </div>
+</section>
+
+<section id="limits">
+  <div class="eyebrow">07 · 准确率与局限</div>
+  <h2>引文对齐可靠，情节对齐还不行</h2>
+  <div class="tablewrap"><table id="evalTable"></table></div>
+  <ul class="lim small col" id="limits"></ul>
+</section>
+
+<footer>
+  <div>数据：UCSD Book Graph（Goodreads，学术用途，不得再分发或商用）；原文：Project Gutenberg 公版文本；模型：BAAI/bge-m3、SamLowe/roberta-base-go_emotions（均为 MIT），Qwen3-1.7B（Apache-2.0，仅冒烟）。</div>
+  <div>本页只展示聚合数字、公版原文、读者高频用词与代理撰写的中文摘要，不含任何用户名或可识别个人的信息。所有数字来自仓库 results/ 下的 result.json。</div>
+  <div id="builtFrom" class="mono"></div>
+</footer>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script id="data" type="application/json">/*__DATA__*/null</script>
+<script>
+(function () {
+  const D = JSON.parse(document.getElementById('data').textContent);
+  const $ = (id) => document.getElementById(id);
+  const NS = 'http://www.w3.org/2000/svg';
+  const GROUPS = [['文笔赞叹', '--s1'], ['感动与共鸣', '--s2'], ['好笑', '--s3'], ['冲击与愤怒', '--s4'], ['未表态', '--s0'], ['无提及', '--snone']];
+  const GCOL = Object.fromEntries(GROUPS);
+  const fmt = (x, d = 0) => Number(x).toLocaleString('zh-CN', { minimumFractionDigits: d, maximumFractionDigits: d });
+  const pct = (x, d = 0) => (100 * x).toFixed(d) + '%';
+  const el = (tag, attrs = {}, text) => { const e = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); if (text != null) e.textContent = text; return e; };
+  const sv = (tag, attrs = {}) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); return e; };
+  const slugs = Object.keys(D.books);
+  let book = slugs[0], mode = 'm', sel = null;
+  try { const s = localStorage.getItem('p8book'); if (s && D.books[s]) book = s; } catch (e) {}
+
+  // ---------- facts ----------
+  const totR = slugs.reduce((a, s) => a + D.books[s].n_reviews, 0);
+  const totQ = slugs.reduce((a, s) => a + D.books[s].align.quote_sentences, 0);
+  const totSc = slugs.reduce((a, s) => a + D.books[s].scenes.length, 0);
+  const qa = D.eval.quote_A_precision, qb = D.eval.quote_B;
+  [[fmt(totR), '条英文书评（3 本书的全部英文版本）'], [fmt(totQ), '个评论句直接引用了原文'], [fmt(totSc), '个场景（桥段）'],
+   [pct(qa.value), `引文对齐精确率（n=${qa.n}，95% CI 下限 ${pct(qa.ci95_low)}）`], [pct(qb.recall.value), `引文召回率（n=${qb.recall.n}）`]]
+    .forEach(([v, l]) => { const d = el('div', { class: 'fact' }); d.append(el('b', {}, v), el('span', {}, l)); $('facts').append(d); });
+
+  // ---------- tabs ----------
+  function mkTabs(host, onPick) {
+    host.textContent = '';
+    slugs.forEach(s => {
+      const b = el('button', { 'aria-pressed': String(s === book) }, `${D.books[s].title_zh}`);
+      b.addEventListener('click', () => { book = s; sel = null; try { localStorage.setItem('p8book', s); } catch (e) {} renderAll(); });
+      host.append(b);
+    });
+  }
+  GROUPS.forEach(([g, v]) => { const s = el('span'); const i = el('i'); i.style.background = `var(${v})`; s.append(i, document.createTextNode(g)); $('legend').append(s); });
+  $('mRaw').onclick = () => { mode = 'm'; $('mRaw').setAttribute('aria-pressed', 'true'); $('mAdj').setAttribute('aria-pressed', 'false'); drawTimeline(); };
+  $('mAdj').onclick = () => { mode = 'h'; $('mAdj').setAttribute('aria-pressed', 'true'); $('mRaw').setAttribute('aria-pressed', 'false'); drawTimeline(); };
+
+  // ---------- tooltip ----------
+  const tip = $('tip');
+  function showTip(ev, lines) {
+    tip.textContent = '';
+    lines.forEach((l, i) => { const d = el('div'); if (i === 0) { d.append(el('b', {}, l[0]), document.createTextNode(' ' + l[1])); } else d.textContent = l; tip.append(d); });
+    tip.hidden = false;
+    const x = Math.min(window.innerWidth - 320, ev.clientX + 14), y = Math.min(window.innerHeight - 120, ev.clientY + 14);
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  }
+  const hideTip = () => { tip.hidden = true; };
+
+  function niceMax(v) { const p = Math.pow(10, Math.floor(Math.log10(v || 1))); const m = v / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p; }
+
+  // ---------- timeline ----------
+  function drawTimeline() {
+    const B = D.books[book], sc = B.scenes;
+    const W = 1060, H = 300, L = 46, R = 12, T = 14, Bm = 34;
+    const svg = sv('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': `${B.title_zh} 场景热度时间线` });
+    const vals = sc.map(s => s[mode]);
+    const vmax = niceMax(Math.max(...vals) * 1.02);
+    const y = v => T + (H - T - Bm) * (1 - v / vmax);
+    const totW = sc.reduce((a, s) => a + s.w, 0);
+    const g = sv('g', { class: 'axis' });
+    for (let i = 0; i <= 4; i++) {
+      const v = vmax * i / 4, yy = y(v);
+      g.append(sv('line', { x1: L, x2: W - R, y1: yy, y2: yy, stroke: i === 0 ? 'var(--base)' : 'var(--rule)', 'stroke-width': 1 }));
+      const t = sv('text', { x: L - 6, y: yy + 4, 'text-anchor': 'end' }); t.textContent = mode === 'h' ? fmt(v, v < 10 ? 1 : 0) : fmt(v); g.append(t);
+    }
+    for (let i = 0; i <= 10; i++) {
+      const xx = L + (W - L - R) * i / 10;
+      const t = sv('text', { x: xx, y: H - Bm + 16, 'text-anchor': i === 0 ? 'start' : i === 10 ? 'end' : 'middle' }); t.textContent = (i * 10) + '%'; g.append(t);
+    }
+    const cap = sv('text', { x: W - R, y: H - 4, 'text-anchor': 'end' }); cap.textContent = '书中位置 →'; g.append(cap);
+    svg.append(g);
+    let acc = 0;
+    // 章节分隔（淡）
+    sc.forEach((s, i) => { if (i > 0 && s.ch !== sc[i - 1].ch) { const xx = L + (W - L - R) * acc / totW; svg.append(sv('line', { x1: xx, x2: xx, y1: T, y2: H - Bm, stroke: 'var(--rule)', 'stroke-width': 0.6 })); } acc += s.w; });
+    acc = 0;
+    sc.forEach((s, i) => {
+      const x0 = L + (W - L - R) * acc / totW, bw = Math.max(1.2, (W - L - R) * s.w / totW - 1.5);
+      acc += s.w;
+      const v = s[mode], yy = y(v), h = Math.max(0, y(0) - yy);
+      const r = Math.min(3, bw / 2, h);
+      const col = `var(${GCOL[s.g] || '--snone'})`;
+      const path = sv('path', { d: `M${x0},${y(0)} V${yy + r} Q${x0},${yy} ${x0 + r},${yy} H${x0 + bw - r} Q${x0 + bw},${yy} ${x0 + bw},${yy + r} V${y(0)} Z`, fill: col, class: 'bar' });
+      if (sel === s.sid) { path.setAttribute('stroke', 'var(--ink)'); path.setAttribute('stroke-width', '1.5'); }
+      const hit = sv('rect', { x: x0 - 1, y: T, width: bw + 2, height: H - T - Bm, fill: 'transparent', tabindex: 0, 'aria-label': `第 ${s.ch} 章 场景 ${s.sid}，提及 ${s.m}` });
+      const lines = () => [[mode === 'h' ? s.h.toFixed(2) : fmt(s.m, s.m % 1 ? 1 : 0), mode === 'h' ? '位置校正热度' : '次提及'], `第 ${s.ch} 章 · 位置 ${pct(s.pos)}`, `原始提及 ${fmt(s.m, 1)} · 预期 ${fmt(s.e, 1)}`, `读者反应：${s.g}`];
+      hit.addEventListener('pointermove', ev => { path.style.opacity = 0.8; showTip(ev, lines()); });
+      hit.addEventListener('pointerleave', () => { path.style.opacity = 1; hideTip(); });
+      hit.addEventListener('focus', ev => { const r = hit.getBoundingClientRect(); showTip({ clientX: r.left, clientY: r.top }, lines()); });
+      hit.addEventListener('blur', hideTip);
+      const pick = () => { sel = s.sid; drawTimeline(); drawDetail(); };
+      hit.addEventListener('click', pick);
+      hit.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); pick(); } });
+      svg.append(path, hit);
+    });
+    // 标注最高的 3 个
+    [...sc].sort((a, b) => b[mode] - a[mode]).slice(0, 3).forEach(s => {
+      let a2 = 0; for (const t of sc) { if (t.sid === s.sid) break; a2 += t.w; }
+      const xx = L + (W - L - R) * (a2 + s.w / 2) / totW;
+      const t = sv('text', { x: Math.min(W - R - 40, Math.max(L + 30, xx)), y: Math.max(T + 10, y(s[mode]) - 6), 'text-anchor': 'middle', class: 'lbl' });
+      t.textContent = `第${s.ch}章`; svg.append(t);
+    });
+    $('tl').textContent = ''; $('tl').append(svg);
+    // table
+    const tb = $('tlTable'); tb.textContent = '';
+    const hr = el('tr'); ['章', '位置', '提及', '预期', '校正热度', '读者反应', '最常被引的句子'].forEach((h, i) => hr.append(el('th', i >= 1 && i <= 4 ? { class: 'num' } : {}, h))); tb.append(hr);
+    [...sc].sort((a, b) => b.m - a.m).slice(0, 20).forEach(s => {
+      const tr = el('tr');
+      tr.append(el('td', {}, s.ch), el('td', { class: 'num' }, pct(s.pos)), el('td', { class: 'num' }, fmt(s.m, 1)), el('td', { class: 'num' }, fmt(s.e, 1)), el('td', { class: 'num' }, s.h.toFixed(2)), el('td', {}, s.g), el('td', {}, s.q || '—'));
+      tb.append(tr);
+    });
+  }
+
+  function drawDetail() {
+    const B = D.books[book];
+    const s = B.scenes.find(x => x.sid === sel) || [...B.scenes].sort((a, b) => b.m - a.m)[0];
+    const host = $('detail'); host.textContent = '';
+    const left = el('div'); left.style.display = 'grid'; left.style.gap = '10px'; left.style.minWidth = '0';
+    left.append(el('div', { class: 'eyebrow' }, `${B.title_zh} · 第 ${s.ch} 章 · 位置 ${pct(s.pos)} · ${fmt(s.w)} 词`));
+    if (s.q) left.append(el('blockquote', {}, s.q));
+    left.append(el('p', { class: 'small' }, '场景开头：' + s.open));
+    const right = el('div'); right.style.display = 'grid'; right.style.gap = '10px'; right.style.minWidth = '0';
+    const nums = el('div', { class: 'facts' });
+    [[fmt(s.m, 1), '原始提及'], [fmt(s.e, 1), '按位置预期'], [s.h.toFixed(2), '校正热度']].forEach(([v, l]) => { const d = el('div', { class: 'fact' }); d.append(el('b', {}, v), el('span', {}, l)); nums.append(d); });
+    right.append(nums);
+    const em = Object.entries(s.emo || {});
+    right.append(el('p', { class: 'small' }, `评论语境 ${s.n_ctx} 条` + (s.bare != null ? `，其中 ${pct(s.bare)} 只贴原文、不加评论` : '') + '。'));
+    if (em.length) { const c = el('div', { class: 'chips' }); em.forEach(([k, v]) => c.append(el('span', { class: 'chip' }, `${k} ${v}`))); right.append(c); }
+    if (s.kw && s.kw.length) right.append(el('p', { class: 'small' }, '读者高频用词：' + s.kw.join(' · ')));
+    if (s.sum) right.append(el('p', { class: 'small' }, '代表性评论摘要（代理撰写）：' + s.sum));
+    else right.append(el('p', { class: 'small muted' }, '摘要只为每本书前 3 个高光撰写；其余场景以高频用词与情绪计数概括。'));
+    host.append(left, right);
+  }
+
+  // ---------- position profile & sim ----------
+  function barChart(host, labels, vals, opts = {}) {
+    const W = 520, H = 220, L = 40, R = 8, T = 12, Bm = 40;
+    const svg = sv('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': opts.aria || '' });
+    const vmax = opts.vmax || niceMax(Math.max(...vals, opts.ref || 0) * 1.05);
+    const y = v => T + (H - T - Bm) * (1 - v / vmax);
+    const g = sv('g', { class: 'axis' });
+    for (let i = 0; i <= 4; i++) { const v = vmax * i / 4; g.append(sv('line', { x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: i ? 'var(--rule)' : 'var(--base)' })); const t = sv('text', { x: L - 6, y: y(v) + 4, 'text-anchor': 'end' }); t.textContent = opts.pct ? pct(v) : fmt(v); g.append(t); }
+    svg.append(g);
+    const band = (W - L - R) / vals.length, bw = Math.min(24, band * 0.6);
+    vals.forEach((v, i) => {
+      const x = L + band * i + (band - bw) / 2, yy = y(v), h = y(0) - yy, r = Math.min(4, h);
+      svg.append(sv('path', { d: `M${x},${y(0)} V${yy + r} Q${x},${yy} ${x + r},${yy} H${x + bw - r} Q${x + bw},${yy} ${x + bw},${yy + r} V${y(0)} Z`, fill: 'var(--s1)' }));
+      const t = sv('text', { x: x + bw / 2, y: H - Bm + 14, 'text-anchor': 'middle', class: 'lbl' }); t.textContent = labels[i]; svg.append(t);
+      const hit = sv('rect', { x: L + band * i, y: T, width: band, height: H - T - Bm, fill: 'transparent' });
+      hit.addEventListener('pointermove', ev => showTip(ev, [[opts.pct ? pct(v, 1) : fmt(v, 1), ''], labels[i]])); hit.addEventListener('pointerleave', hideTip);
+      svg.append(hit);
+    });
+    if (opts.ref != null) { svg.append(sv('line', { x1: L, x2: W - R, y1: y(opts.ref), y2: y(opts.ref), stroke: 'var(--s2)', 'stroke-width': 2 })); }
+    host.textContent = ''; host.append(svg);
+  }
+  barChart($('pp'), ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90%'], D.position_profile, { aria: '书评引用的位置分布' });
+  const SIMN = { mentions: '原始计数', raw_density: '按篇幅', oe: '观测/期望', oe_eb: '+EB 收缩', surv_true: '已知留存' };
+  const sk = Object.keys(SIMN);
+  barChart($('sim'), sk.map(k => SIMN[k]), sk.map(k => D.eval.heat_sim[k].late_share_top20.mean), { pct: true, ref: D.eval.heat_sim_truth_late, vmax: 0.4, aria: '合成数据检验' });
+  const hs = D.eval.heat_sim;
+  $('simText').textContent = `合成数据（明确标注为模拟）：原始计数与真实吸引力的 Spearman 相关 ${hs.mentions.spearman.mean.toFixed(2)}，Top10 命中 ${pct(hs.mentions.top10_recall.mean)}；观测/期望 + 经验贝叶斯后分别为 ${hs.oe_eb.spearman.mean.toFixed(2)} 与 ${pct(hs.oe_eb.top10_recall.mean)}，接近已知留存曲线的上限 ${hs.surv_true.spearman.mean.toFixed(2)}。真实书评数据的形状不同：首尾都高（开篇第一句与结尾句被大量引用），所以位置校正用的是“位置样条”，不是单调的留存曲线。`;
+
+  // ---------- forest ----------
+  const FZ = { dialogue_ratio: '对话占比', conflict_per1k: '冲突词', reversal_per1k: '揭示/反转词', death_parting_per1k: '死亡/离别词', reunion_per1k: '重逢词', romance_per1k: '爱情词', sensory_per1k: '感官词', suspense_per1k: '悬疑词', humor_per1k: '幽默词', aphorism_n: '格言式句子', exclaim_per1k: '感叹号' };
+  (function () {
+    const eff = [...D.heat_model.adjusted].sort((a, b) => b.r - a.r);
+    const W = 520, rowH = 26, T = 10, L = 96, R = 60, H = T + rowH * eff.length + 30;
+    const lo = 0.6, hi = 1.8, x = v => L + (W - L - R) * (Math.log(v) - Math.log(lo)) / (Math.log(hi) - Math.log(lo));
+    const svg = sv('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': '特征对被引用次数的发生率比' });
+    const g = sv('g', { class: 'axis' });
+    [0.6, 0.8, 1, 1.25, 1.5].forEach(v => { g.append(sv('line', { x1: x(v), x2: x(v), y1: T, y2: H - 26, stroke: v === 1 ? 'var(--base)' : 'var(--rule)' })); const t = sv('text', { x: x(v), y: H - 10, 'text-anchor': 'middle' }); t.textContent = v; g.append(t); });
+    svg.append(g);
+    eff.forEach((e, i) => {
+      const yy = T + rowH * i + rowH / 2, sig = e.q < 0.1, c = sig ? 'var(--s1)' : 'var(--muted)';
+      const lab = sv('text', { x: L - 8, y: yy + 4, 'text-anchor': 'end', fill: 'var(--ink)', 'font-size': 12, 'font-family': 'var(--f-body)' }); lab.textContent = FZ[e.f]; svg.append(lab);
+      svg.append(sv('line', { x1: x(Math.max(lo, e.lo)), x2: x(Math.min(hi, e.hi)), y1: yy, y2: yy, stroke: c, 'stroke-width': 2, 'stroke-linecap': 'round' }));
+      svg.append(sv('circle', { cx: x(e.r), cy: yy, r: 5, fill: c, stroke: 'var(--sheet)', 'stroke-width': 2 }));
+      const v = sv('text', { x: W - R + 6, y: yy + 4, class: 'lbl' }); v.textContent = e.r.toFixed(2); svg.append(v);
+      const hit = sv('rect', { x: 0, y: yy - rowH / 2, width: W, height: rowH, fill: 'transparent' });
+      hit.addEventListener('pointermove', ev => showTip(ev, [[e.r.toFixed(2), 'IRR / +1 SD'], `${FZ[e.f]}：95% CI ${e.lo.toFixed(2)}–${e.hi.toFixed(2)}`, `p = ${e.p.toFixed(3)}，BH q = ${e.q.toFixed(3)}`])); hit.addEventListener('pointerleave', hideTip);
+      svg.append(hit);
+    });
+    $('forest').append(svg);
+    const hm = D.heat_model, a = hm.adjusted.find(e => e.f === 'aphorism_n'), rm = hm.adjusted.find(e => e.f === 'romance_per1k');
+    const bf = Math.exp(hm.controls.book_first.coef), bl = Math.exp(hm.controls.book_last.coef);
+    $('forestNote').textContent = `${hm.n} 个场景、${hm.n_clusters} 个聚类。格言式句子每多 1 SD，被引用次数 ×${a.r.toFixed(2)}（${a.lo.toFixed(2)}–${a.hi.toFixed(2)}，q=${a.q.toFixed(2)}）；爱情词 ×${rm.r.toFixed(2)}（${rm.lo.toFixed(2)}–${rm.hi.toFixed(2)}，q=${rm.q.toFixed(2)}）。混杂量本身很大：全书第一个场景 ×${bf.toFixed(1)}，最后一个场景 ×${bl.toFixed(1)}，篇幅弹性 ${hm.controls.log_words.coef.toFixed(2)}。过度离散度 ${hm.dispersion.toFixed(1)}，因此只用稳健标准误。`;
+  })();
+
+  // ---------- feature × emotion ----------
+  (function () {
+    const FE = { aphorism: '金句', romance: '爱情', death_parting: '死亡/离别', reversal: '揭示/反转', conflict: '冲突', reunion: '重逢', humor: '幽默', suspense: '悬疑' };
+    const EM = ['aesthetic', 'resonance', 'moved', 'heartbreak', 'swoon', 'comfort', 'amusement', 'shock', 'anger'];
+    const t = $('fe'); const hr = el('tr'); hr.append(el('th', {}, '特征 \\ 情绪')); EM.forEach(e => hr.append(el('th', { class: 'num' }, D.meta.label_zh[e]))); t.append(hr);
+    Object.keys(FE).forEach(f => {
+      const tr = el('tr'); tr.append(el('td', {}, FE[f]));
+      EM.forEach(e => {
+        const c = D.feature_emotion.cells.find(x => x.f === f && x.e === e);
+        const td = el('td', { class: 'cell' }, c.k1 < 5 ? '·' : c.rr.toFixed(1));
+        if (c.k1 >= 5) {
+          const lr = Math.max(-1, Math.min(1, Math.log2(c.rr) / 2));
+          td.style.background = lr >= 0 ? `color-mix(in srgb, var(--s1) ${Math.round(lr * 70)}%, transparent)` : `color-mix(in srgb, var(--s2) ${Math.round(-lr * 70)}%, transparent)`;
+        } else td.style.color = 'var(--muted)';
+        td.title = `${FE[f]} × ${D.meta.label_zh[e]}：有特征 ${c.k1}/${c.n1}，无特征 ${c.k0}/${c.n0}`;
+        tr.append(td);
+      });
+      t.append(tr);
+    });
+  })();
+
+  // ---------- highlights & cards ----------
+  function drawHighlights() {
+    const B = D.books[book]; const host = $('hlList'); host.textContent = '';
+    B.highlights.slice(0, 8).forEach(h => {
+      const it = el('div', { class: 'hl-item' });
+      it.append(el('div', { class: 'hl-rank' }, String(h.rank)));
+      const body = el('div'); body.style.display = 'grid'; body.style.gap = '6px'; body.style.minWidth = '0';
+      body.append(el('div', { class: 'small mono' }, `第 ${h.chapter} 章 · 位置 ${pct(h.pos)} · 提及 ${fmt(h.mentions, 1)} / 预期 ${fmt(h.expected, 1)} · 热度 ${h.heat_oe_eb.toFixed(1)}`));
+      if (h.top_quote) body.append(el('div', { style: 'font-family:var(--f-display);font-weight:600' }, h.top_quote));
+      const chips = el('div', { class: 'chips' });
+      h.features.forEach(f => chips.append(el('span', { class: 'chip' }, f)));
+      Object.entries(h.reader_emotions).forEach(([k, v]) => chips.append(el('span', { class: 'chip' }, `读者·${k} ${v}`)));
+      body.append(chips);
+      body.append(el('div', { class: 'small' }, '切入点：' + h.hooks[0]));
+      it.append(body); host.append(it);
+    });
+    const ch = $('cards'); ch.textContent = '';
+    B.cards.slice(0, 6).forEach(c => {
+      const d = el('div', { class: 'card' });
+      d.append(el('q', {}, c.sentence));
+      const m = el('div', { class: 'meta' }); m.append(el('span', {}, `${B.title} · 第 ${c.chapter} 章`), el('span', {}, `${c.n_reviews} 篇书评引用`)); d.append(m);
+      ch.append(d);
+    });
+    // 脚本示意
+    const s = $('script'); s.textContent = '';
+    const top = B.highlights[0], card = B.cards[0];
+    s.append(el('h3', {}, `示意：《${B.title_zh}》60 秒拆书短视频`));
+    [['0–3 秒', `封面字：「${card.sentence.length > 70 ? card.sentence.slice(0, 68) + '…' : card.sentence}」（${card.n_reviews} 篇书评引用过这句）`],
+     ['3–20 秒', `回到第 ${top.chapter} 章：${top.hooks[0]}`],
+     ['20–45 秒', `朗读高光原文，字幕标出读者最常见的反应：${Object.keys(top.reader_emotions).slice(0, 2).join('、') || '文笔赞叹'}`],
+     ['45–60 秒', '抛问题收尾：“你读到这里时是什么感受？”评论区的回答回流成新的标注数据']]
+      .forEach(([t, txt]) => { const r = el('div'); r.append(el('div', { class: 't' }, t), el('div', {}, txt)); s.append(r); });
+    s.append(el('p', { class: 'small muted' }, '示意用的是公版原文；Goodreads 数据只用于方法验证，不能直接支撑商用内容生产。'));
+  }
+
+  const imp = [
+    `读者在引用旁边最常写的是“文笔赞叹”：情绪金标中有情绪的 34 条里 17 条是文笔赞叹。金句卡和“慢读一段话”类内容最贴合这种反应。`,
+    `引用高度集中在少数名句：前 10 句占全部引用的 ${pct(D.books.gatsby.concentration.top10_share)}（盖茨比）、${pct(D.books.pride.concentration.top10_share)}（傲慢与偏见）、${pct(D.books.janeeyre.concentration.top10_share)}（简·爱）。名句是流量入口，校正后的“被低估高光”是差异化选题。`,
+    `开头与结尾的引用远多于中段（首个场景约 ×${Math.exp(D.heat_model.controls.book_first.coef).toFixed(0)}）。只看原始热度会让选题挤在首尾；位置校正热度能把中段的好桥段挑出来。`,
+    `格言式句子是被引用的最强特征；情节类特征（死亡、反转）在引用数据里信号弱，要等情节对齐（服务器上的 7B+ 模型）补上“描述情节”的那一半评论。`,
+  ];
+  imp.forEach(t => $('implications').append(el('li', {}, t)));
+
+  // ---------- eval ----------
+  (function () {
+    const E = D.eval, t = $('evalTable');
+    const hr = el('tr'); ['环节', '指标', '数值', '样本'].forEach((h, i) => hr.append(el('th', i === 2 ? { class: 'num' } : {}, h))); t.append(hr);
+    const ci = o => o ? `${pct(o.value)}（${pct(o.ci95_low)}–${pct(o.ci95_high)}）` : '—';
+    const rows = [
+      ['引文对齐', '精确率（判为引文的句子）', ci(E.quote_A_precision), `n=${E.quote_A_precision.n}`],
+      ['引文对齐', '召回率（含引号的句子中真引文）', ci(E.quote_B.recall), `n=${E.quote_B.recall.n}`],
+      ['情节对齐', '检索 top-1 / top-5 / top-8 召回', `${pct(E.plot_retrieval.recall_at_1.value)} / ${pct(E.plot_retrieval.recall_at_5.value)} / ${pct(E.plot_retrieval.recall_at_8.value)}`, `n=${E.plot_retrieval.recall_at_1.n}`],
+      ['情节对齐', '真正指向具体桥段的候选句比例', ci(E.plot_retrieval.base_rate_specific), `n=${E.plot_retrieval.base_rate_specific.n}`],
+      ['情节对齐', '规则确认器 F1（test）', E.plot_test.mock_default.f1.toFixed(2), `n=${E.plot_test.mock_default.n}`],
+      ['情节对齐', 'Qwen3-1.7B 确认器 F1（test，本机冒烟）', Object.values(E.plot_llm)[0] ? Object.values(E.plot_llm)[0].f1.toFixed(2) : '—', 'n=80'],
+      ['读者情绪', '“有无情绪”精确率：词典 / GoEmotions', `${pct(E.emotion.lex.precision.value)} / ${pct(E.emotion.goemo.precision.value)}`, 'n=90'],
+      ['读者情绪', '标签级微平均精确率：词典 / GoEmotions', `${pct(E.emotion.lex.micro_precision.value)} / ${pct(E.emotion.goemo.micro_precision.value)}`, 'n=90'],
+      ['场景切分', '找回作者章节边界 Pk（越低越好）vs 随机', slugs.map(s => `${E.segmentation[s].pk.toFixed(2)}/${E.segmentation[s].random_baseline.pk.toFixed(2)}`).join('  '), '3 本'],
+    ];
+    rows.forEach(r => { const tr = el('tr'); r.forEach((c, i) => tr.append(el('td', i === 2 ? { class: 'num' } : {}, c))); t.append(tr); });
+  })();
+  [
+    '金标由本项目的代理（Claude）标注，不是独立人工标注；同一人设计算法又做标注，会高估一致性。上线前需要至少两位人工复标并报 κ。',
+    '主分析只用“直接引用原文”的评论（高精确率），这一半偏向名句与文笔；“描述情节”的另一半评论在本机的规则和 1.7B 模型上 F1 只有约 0.1，要在 GPU 服务器用 7B 以上多模型确认后才能并入。',
+    '只用规则确认的情节对齐会制造假关联：爱情类评论句会被检索到爱情类段落，把“爱情词”的效应虚高（敏感性分析里 IRR 从约 1.2 升到 1.29）。',
+    '读者情绪在引用语境里很稀疏（随机抽样只有约 18% 表达了情绪），10 类情绪里多数阳性不足 40 条，情绪与特征的回归只作探索。',
+    'Goodreads 书评是英文、读完后写的，与微信读书“边读边划”的中文划线形态不同：前者首尾高，后者随阅读进度衰减。归一化方法两种都实现了，但真实划线数据的效果未验证。',
+    '三本书、624 个场景，书固定效应只能控制书间差异；特征由词典规则测量，LLM 编码（服务器）尚未运行。',
+    'Goodreads 数据仅限学术用途，本页不含评论原文；商用获客需换成自有、用户授权或平台授权的数据。',
+  ].forEach(t => $('limits').append(el('li', {}, t)));
+  $('builtFrom').textContent = '数据来源：' + Object.values(D.meta.built_from).join(' · ');
+
+  function renderAll() { mkTabs($('bookTabs')); mkTabs($('bookTabs2')); drawTimeline(); drawDetail(); drawHighlights(); }
+  renderAll();
+})();
+</script>

@@ -1,0 +1,1209 @@
+{
+  "scene_table": "results/analysis/2026-10-08_quoteonly_goemo/scene_table.csv",
+  "books": {
+    "gatsby": {
+      "title": "The Great Gatsby",
+      "title_zh": "了不起的盖茨比",
+      "author": "F. Scott Fitzgerald",
+      "quote_concentration": {
+        "n_quoted_sentences": 459,
+        "total_review_sentence_pairs": 1549,
+        "top10_share": 0.2679
+      },
+      "highlights": [
+        {
+          "rank": 1,
+          "sid": 17,
+          "chapter": 2,
+          "pos": 0.1977,
+          "mentions": 20.0,
+          "expected": 2.98,
+          "heat_oe_eb": 6.572,
+          "n_words": 307,
+          "top_quote": "I was within and without, simultaneously enchanted and repelled by the inexhaustible variety of life.",
+          "top_quote_reviews": 19,
+          "scene_opening": "The bottle of whisky—a second one—was now in constant demand by all present, excepting Catherine, who “felt just as good on nothing at all.” Tom rang for the janitor and sent him for some celebrated sandwiches, which were a complete…",
+          "features": [
+            "揭示/反转"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 1
+          },
+          "n_contexts": 25,
+          "bare_quote_share": 0.28,
+          "hooks": [
+            "反转悬念：用“你以为……其实……”句式，把揭示前后的两句话并排呈现。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 2,
+          "sid": 64,
+          "chapter": 7,
+          "pos": 0.738,
+          "mentions": 18.0,
+          "expected": 3.14,
+          "heat_oe_eb": 5.621,
+          "n_words": 367,
+          "top_quote": "Thirty—the promise of a decade of loneliness, a thinning list of single men to know, a thinning briefcase of enthusiasm, thinning hair.",
+          "top_quote_reviews": 6,
+          "scene_opening": "It passed, and he began to talk excitedly to Daisy, denying everything, defending his name against accusations that had not been made. But with every word she was drawing further and further into herself, so he gave that up, and…",
+          "features": [
+            "死亡/离别",
+            "冲突",
+            "悬疑/不安",
+            "幽默"
+          ],
+          "reader_emotions": {
+            "治愈/释然": 1
+          },
+          "n_contexts": 25,
+          "bare_quote_share": 0.44,
+          "hooks": [
+            "悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。",
+            "冲突对峙：选一段针锋相对的对白做双人配音，适合短视频口播。",
+            "幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 3,
+          "sid": 52,
+          "chapter": 6,
+          "pos": 0.6114,
+          "mentions": 33.0,
+          "expected": 6.07,
+          "heat_oe_eb": 5.381,
+          "n_words": 379,
+          "top_quote": "At his lips’ touch she blossomed for him like a flower and the incarnation was complete.",
+          "top_quote_reviews": 14,
+          "scene_opening": "“I’m going to fix everything just the way it was before,” he said, nodding determinedly. “She’ll see.” He talked a lot about the past, and I gathered that he wanted to recover something, some idea of himself perhaps, that had…",
+          "features": [
+            "爱情/表白",
+            "冲突",
+            "悬疑/不安"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 8,
+            "愤怒": 2,
+            "震撼/意外": 1,
+            "意难平/心碎": 1
+          },
+          "n_contexts": 82,
+          "bare_quote_share": 0.488,
+          "hooks": [
+            "情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。",
+            "冲突对峙：选一段针锋相对的对白做双人配音，适合短视频口播。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 4,
+          "sid": 27,
+          "chapter": 3,
+          "pos": 0.3245,
+          "mentions": 28.0,
+          "expected": 7.46,
+          "heat_oe_eb": 3.729,
+          "n_words": 557,
+          "top_quote": "Everyone suspects himself of at least one of the cardinal virtues, and this is mine: I am one of the few honest people that I have ever known.",
+          "top_quote_reviews": 17,
+          "scene_opening": "For a while I lost sight of Jordan Baker, and then in midsummer I found her again. At first I was flattered to go places with her, because she was a golf champion, and everyone knew her name. Then it…",
+          "features": [
+            "爱情/表白",
+            "揭示/反转"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 4,
+            "意难平/心碎": 1,
+            "共鸣/认同": 1,
+            "震撼/意外": 1
+          },
+          "n_contexts": 40,
+          "bare_quote_share": 0.275,
+          "hooks": [
+            "情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。",
+            "悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。",
+            "反转悬念：用“你以为……其实……”句式，把揭示前后的两句话并排呈现。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 5,
+          "sid": 75,
+          "chapter": 8,
+          "pos": 0.8464,
+          "mentions": 21.0,
+          "expected": 6.36,
+          "heat_oe_eb": 3.275,
+          "n_words": 868,
+          "top_quote": "You’re worth the whole damn bunch put together.",
+          "top_quote_reviews": 18,
+          "scene_opening": "It was nine o’clock when we finished breakfast and went out on the porch. The night had made a sharp difference in the weather and there was an autumn flavour in the air. The gardener, the last one of Gatsby’s…",
+          "features": [
+            "死亡/离别",
+            "冲突"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 4,
+            "治愈/释然": 1,
+            "震撼/意外": 1,
+            "愤怒": 1
+          },
+          "n_contexts": 46,
+          "bare_quote_share": 0.478,
+          "hooks": [
+            "悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 6,
+          "sid": 22,
+          "chapter": 3,
+          "pos": 0.2679,
+          "mentions": 43.0,
+          "expected": 13.34,
+          "heat_oe_eb": 3.211,
+          "n_words": 1221,
+          "top_quote": "It was one of those rare smiles with a quality of eternal reassurance in it, that you may come across four or five times in life.",
+          "top_quote_reviews": 20,
+          "scene_opening": "There was dancing now on the canvas in the garden; old men pushing young girls backward in eternal graceless circles, superior couples holding each other tortuously, fashionably, and keeping in the corners—and a great number of single girls dancing individually…",
+          "features": [
+            "悬疑/不安",
+            "幽默"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 7,
+            "共鸣/认同": 2,
+            "治愈/释然": 2,
+            "心动": 1
+          },
+          "n_contexts": 99,
+          "bare_quote_share": 0.323,
+          "hooks": [
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。",
+            "幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 7,
+          "sid": 89,
+          "chapter": 9,
+          "pos": 0.9954,
+          "mentions": 159.0,
+          "expected": 58.0,
+          "heat_oe_eb": 2.739,
+          "n_words": 439,
+          "top_quote": "So we beat on, boats against the current, borne back ceaselessly into the past.",
+          "top_quote_reviews": 122,
+          "scene_opening": "I spent my Saturday nights in New York because those gleaming, dazzling parties of his were with me so vividly that I could still hear the music and the laughter, faint and incessant, from his garden, and the cars going…",
+          "features": [
+            "重逢",
+            "幽默",
+            "感官描写"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 67,
+            "共鸣/认同": 11,
+            "治愈/释然": 5,
+            "意难平/心碎": 2
+          },
+          "n_contexts": 284,
+          "bare_quote_share": 0.197,
+          "hooks": [
+            "结尾余韵：用最后一句「So we beat on, boats against the current, borne back ceaselessly into the past.」做片尾字幕，引导评论区写“你读到这里时的感受”。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。",
+            "幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 8,
+          "sid": 73,
+          "chapter": 8,
+          "pos": 0.8235,
+          "mentions": 10.0,
+          "expected": 3.61,
+          "heat_oe_eb": 2.737,
+          "n_words": 526,
+          "top_quote": "At the grey tea hour there were always rooms that throbbed incessantly with this low, sweet fever, while fresh faces drifted here and there like rose petals blown by the sad horns around the floor.",
+          "top_quote_reviews": 3,
+          "scene_opening": "On the last afternoon before he went abroad, he sat with Daisy in his arms for a long, silent time. It was a cold fall day, with fire in the room and her cheeks flushed. Now and then she moved…",
+          "features": [
+            "死亡/离别",
+            "悬疑/不安",
+            "感官描写"
+          ],
+          "reader_emotions": {
+            "好笑": 1,
+            "文笔赞叹": 1
+          },
+          "n_contexts": 12,
+          "bare_quote_share": 0.083,
+          "hooks": [
+            "悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。",
+            "幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 9,
+          "sid": 19,
+          "chapter": 3,
+          "pos": 0.2144,
+          "mentions": 8.0,
+          "expected": 2.92,
+          "heat_oe_eb": 2.693,
+          "n_words": 300,
+          "top_quote": "In his blue gardens men and girls came and went like moths among the whisperings and the champagne and the stars.",
+          "top_quote_reviews": 5,
+          "scene_opening": "There was music from my neighbour’s house through the summer nights. In his blue gardens men and girls came and went like moths among the whisperings and the champagne and the stars. At high tide in the afternoon I watched…",
+          "features": [
+            "悬疑/不安",
+            "感官描写"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 2,
+            "心动": 1
+          },
+          "n_contexts": 9,
+          "bare_quote_share": 0.222,
+          "hooks": [
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 10,
+          "sid": 79,
+          "chapter": 8,
+          "pos": 0.8834,
+          "mentions": 20.0,
+          "expected": 7.52,
+          "heat_oe_eb": 2.644,
+          "n_words": 778,
+          "top_quote": "He must have looked up at an unfamiliar sky through frightening leaves and shivered as he found what a grotesque thing a rose is and how raw the sunlight was upon the scarcely created grass.",
+          "top_quote_reviews": 14,
+          "scene_opening": "Standing behind him, Michaelis saw with a shock that he was looking at the eyes of Doctor T. J. Eckleburg, which had just emerged, pale and enormous, from the dissolving night. “God sees everything,” repeated Wilson. “That’s an advertisement,” Michaelis…",
+          "features": [
+            "悬疑/不安"
+          ],
+          "reader_emotions": {
+            "共鸣/认同": 9,
+            "文笔赞叹": 2,
+            "愤怒": 1
+          },
+          "n_contexts": 57,
+          "bare_quote_share": 0.474,
+          "hooks": [
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"
+          ],
+          "n_representative_excerpts": 2
+        }
+      ],
+      "quote_cards": [
+        {
+          "rank": 1,
+          "sentence": "So we beat on, boats against the current, borne back ceaselessly into the past.",
+          "chapter": 9,
+          "pos": 0.9999,
+          "n_reviews": 122,
+          "sid": 89
+        },
+        {
+          "rank": 2,
+          "sentence": "They were careless people, Tom and Daisy—they smashed up things and creatures and then retreated back into their money or their vast carelessness, or whatever it was that kept them together, and let other people clean up the mess they had made …",
+          "chapter": 9,
+          "pos": 0.9873,
+          "n_reviews": 66,
+          "sid": 88
+        },
+        {
+          "rank": 3,
+          "sentence": "It eluded us then, but that’s no matter—tomorrow we will run faster, stretch out our arms further … And one fine morning—",
+          "chapter": 9,
+          "pos": 0.9993,
+          "n_reviews": 52,
+          "sid": 89
+        },
+        {
+          "rank": 4,
+          "sentence": "Gatsby believed in the green light, the orgiastic future that year by year recedes before us.",
+          "chapter": 9,
+          "pos": 0.9993,
+          "n_reviews": 50,
+          "sid": 89
+        },
+        {
+          "rank": 5,
+          "sentence": "And I hope she’ll be a fool—that’s the best thing a girl can be in this world, a beautiful little fool.’",
+          "chapter": 1,
+          "pos": 0.0976,
+          "n_reviews": 25,
+          "sid": 8
+        },
+        {
+          "rank": 6,
+          "sentence": "Whenever you feel like criticizing anyone,” he told me, “just remember that all the people in this world haven’t had the advantages that you’ve had.",
+          "chapter": 1,
+          "pos": 0.0007,
+          "n_reviews": 22,
+          "sid": 0
+        },
+        {
+          "rank": 7,
+          "sentence": "It was one of those rare smiles with a quality of eternal reassurance in it, that you may come across four or five times in life.",
+          "chapter": 3,
+          "pos": 0.266,
+          "n_reviews": 20,
+          "sid": 22
+        },
+        {
+          "rank": 8,
+          "sentence": "It faced—or seemed to face—the whole eternal world for an instant, and then concentrated on you with an irresistible prejudice in your favour.",
+          "chapter": 3,
+          "pos": 0.266,
+          "n_reviews": 20,
+          "sid": 22
+        },
+        {
+          "rank": 9,
+          "sentence": "I was within and without, simultaneously enchanted and repelled by the inexhaustible variety of life.",
+          "chapter": 2,
+          "pos": 0.1959,
+          "n_reviews": 19,
+          "sid": 17
+        },
+        {
+          "rank": 10,
+          "sentence": "And as I sat there brooding on the old, unknown world, I thought of Gatsby’s wonder when he first picked out the green light at the end of Daisy’s dock.",
+          "chapter": 9,
+          "pos": 0.998,
+          "n_reviews": 19,
+          "sid": 89
+        },
+        {
+          "rank": 11,
+          "sentence": "No amount of fire or freshness can challenge what a man can store up in his ghostly heart.",
+          "chapter": 5,
+          "pos": 0.528,
+          "n_reviews": 19,
+          "sid": 45
+        },
+        {
+          "rank": 12,
+          "sentence": "You’re worth the whole damn bunch put together.",
+          "chapter": 8,
+          "pos": 0.8419,
+          "n_reviews": 18,
+          "sid": 75
+        }
+      ]
+    },
+    "pride": {
+      "title": "Pride and Prejudice",
+      "title_zh": "傲慢与偏见",
+      "author": "Jane Austen",
+      "quote_concentration": {
+        "n_quoted_sentences": 354,
+        "total_review_sentence_pairs": 834,
+        "top10_share": 0.3177
+      },
+      "highlights": [
+        {
+          "rank": 1,
+          "sid": 0,
+          "chapter": 1,
+          "pos": 0.0013,
+          "mentions": 121.0,
+          "expected": 6.41,
+          "heat_oe_eb": 18.685,
+          "n_words": 309,
+          "top_quote": "It is a truth universally acknowledged, that a single man in possession of a good fortune must be in want of a wife.",
+          "top_quote_reviews": 120,
+          "scene_opening": "It is a truth universally acknowledged, that a single man in possession of a good fortune must be in want of a wife. However little known the feelings or views of such a man may be on his first entering…",
+          "features": [
+            "金句",
+            "揭示/反转",
+            "重逢"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 23,
+            "共鸣/认同": 6,
+            "好笑": 5,
+            "愤怒": 4
+          },
+          "n_contexts": 136,
+          "bare_quote_share": 0.074,
+          "hooks": [
+            "开篇钩子：把第一句「It is a truth universally acknowledged, that a single man in possession of a good fortun…」打在封面上，3 秒内提问“这句话其实是反讽，你看出来了吗”。",
+            "金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。",
+            "反转悬念：用“你以为……其实……”句式，把揭示前后的两句话并排呈现。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 2,
+          "sid": 98,
+          "chapter": 34,
+          "pos": 0.4821,
+          "mentions": 29.0,
+          "expected": 1.99,
+          "heat_oe_eb": 14.055,
+          "n_words": 490,
+          "top_quote": "You must allow me to tell you how ardently I admire and love you.",
+          "top_quote_reviews": 28,
+          "scene_opening": "“In vain have I struggled. It will not do. My feelings will not be repressed. You must allow me to tell you how ardently I admire and love you.” Elizabeth’s astonishment was beyond expression. She stared, coloured, doubted, and was…",
+          "features": [
+            "爱情/表白",
+            "揭示/反转",
+            "冲突",
+            "悬疑/不安"
+          ],
+          "reader_emotions": {
+            "共鸣/认同": 3,
+            "文笔赞叹": 2,
+            "好笑": 1,
+            "震撼/意外": 1
+          },
+          "n_contexts": 32,
+          "bare_quote_share": 0.344,
+          "hooks": [
+            "情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。",
+            "反转悬念：用“你以为……其实……”句式，把揭示前后的两句话并排呈现。",
+            "冲突对峙：选一段针锋相对的对白做双人配音，适合短视频口播。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 3,
+          "sid": 157,
+          "chapter": 50,
+          "pos": 0.7947,
+          "mentions": 5.0,
+          "expected": 0.74,
+          "heat_oe_eb": 6.233,
+          "n_words": 498,
+          "top_quote": "But how little of permanent happiness could belong to a couple who were only brought together because their passions were stronger than their virtue, she could easily conjecture.",
+          "top_quote_reviews": 5,
+          "scene_opening": "Elizabeth was now most heartily sorry that she had, from the distress of the moment, been led to make Mr. Darcy acquainted with their fears for her sister; for since her marriage would so shortly give the proper termination to…",
+          "features": [
+            "爱情/表白",
+            "悬疑/不安"
+          ],
+          "reader_emotions": {},
+          "n_contexts": 9,
+          "bare_quote_share": 0.333,
+          "hooks": [
+            "情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 4,
+          "sid": 62,
+          "chapter": 20,
+          "pos": 0.2886,
+          "mentions": 6.0,
+          "expected": 0.9,
+          "heat_oe_eb": 6.23,
+          "n_words": 357,
+          "top_quote": "Those who do not complain are never pitied.",
+          "top_quote_reviews": 5,
+          "scene_opening": "While the family were in this confusion, Charlotte Lucas came to spend the day with them. She was met in the vestibule by Lydia, who, flying to her, cried in a half whisper, “I am glad you are come, for…",
+          "features": [
+            "金句",
+            "死亡/离别"
+          ],
+          "reader_emotions": {},
+          "n_contexts": 9,
+          "bare_quote_share": 0.444,
+          "hooks": [
+            "金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。",
+            "悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 5,
+          "sid": 164,
+          "chapter": 52,
+          "pos": 0.8367,
+          "mentions": 5.0,
+          "expected": 0.75,
+          "heat_oe_eb": 6.127,
+          "n_words": 496,
+          "top_quote": "Her heart did whisper that he had done it for her.",
+          "top_quote_reviews": 5,
+          "scene_opening": "The contents of this letter threw Elizabeth into a flutter of spirits, in which it was difficult to determine whether pleasure or pain bore the greatest share. The vague and unsettled suspicions which uncertainty had produced, of what Mr. Darcy…",
+          "features": [
+            "金句",
+            "爱情/表白",
+            "冲突"
+          ],
+          "reader_emotions": {
+            "共鸣/认同": 1
+          },
+          "n_contexts": 6,
+          "bare_quote_share": 0.167,
+          "hooks": [
+            "金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。",
+            "情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。",
+            "冲突对峙：选一段针锋相对的对白做双人配音，适合短视频口播。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 6,
+          "sid": 10,
+          "chapter": 5,
+          "pos": 0.0417,
+          "mentions": 25.0,
+          "expected": 4.66,
+          "heat_oe_eb": 5.297,
+          "n_words": 577,
+          "top_quote": "Pride relates more to our opinion of ourselves; vanity to what we would have others think of us.",
+          "top_quote_reviews": 20,
+          "scene_opening": "“Upon my word! Well, that was very decided, indeed--that does seem as if--but, however, it may all come to nothing, you know.” “My overhearings were more to the purpose than yours, Eliza,” said Charlotte. “Mr. Darcy is not so well…",
+          "features": [
+            "冲突"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 4,
+            "好笑": 1,
+            "意难平/心碎": 1,
+            "治愈/释然": 1
+          },
+          "n_contexts": 63,
+          "bare_quote_share": 0.603,
+          "hooks": [
+            "悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。",
+            "幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 7,
+          "sid": 31,
+          "chapter": 11,
+          "pos": 0.1358,
+          "mentions": 16.0,
+          "expected": 3.17,
+          "heat_oe_eb": 4.951,
+          "n_words": 1260,
+          "top_quote": "I declare, after all, there is no enjoyment like reading!",
+          "top_quote_reviews": 9,
+          "scene_opening": "Miss Bingley’s attention was quite as much engaged in watching Mr. Darcy’s progress through his book, as in reading her own; and she was perpetually either making some inquiry, or looking at his page. She could not win him, however,…",
+          "features": [
+            "金句",
+            "冲突",
+            "幽默"
+          ],
+          "reader_emotions": {
+            "共鸣/认同": 3,
+            "文笔赞叹": 2
+          },
+          "n_contexts": 33,
+          "bare_quote_share": 0.333,
+          "hooks": [
+            "金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。",
+            "幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 8,
+          "sid": 61,
+          "chapter": 20,
+          "pos": 0.2834,
+          "mentions": 11.0,
+          "expected": 2.21,
+          "heat_oe_eb": 4.848,
+          "n_words": 892,
+          "top_quote": "Collins, and I will never see you again if you do.",
+          "top_quote_reviews": 10,
+          "scene_opening": "Mr. Collins was not left long to the silent contemplation of his successful love; for Mrs. Bennet, having dawdled about in the vestibule to watch for the end of the conference, no sooner saw Elizabeth open the door and with…",
+          "features": [
+            "爱情/表白",
+            "死亡/离别",
+            "冲突",
+            "重逢",
+            "悬疑/不安"
+          ],
+          "reader_emotions": {
+            "愤怒": 1,
+            "意难平/心碎": 1
+          },
+          "n_contexts": 48,
+          "bare_quote_share": 0.625,
+          "hooks": [
+            "情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。",
+            "悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。",
+            "冲突对峙：选一段针锋相对的对白做双人配音，适合短视频口播。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 9,
+          "sid": 80,
+          "chapter": 27,
+          "pos": 0.3927,
+          "mentions": 9.0,
+          "expected": 1.99,
+          "heat_oe_eb": 4.399,
+          "n_words": 559,
+          "top_quote": "Stupid men are the only ones worth knowing, after all.",
+          "top_quote_reviews": 5,
+          "scene_opening": "“But, my dear Elizabeth,” she added, “what sort of girl is Miss King? I should be sorry to think our friend mercenary.” “Pray, my dear aunt, what is the difference in matrimonial affairs, between the mercenary and the prudent motive?…",
+          "features": [
+            "金句",
+            "死亡/离别",
+            "悬疑/不安"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 1
+          },
+          "n_contexts": 18,
+          "bare_quote_share": 0.5,
+          "hooks": [
+            "金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。",
+            "悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 10,
+          "sid": 184,
+          "chapter": 56,
+          "pos": 0.9209,
+          "mentions": 7.0,
+          "expected": 1.78,
+          "heat_oe_eb": 3.819,
+          "n_words": 498,
+          "top_quote": "I am only resolved to act in that manner, which will, in my own opinion, constitute my happiness, without reference to you, or to any person so wholly unconnected with me.",
+          "top_quote_reviews": 4,
+          "scene_opening": "“You can now have nothing further to say,” she resentfully answered. “You have insulted me, in every possible method. I must beg to return to the house.” And she rose as she spoke. Lady Catherine rose also, and they turned…",
+          "features": [
+            "冲突"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 2
+          },
+          "n_contexts": 12,
+          "bare_quote_share": 0.5,
+          "hooks": [
+            "冲突对峙：选一段针锋相对的对白做双人配音，适合短视频口播。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"
+          ],
+          "n_representative_excerpts": 2
+        }
+      ],
+      "quote_cards": [
+        {
+          "rank": 1,
+          "sentence": "It is a truth universally acknowledged, that a single man in possession of a good fortune must be in want of a wife.",
+          "chapter": 1,
+          "pos": 0.0001,
+          "n_reviews": 120,
+          "sid": 0
+        },
+        {
+          "rank": 2,
+          "sentence": "You must allow me to tell you how ardently I admire and love you.",
+          "chapter": 34,
+          "pos": 0.4802,
+          "n_reviews": 28,
+          "sid": 98
+        },
+        {
+          "rank": 3,
+          "sentence": "Pride relates more to our opinion of ourselves; vanity to what we would have others think of us.",
+          "chapter": 5,
+          "pos": 0.0428,
+          "n_reviews": 20,
+          "sid": 10
+        },
+        {
+          "rank": 4,
+          "sentence": "I cannot fix on the hour, or the spot, or the look, or the words, which laid the foundation.",
+          "chapter": 60,
+          "pos": 0.9773,
+          "n_reviews": 18,
+          "sid": 195
+        },
+        {
+          "rank": 5,
+          "sentence": "I was in the middle before I knew that I had begun.",
+          "chapter": 60,
+          "pos": 0.9773,
+          "n_reviews": 18,
+          "sid": 195
+        },
+        {
+          "rank": 6,
+          "sentence": "Vanity and pride are different things, though the words are often used synonymously.",
+          "chapter": 5,
+          "pos": 0.0428,
+          "n_reviews": 15,
+          "sid": 10
+        },
+        {
+          "rank": 7,
+          "sentence": "A person may be proud without being vain.",
+          "chapter": 5,
+          "pos": 0.0428,
+          "n_reviews": 15,
+          "sid": 10
+        },
+        {
+          "rank": 8,
+          "sentence": "The more I see of the world the more am I dissatisfied with it; and every day confirms my belief of the inconsistency of all human characters, and of the little dependence that can be placed on the appearance of either merit or sense.",
+          "chapter": 24,
+          "pos": 0.3431,
+          "n_reviews": 11,
+          "sid": 72
+        },
+        {
+          "rank": 9,
+          "sentence": "Collins, and I will never see you again if you do.",
+          "chapter": 20,
+          "pos": 0.285,
+          "n_reviews": 10,
+          "sid": 61
+        },
+        {
+          "rank": 10,
+          "sentence": "Think only of the past as its remembrance gives you pleasure.",
+          "chapter": 58,
+          "pos": 0.9477,
+          "n_reviews": 10,
+          "sid": 190
+        },
+        {
+          "rank": 11,
+          "sentence": "Your mother will never see you again if you do not marry Mr.",
+          "chapter": 20,
+          "pos": 0.285,
+          "n_reviews": 10,
+          "sid": 61
+        },
+        {
+          "rank": 12,
+          "sentence": "There are few people whom I really love, and still fewer of whom I think well.",
+          "chapter": 24,
+          "pos": 0.3431,
+          "n_reviews": 9,
+          "sid": 72
+        }
+      ]
+    },
+    "janeeyre": {
+      "title": "Jane Eyre",
+      "title_zh": "简·爱",
+      "author": "Charlotte Brontë",
+      "quote_concentration": {
+        "n_quoted_sentences": 565,
+        "total_review_sentence_pairs": 1046,
+        "top10_share": 0.1883
+      },
+      "highlights": [
+        {
+          "rank": 1,
+          "sid": 77,
+          "chapter": 12,
+          "pos": 0.232,
+          "mentions": 33.0,
+          "expected": 0.42,
+          "heat_oe_eb": 67.24,
+          "n_words": 307,
+          "top_quote": "Women are supposed to be very calm generally: but women feel just as men feel; they need exercise for their faculties, and a field for their efforts, as much as their brothers do; they suffer from too rigid a restraint, too absolute a stagnation, precisely as men would suffer; and it is narrow-minded in their more privileged fellow-creatures to say that they ought to confine themselves to making puddings and knitting stockings, to playing on the piano and embroidering bags.",
+          "top_quote_reviews": 25,
+          "scene_opening": "Who blames me? Many, no doubt; and I shall be called discontented. I could not help it: the restlessness was in my nature; it agitated me to pain sometimes. Then my sole relief was to walk along the corridor of…",
+          "features": [
+            "金句",
+            "悬疑/不安",
+            "幽默"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 7,
+            "共鸣/认同": 1
+          },
+          "n_contexts": 68,
+          "bare_quote_share": 0.412,
+          "hooks": [
+            "金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。",
+            "幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 2,
+          "sid": 231,
+          "chapter": 27,
+          "pos": 0.6926,
+          "mentions": 30.5,
+          "expected": 1.62,
+          "heat_oe_eb": 18.054,
+          "n_words": 1070,
+          "top_quote": "The more solitary, the more friendless, the more unsustained I am, the more I will respect myself.",
+          "top_quote_reviews": 14,
+          "scene_opening": "“Don’t talk any more of those days, sir,” I interrupted, furtively dashing away some tears from my eyes; his language was torture to me; for I knew what I must do—and do soon—and all these reminiscences, and these revelations of…",
+          "features": [
+            "爱情/表白",
+            "死亡/离别",
+            "悬疑/不安"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 5,
+            "治愈/释然": 2,
+            "意难平/心碎": 2
+          },
+          "n_contexts": 71,
+          "bare_quote_share": 0.577,
+          "hooks": [
+            "情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。",
+            "悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 3,
+          "sid": 187,
+          "chapter": 23,
+          "pos": 0.552,
+          "mentions": 64.0,
+          "expected": 3.57,
+          "heat_oe_eb": 17.601,
+          "n_words": 1425,
+          "top_quote": "I am no bird; and no net ensnares me; I am a free human being with an independent will, which I now exert to leave you.",
+          "top_quote_reviews": 40,
+          "scene_opening": "In listening, I sobbed convulsively; for I could repress what I endured no longer; I was obliged to yield, and I was shaken from head to foot with acute distress. When I did speak, it was only to express an…",
+          "features": [
+            "爱情/表白",
+            "死亡/离别",
+            "悬疑/不安"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 16,
+            "治愈/释然": 4,
+            "意难平/心碎": 1,
+            "震撼/意外": 1
+          },
+          "n_contexts": 145,
+          "bare_quote_share": 0.531,
+          "hooks": [
+            "情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。",
+            "悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 4,
+          "sid": 125,
+          "chapter": 17,
+          "pos": 0.3754,
+          "mentions": 16.0,
+          "expected": 0.88,
+          "heat_oe_eb": 16.824,
+          "n_words": 409,
+          "top_quote": "He made me love him without looking at me.",
+          "top_quote_reviews": 7,
+          "scene_opening": "He comes in last: I am not looking at the arch, yet I see him enter. I try to concentrate my attention on those netting-needles, on the meshes of the purse I am forming—I wish to think only of the…",
+          "features": [
+            "爱情/表白",
+            "揭示/反转"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 5,
+            "治愈/释然": 1
+          },
+          "n_contexts": 27,
+          "bare_quote_share": 0.444,
+          "hooks": [
+            "情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。",
+            "反转悬念：用“你以为……其实……”句式，把揭示前后的两句话并排呈现。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 5,
+          "sid": 39,
+          "chapter": 6,
+          "pos": 0.1157,
+          "mentions": 10.0,
+          "expected": 0.78,
+          "heat_oe_eb": 11.824,
+          "n_words": 421,
+          "top_quote": "Life appears to me too short to be spent in nursing animosity or registering wrongs.",
+          "top_quote_reviews": 10,
+          "scene_opening": "“She has been unkind to you, no doubt; because you see, she dislikes your cast of character, as Miss Scatcherd does mine; but how minutely you remember all she has done and said to you! What a singularly deep impression…",
+          "features": [
+            "悬疑/不安"
+          ],
+          "reader_emotions": {},
+          "n_contexts": 14,
+          "bare_quote_share": 0.5,
+          "hooks": [
+            "通用：原文朗读 + 一句话点评，突出这一段被读者反复引用的理由。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 6,
+          "sid": 302,
+          "chapter": 34,
+          "pos": 0.9033,
+          "mentions": 15.0,
+          "expected": 1.43,
+          "heat_oe_eb": 10.052,
+          "n_words": 841,
+          "top_quote": "I have not much pride under such circumstances: I would always rather be happy than dignified; and I ran after him—he stood at the foot of the stairs.",
+          "top_quote_reviews": 11,
+          "scene_opening": "“It is known that you are not my sister; I cannot introduce you as such: to attempt it would be to fasten injurious suspicions on us both. And for the rest, though you have a man’s vigorous brain, you have…",
+          "features": [
+            "爱情/表白",
+            "冲突",
+            "悬疑/不安"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 2,
+            "愤怒": 1,
+            "治愈/释然": 1
+          },
+          "n_contexts": 25,
+          "bare_quote_share": 0.24,
+          "hooks": [
+            "情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 7,
+          "sid": 232,
+          "chapter": 27,
+          "pos": 0.6973,
+          "mentions": 9.0,
+          "expected": 0.94,
+          "heat_oe_eb": 8.947,
+          "n_words": 638,
+          "top_quote": "And it is you, spirit—with will and energy, and virtue and purity—that I want: not alone your brittle frame.",
+          "top_quote_reviews": 3,
+          "scene_opening": "I did. Mr. Rochester, reading my countenance, saw I had done so. His fury was wrought to the highest: he must yield to it for a moment, whatever followed; he crossed the floor and seized my arm and grasped my…",
+          "features": [
+            "爱情/表白",
+            "死亡/离别",
+            "悬疑/不安"
+          ],
+          "reader_emotions": {},
+          "n_contexts": 26,
+          "bare_quote_share": 0.654,
+          "hooks": [
+            "情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。",
+            "悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 8,
+          "sid": 248,
+          "chapter": 29,
+          "pos": 0.748,
+          "mentions": 5.0,
+          "expected": 0.5,
+          "heat_oe_eb": 8.812,
+          "n_words": 452,
+          "top_quote": "Prejudices, it is well known, are most difficult to eradicate from the heart whose soil has never been loosened or fertilised by education: they grow there, firm as weeds among stones.",
+          "top_quote_reviews": 5,
+          "scene_opening": "“She is so ill, St. John.” “Ill or well, she would always be plain. The grace and harmony of beauty are quite wanting in those features.” On the third day I was better; on the fourth, I could speak, move,…",
+          "features": [
+            "金句",
+            "重逢",
+            "幽默"
+          ],
+          "reader_emotions": {
+            "治愈/释然": 1,
+            "文笔赞叹": 1
+          },
+          "n_contexts": 5,
+          "bare_quote_share": 0.2,
+          "hooks": [
+            "金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。",
+            "幽默向：把讽刺对白做成表情包或“古人吐槽”合集。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 9,
+          "sid": 47,
+          "chapter": 8,
+          "pos": 0.1385,
+          "mentions": 9.0,
+          "expected": 1.35,
+          "heat_oe_eb": 6.363,
+          "n_words": 861,
+          "top_quote": "If all the world hated you, and believed you wicked, while your own conscience approved you, and absolved you from guilt, you would not be without friends.",
+          "top_quote_reviews": 5,
+          "scene_opening": "Ere the half-hour ended, five o’clock struck; school was dismissed, and all were gone into the refectory to tea. I now ventured to descend: it was deep dusk; I retired into a corner and sat down on the floor. The…",
+          "features": [
+            "爱情/表白",
+            "死亡/离别",
+            "冲突"
+          ],
+          "reader_emotions": {
+            "文笔赞叹": 2,
+            "共鸣/认同": 1,
+            "治愈/释然": 1
+          },
+          "n_contexts": 16,
+          "bare_quote_share": 0.312,
+          "hooks": [
+            "情感名场面：截取表白/求婚的 2–3 句对白，做“如果是你会怎么回答”的互动。",
+            "悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。",
+            "文笔向：读者最常见的反应是赞叹文笔，适合“一段话读三遍”的慢读视频。"
+          ],
+          "n_representative_excerpts": 2
+        },
+        {
+          "rank": 10,
+          "sid": 186,
+          "chapter": 23,
+          "pos": 0.5467,
+          "mentions": 9.0,
+          "expected": 1.37,
+          "heat_oe_eb": 6.301,
+          "n_words": 542,
+          "top_quote": "Because,” he said, “I sometimes have a queer feeling with regard to you—especially when you are near me, as now: it is as if I had a string somewhere under my left ribs, tightly and inextricably knotted to a similar string situated in the corresponding quarter of your little frame.",
+          "top_quote_reviews": 9,
+          "scene_opening": "“Oh, no need to apologise! I consider that when a dependent does her duty as well as you have done yours, she has a sort of claim upon her employer for any little assistance he can conveniently render her; indeed…",
+          "features": [
+            "金句",
+            "死亡/离别",
+            "冲突",
+            "悬疑/不安"
+          ],
+          "reader_emotions": {},
+          "n_contexts": 15,
+          "bare_quote_share": 0.6,
+          "hooks": [
+            "金句卡：单句上图，配一句现代场景的“翻译”，适合书单号图文与小红书封面。",
+            "悲剧倒叙：先给结局画面，再回到起点讲“他是怎么一步步走到这里的”。"
+          ],
+          "n_representative_excerpts": 2
+        }
+      ],
+      "quote_cards": [
+        {
+          "rank": 1,
+          "sentence": "I am no bird; and no net ensnares me; I am a free human being with an independent will, which I now exert to leave you.",
+          "chapter": 23,
+          "pos": 0.5513,
+          "n_reviews": 40,
+          "sid": 187
+        },
+        {
+          "rank": 2,
+          "sentence": "Women are supposed to be very calm generally: but women feel just as men feel; they need exercise for their faculties, and a field for their efforts, as much as their brothers do; they suffer from too rigid a restraint, too absolute a stagnation, precisely as men would suffer; and it is narrow-minded in their more privileged fellow-creatures to say that they ought to confine themselves to making puddings and knitting stockings, to playing on the piano and embroidering bags.",
+          "chapter": 12,
+          "pos": 0.2324,
+          "n_reviews": 25,
+          "sid": 77
+        },
+        {
+          "rank": 3,
+          "sentence": "It is thoughtless to condemn them, or laugh at them, if they seek to do more or learn more than custom has pronounced necessary for their sex.",
+          "chapter": 12,
+          "pos": 0.2324,
+          "n_reviews": 23,
+          "sid": 77
+        },
+        {
+          "rank": 4,
+          "sentence": "Do you think, because I am poor, obscure, plain, and little, I am soulless and heartless?",
+          "chapter": 23,
+          "pos": 0.5501,
+          "n_reviews": 23,
+          "sid": 187
+        },
+        {
+          "rank": 5,
+          "sentence": "You think wrong!—I have as much soul as you,—and full as much heart!",
+          "chapter": 23,
+          "pos": 0.5501,
+          "n_reviews": 19,
+          "sid": 187
+        },
+        {
+          "rank": 6,
+          "sentence": "I am not talking to you now through the medium of custom, conventionalities, nor even of mortal flesh;—it is my spirit that addresses your spirit; just as if both had passed through the grave, and we stood at God’s feet, equal,—as we are!",
+          "chapter": 23,
+          "pos": 0.5501,
+          "n_reviews": 15,
+          "sid": 187
+        },
+        {
+          "rank": 7,
+          "sentence": "And if God had gifted me with some beauty and much wealth, I should have made it as hard for you to leave me, as it is now for me to leave you.",
+          "chapter": 23,
+          "pos": 0.5501,
+          "n_reviews": 14,
+          "sid": 187
+        },
+        {
+          "rank": 8,
+          "sentence": "The more solitary, the more friendless, the more unsustained I am, the more I will respect myself.",
+          "chapter": 27,
+          "pos": 0.6951,
+          "n_reviews": 14,
+          "sid": 231
+        },
+        {
+          "rank": 9,
+          "sentence": "Laws and principles are not for the times when there is no temptation: they are for such moments as this, when body and soul rise in mutiny against their rigour; stringent are they; inviolate they shall be.",
+          "chapter": 27,
+          "pos": 0.6951,
+          "n_reviews": 13,
+          "sid": 231
+        },
+        {
+          "rank": 10,
+          "sentence": "and can bear to have my morsel of bread snatched from my lips, and my drop of living water dashed from my cup?",
+          "chapter": 23,
+          "pos": 0.5501,
+          "n_reviews": 11,
+          "sid": 187
+        },
+        {
+          "rank": 11,
+          "sentence": "I have not much pride under such circumstances: I would always rather be happy than dignified; and I ran after him—he stood at the foot of the stairs.",
+          "chapter": 34,
+          "pos": 0.9049,
+          "n_reviews": 11,
+          "sid": 302
+        },
+        {
+          "rank": 12,
+          "sentence": "Life appears to me too short to be spent in nursing animosity or registering wrongs.",
+          "chapter": 6,
+          "pos": 0.1154,
+          "n_reviews": 10,
+          "sid": 39
+        }
+      ]
+    }
+  }
+}

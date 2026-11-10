@@ -1,0 +1,37 @@
+{
+  "source_run": "results/eval_align/2026-10-08_with_llm",
+  "note": "只用原运行 raw/plot_C.jsonl 里的候选列表和金标重算，没有重新检索。",
+  "plot": {
+    "retrieval": {
+      "recall_at_1": {
+        "k": 8,
+        "n": 36,
+        "value": 0.2222,
+        "ci95_low": 0.1172,
+        "ci95_high": 0.3809
+      },
+      "recall_at_5": {
+        "k": 19,
+        "n": 36,
+        "value": 0.5278,
+        "ci95_low": 0.3701,
+        "ci95_high": 0.6801
+      },
+      "recall_at_8": {
+        "k": 24,
+        "n": 36,
+        "value": 0.6667,
+        "ci95_low": 0.5033,
+        "ci95_high": 0.7979
+      },
+      "n_candidates": 8,
+      "base_rate_specific": {
+        "k": 36,
+        "n": 120,
+        "value": 0.3,
+        "ci95_low": 0.2253,
+        "ci95_high": 0.3872
+      }
+    }
+  }
+}

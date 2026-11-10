@@ -1,0 +1,13 @@
+{"annotator": "agent:claude-opus-5.5", "date": "2026-10-08", "book": "gatsby",
+ "note": "代理标注。A/B: quote=引文出处段落 pid（多个=任一即对）；none=不是本书引文。C: sids=评论指向的场景（可接受集合，事件跨场景时列全）；none=泛泛而谈/无法唯一定位。",
+ "A": {"*": "pred_correct"},
+ "B": {"B00":{"quote":[16]},"B01":"none","B02":{"quote":[1614]},"B03":{"quote":[1040]},"B04":{"quote":[600]},
+       "B05":"none","B06":"none","B07":"none","B08":"none","B09":"none","B10":{"quote":[1376]},"B11":{"quote":[291]},
+       "B12":{"quote":[3]},"B13":"none","B14":"none","B15":"none","B16":{"quote":[291]},"B17":{"quote":[19]},"B18":"none",
+       "B19":{"quote":[1630]}},
+ "C": {"C00":"none","C01":"none","C02":"none","C03":"none","C04":"none","C05":[79],"C06":"none","C07":"none","C08":[80,86],
+       "C09":"none","C10":"none","C11":"none","C12":[79],"C13":"none","C14":"none","C15":"none","C16":"none","C17":[80,86],
+       "C18":"none","C19":"none","C20":"none","C21":"none","C22":"none","C23":"none","C24":"none","C25":[1,2],"C26":"none",
+       "C27":"none","C28":"none","C29":[21,22],"C30":"none","C31":"none","C32":[21],"C33":[3,4],"C34":[11,12,13],
+       "C35":[34,72],"C36":[35,73],"C37":"none","C38":"none","C39":[3,4,5,6,7,8]}
+}

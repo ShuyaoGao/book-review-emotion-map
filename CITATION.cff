@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software or its teaching materials, please cite it as below."
+title: "读者评论 → 桥段热度与情绪地图 / Book Review Emotion Map: aligning reader quotes to passages of public-domain novels"
+abstract: "A teaching demo that treats the sentences readers quote in book reviews as free annotations: quotes are aligned back to the source text of three public-domain novels (5-gram shingles plus fuzzy matching, embeddings for plot mentions), mention counts are corrected for position bias (observed/expected with empirical-Bayes shrinkage), and the result is shown as an auto-playing heat-emotion timeline. Only aggregate statistics are published; no review text. Part of the AI Teaching Demos series."
+type: software
+authors:
+  - family-names: "Gao"
+    given-names: "Shuyao"
+    email: "gaoshuyao.mk@gmail.com"
+    affiliation: "aSSIST University (Seoul School of Integrated Sciences and Technologies)"
+version: "1.0"
+date-released: "2026-11-10"
+license: MIT
+repository-code: "https://github.com/ShuyaoGao/book-review-emotion-map"
+url: "https://shuyaogao.github.io/book-review-emotion-map/"
+keywords:
+  - reader response
+  - quote alignment
+  - position bias
+  - empirical Bayes
+  - emotion analysis
+  - teaching demo

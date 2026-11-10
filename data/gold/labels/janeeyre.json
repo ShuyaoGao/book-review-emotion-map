@@ -1,0 +1,12 @@
+{"annotator": "agent:claude-opus-5.5", "date": "2026-10-08", "book": "janeeyre",
+ "note": "同 gatsby.json / pride.json。",
+ "A": {"*": "pred_correct"},
+ "B": {"B00":"none","B01":"none","B02":"none","B03":"none","B04":"none","B05":"none","B06":"none","B07":"none","B08":"none",
+       "B09":{"quote":[4047]},"B10":{"quote":[1122]},"B11":{"quote":[214]},"B12":"none","B13":"none","B14":{"quote":[298]},
+       "B15":"none","B16":"none","B17":{"quote":[0]},"B18":{"quote":[3860]},"B19":"none"},
+ "C": {"C00":["ch37"],"C01":"none","C02":["ch34","ch35"],"C03":"none","C04":"none","C05":"none","C06":[55],"C07":"none",
+       "C08":[332],"C09":[332],"C10":"none","C11":"none","C12":["ch27"],"C13":["ch34","ch35"],"C14":"none","C15":["ch28","ch29"],
+       "C16":[174,175,176],"C17":"none","C18":"none","C19":[222],"C20":["ch34","ch35"],"C21":[187],"C22":"none","C23":"none",
+       "C24":"none","C25":"none","C26":"none","C27":["ch36"],"C28":"none","C29":"none","C30":"none","C31":"none",
+       "C32":[163,164,165],"C33":["ch19","ch26","ch33"],"C34":"none","C35":"none","C36":"none","C37":"none","C38":"none","C39":"none"}
+}

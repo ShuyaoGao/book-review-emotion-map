@@ -1,0 +1,33 @@
+Documentation and teaching materials license
+============================================
+
+Copyright (c) 2026 Shuyao Gao
+Contact: gaoshuyao.mk@gmail.com
+
+Unless otherwise noted, the documentation and teaching materials in this
+repository are licensed under the Creative Commons Attribution 4.0
+International License (CC BY 4.0).
+
+  Summary: https://creativecommons.org/licenses/by/4.0/
+  Full legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+
+"Documentation and teaching materials" means:
+  - the prose of README.md, DEMO_GUIDE.md and everything under docs/;
+  - showcase/DEMO.md and the slide deck 讲解.pptx;
+  - the text, charts and figures shown by the web pages (demo/, showcase/),
+    including the Chinese summaries written by the AI agent;
+  - figures and screenshots under demo/screenshots/ and showcase/figs/.
+
+Source code (Python, JavaScript, HTML/CSS templates and build scripts) is
+licensed separately under the MIT License, see LICENSE.
+
+NOT covered by this file (see THIRD_PARTY.md):
+  - Sentences quoted from the novels (Project Gutenberg texts, public domain
+    in the United States);
+  - Aggregate statistics derived from the UCSD Book Graph (Goodreads) dataset,
+    which is provided for academic use only. No review text, user names or
+    per-review records are included in this repository.
+
+Suggested attribution:
+  "Book Review Emotion Map" by Shuyao Gao, CC BY 4.0,
+  https://github.com/ShuyaoGao/book-review-emotion-map

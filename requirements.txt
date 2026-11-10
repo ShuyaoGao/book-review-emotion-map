@@ -1,0 +1,15 @@
+# 版本与全局 Python 一致（Windows 智能应用控制会拦截新下载的 .pyd）
+numpy==2.5.1
+pandas==3.0.5
+scipy==1.18.0
+scikit-learn==1.9.0
+matplotlib==3.11.1
+statsmodels==0.15.0
+rapidfuzz==3.14.6
+requests==2.34.2
+pytest==9.1.1
+sentence-transformers==6.1.0
+transformers==5.19.0
+huggingface_hub==1.33.0
+# torch==2.11.0 另装：--index-url https://download.pytorch.org/whl/cu128
+# GPU 服务器端（可选，Linux）：vllm 0.27.1、pingouin 0.6.1

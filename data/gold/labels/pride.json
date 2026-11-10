@@ -1,0 +1,13 @@
+{"annotator": "agent:claude-opus-5.5", "date": "2026-10-08", "book": "pride",
+ "note": "同 gatsby.json。'chNN' 表示该章任一场景都算对（事件跨多个场景时用）。",
+ "A": {"*": "pred_correct"},
+ "B": {"B00":{"quote":[172]},"B01":{"quote":[172]},"B02":{"quote":[1919]},"B03":"none","B04":{"quote":[417]},"B05":"none",
+       "B06":{"quote":[247]},"B07":{"quote":[172]},"B08":"none","B09":{"quote":[0]},"B10":{"quote":[0]},"B11":"none",
+       "B12":{"quote":[1098]},"B13":"none","B14":{"quote":[637]},"B15":"none","B16":{"quote":[784]},"B17":{"quote":[1080]},
+       "B18":"none","B19":"none"},
+ "C": {"C00":"none","C01":["ch43"],"C02":"none","C03":["ch34","ch35","ch43"],"C04":"none","C05":["ch22"],"C06":["ch34","ch35"],
+       "C07":"none","C08":"none","C09":"none","C10":"none","C11":"none","C12":"none","C13":"none","C14":"none","C15":["ch58"],
+       "C16":"none","C17":"none","C18":"none","C19":["ch55","ch58"],"C20":"none","C21":"none","C22":"none","C23":["ch34"],
+       "C24":"none","C25":"none","C26":"none","C27":"none","C28":"none","C29":"none","C30":"none","C31":"none","C32":"none",
+       "C33":"none","C34":"none","C35":"none","C36":[195],"C37":"none","C38":["ch41"],"C39":"none"}
+}

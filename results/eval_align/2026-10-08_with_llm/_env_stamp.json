@@ -1,0 +1,28 @@
+{
+  "run_at": "2026-10-08T01:38:59",
+  "host": "dev-laptop",
+  "os": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "gpu": "NVIDIA GeForce RTX 5090 Laptop GPU",
+  "cuda_visible_devices": null,
+  "packages": {
+    "numpy": "2.5.1",
+    "pandas": "3.0.5",
+    "scipy": "1.18.0",
+    "scikit-learn": "1.9.0",
+    "rapidfuzz": "3.14.6",
+    "torch": "2.11.0+cu128",
+    "sentence-transformers": "6.1.0",
+    "transformers": "5.19.0"
+  },
+  "seed": 42,
+  "argv": [
+    "src/eval_align.py",
+    "--llm-raw",
+    "results/local_llm/2026-10-08_align_Qwen3-1.7B/raw/Qwen__Qwen3-1.7B.jsonl"
+  ],
+  "git": "1d628bfa86c9e1359b2274297efb265fd8fa3679+dirty",
+  "llm_raw": [
+    "results/local_llm/2026-10-08_align_Qwen3-1.7B/raw/Qwen__Qwen3-1.7B.jsonl"
+  ]
+}
